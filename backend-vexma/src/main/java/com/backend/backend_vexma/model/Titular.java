@@ -1,8 +1,15 @@
 package com.backend.backend_vexma.model;
 
 import java.time.LocalDate;
-import jakarta.persistence.*;
 import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "titular")
@@ -10,10 +17,10 @@ public class Titular {
     //Anotaciones JPA | definicion de columnas y atributos
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "dni", nullable = false, precision = 8, unique = true)
-    private int dni;
+    private Integer dni;
     @Column(name = "nombre", nullable = false)
     private String nombre;
     @Column(name = "apellido", nullable = false)
@@ -23,7 +30,7 @@ public class Titular {
 
 
     // Relaciones
-    @OneToMany(mappedBy = "idTitular")
+    @OneToMany(mappedBy = "titular")
     private List<Vehiculo> vehiculos;
 
     // Constructor
@@ -37,14 +44,14 @@ public class Titular {
     }  
 
     // Getters y setters
-    public long getId(){
+    public Long getId(){
         return this.id;
     }
 
-    public int getDni(){
+    public Integer getDni(){
         return this.dni;
     }
-    public void setDni(int dni){
+    public void setDni(Integer dni){
         this.dni = dni;
     }
 

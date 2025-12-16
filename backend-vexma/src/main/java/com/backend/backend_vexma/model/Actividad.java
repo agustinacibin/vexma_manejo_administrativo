@@ -1,36 +1,44 @@
 package com.backend.backend_vexma.model;
 
 import java.time.LocalDate;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Actividad")
 public class Actividad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "isPendiente", nullable = false)
-    private boolean isPendiente;
+    private Boolean isPendiente;
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
     @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
     @Column(name = "gasto", nullable = false)
-    private double gasto;
+    private Double gasto;
 
 
     // Relaciones
     @ManyToOne
-    @JoinColumn(name = "idVehiculo", nullable = false)
-    private Vehiculo idVehiculo;
+    @JoinColumn(name = "vehiculo", nullable = false)
+    private Vehiculo vehiculo;
 
 
     // Constructor
     public Actividad(){}
 
-    public Actividad(Vehiculo idVehiculo, boolean isPendiente, String descripcion, LocalDate fecha, double gasto){
-        this.idVehiculo = idVehiculo;
+    public Actividad(Vehiculo vehiculo, Boolean isPendiente, String descripcion, LocalDate fecha, Double gasto){
+        this.vehiculo = vehiculo;
         this.isPendiente = isPendiente;
         this.descripcion = descripcion;
         this.fecha = fecha;
@@ -38,42 +46,42 @@ public class Actividad {
     }
 
     // Getters y setters
-    long getId(){
+    public Long getId(){
         return this.id;
     }
 
-    Vehiculo getIdVehiculo(){
-        return this.idVehiculo;
+    public Vehiculo getVehiculo(){
+        return this.vehiculo;
     }
-    void setIdVehiculo(Vehiculo idVehiculo){
-        this.idVehiculo = idVehiculo;
+    public void setVehiculo(Vehiculo vehiculo){
+        this.vehiculo = vehiculo;
     }
 
-    boolean getIsPendiente(){
+    public Boolean getIsPendiente(){
         return this.isPendiente;
     }
-    void setIsPendiente(boolean isPendiente){
+    public void setIsPendiente(Boolean isPendiente){
         this.isPendiente = isPendiente;
     }
 
-    String getDescripcion(){
+    public String getDescripcion(){
         return this.descripcion;
     }
-    void setDescripcion(String descripcion){
+    public void setDescripcion(String descripcion){
         this.descripcion = descripcion;
     }
 
-    LocalDate getFecha(){
+    public LocalDate getFecha(){
         return this.fecha;
     }
-    void setFecha(LocalDate fecha){
+    public void setFecha(LocalDate fecha){
         this.fecha = fecha;
     }
 
-    double getGasto(){
+    public Double getGasto(){
         return gasto;
     }
-    void setGasto(double gasto){
+    public void setGasto(Double gasto){
         this.gasto = gasto;
     }
 }

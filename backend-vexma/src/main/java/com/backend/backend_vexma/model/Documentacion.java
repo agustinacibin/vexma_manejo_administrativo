@@ -1,5 +1,12 @@
 package com.backend.backend_vexma.model;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Documentacion")
@@ -8,41 +15,41 @@ public class Documentacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "formulario08", nullable = false)
-    private boolean formulario08;
+    private Boolean formulario08;
     @Column(name = "cedulaVerde", nullable = false)
-    private boolean cedulaVerde;
+    private Boolean cedulaVerde;
     @Column(name = "titulo", nullable = false)
-    private boolean titulo;
+    private Boolean titulo;
     @Column(name = "verificacionPolicial", nullable = false)
-    private boolean verificacionPolicial;
+    private Boolean verificacionPolicial;
     @Column(name = "informeDominioRnpa", nullable = false)
-    private boolean informeDominioRnpa;
+    private Boolean informeDominioRnpa;
     @Column(name = "informeMultasRnpa", nullable = false)
-    private boolean informeMultasRnpa;
+    private Boolean informeMultasRnpa;
     @Column(name = "estadoImpositivo", nullable = false)
-    private boolean estadoImpositivo;
+    private Boolean estadoImpositivo;
     @Column(name = "manuales", nullable = false)
-    private boolean manuales;
+    private Boolean manuales;
     @Column(name = "duplicadoLlaves", nullable = false)
-    private boolean duplicadoLlaves;
+    private Boolean duplicadoLlaves;
     @Column(name = "itv", nullable = false)
-    private boolean itv;
+    private Boolean itv;
 
 
     // Relaciones
     @OneToOne
-    @JoinColumn(name = "idVehiculo", nullable = false)
-    private Vehiculo idVehiculo;
+    @JoinColumn(name = "vehiculo", nullable = false)
+    private Vehiculo vehiculo;
 
 
     // Constructor
     public Documentacion(){}
 
-    public Documentacion(Vehiculo idVehiculo, boolean formulario08, boolean cedulaVerde, boolean titulo, boolean verificacionPolicial, boolean informeDominioRnpa, boolean informeMultasRnpa, boolean estadoImpositivo, boolean manuales, boolean duplicadoLlaves, boolean itv){
-        this.idVehiculo = idVehiculo;
+    public Documentacion(Vehiculo vehiculo, Boolean formulario08, Boolean cedulaVerde, Boolean titulo, Boolean verificacionPolicial, Boolean informeDominioRnpa, Boolean informeMultasRnpa, Boolean estadoImpositivo, Boolean manuales, Boolean duplicadoLlaves, Boolean itv){
+        this.vehiculo = vehiculo;
         this.formulario08 = formulario08;
         this.cedulaVerde = cedulaVerde;
         this.titulo = titulo;
@@ -56,78 +63,82 @@ public class Documentacion {
     }
 
     // Getters y setters
-    Vehiculo getIdVehiculo(){
-        return this.idVehiculo;
+    public Long getId(){
+        return this.id;
+    } 
+
+    public Vehiculo getVehiculo(){
+        return this.vehiculo;
     }
-    void setIdVehiculo(Vehiculo idVehiculo){
-        this.idVehiculo = idVehiculo;
+    public void setVehiculo(Vehiculo vehiculo){
+        this.vehiculo = vehiculo;
     }
 
-    boolean getFormulario08(){
+    public Boolean getFormulario08(){
         return this.formulario08;
     }
-    void setFormulario08(boolean formulario08){
+    public void setFormulario08(Boolean formulario08){
         this.formulario08 = formulario08;
     }
 
-    boolean getCedulaVerde(){
+    public Boolean getCedulaVerde(){
         return this.cedulaVerde;
     }
-    void setCedulaVerde(boolean cedulaVerde){
+    public void setCedulaVerde(Boolean cedulaVerde){
         this.cedulaVerde = cedulaVerde;
     }
 
-    boolean getTitulo(){
+    public Boolean getTitulo(){
         return this.titulo;
     }
-    void setTitulo(boolean titulo){
+    public void setTitulo(Boolean titulo){
         this.titulo = titulo;
     }
 
-    boolean getVerificacionPolicial(){
+    public Boolean getVerificacionPolicial(){
         return this.verificacionPolicial;
     }
-    void setVerificacionPolicial(boolean verificacionPolicial){
+    public void setVerificacionPolicial(Boolean verificacionPolicial){
         this.verificacionPolicial = verificacionPolicial;
     }
 
-    boolean getInformeDominioRnpa(){
+    public Boolean getInformeDominioRnpa(){
         return this.informeDominioRnpa;
     }
-    void setInformeDominioRnpa(boolean informeDominioRnpa){
+    public void setInformeDominioRnpa(Boolean informeDominioRnpa){
         this.informeDominioRnpa = informeDominioRnpa;
     }
 
-    boolean getInformeMultasRnpa(){
+    public Boolean getInformeMultasRnpa(){
         return this.informeMultasRnpa;
     }
-    void setInformeMultasRnpa(boolean informeMultasRnpa){
+    public void setInformeMultasRnpa(Boolean informeMultasRnpa){
         this.informeMultasRnpa = informeMultasRnpa;
     }
 
-    boolean getEstadoImpositivo(){
+    public Boolean getEstadoImpositivo(){
         return this.estadoImpositivo;
     }
-    void setEstadoImpositivo(boolean estadoImpositivo){
+    public void setEstadoImpositivo(Boolean estadoImpositivo){
         this.estadoImpositivo = estadoImpositivo;
     }
 
-    boolean getManuales(){
+    public Boolean getManuales(){
         return this.manuales;
     }
-    void setManuales(boolean manuales){
+    public void setManuales(Boolean manuales){
         this.manuales = manuales;
     }
 
-    boolean getDuplicadoLlaves(){
+    public Boolean getDuplicadoLlaves(){
         return this.duplicadoLlaves;
     }
-    void setDuplicadoLlaves(boolean duplicadoLlaves){
+    public void setDuplicadoLlaves(Boolean duplicadoLlaves){
         this.duplicadoLlaves = duplicadoLlaves;
     }
 
     // isCompleta --> en base al estado de determinados documentos, retorna si el estado general de la documentacion es completa o incompleta
-    boolean isCompleta(){
+    public Boolean isCompleta(){
         return this.formulario08 && 
                 this.cedulaVerde && 
                 this.titulo && 

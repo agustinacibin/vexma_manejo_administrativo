@@ -1,6 +1,18 @@
 package com.backend.backend_vexma.model;
-import jakarta.persistence.*;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
 
 @Entity
 @Table(name = "Vehiculo")
@@ -9,7 +21,7 @@ public class Vehiculo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "patente", length = 7, nullable = false, unique = true)
     private String patente;
@@ -18,36 +30,36 @@ public class Vehiculo {
     @Column(name = "modelo", nullable = false)
     private String modelo;
     @Column(name = "anio", precision = 4, nullable = false)
-    private int anio;
+    private Integer anio;
     @Column(name = "isNuevo", nullable = false)
-    private boolean isNuevo;
+    private Boolean isNuevo;
     @Column(name = "precioCompra", nullable = false, scale = 3)
-    private double precioCompra;
+    private Double precioCompra;
     @Column(name = "precioLista", nullable = false, scale = 3)
-    private double precioLista;
+    private Double precioLista;
 
 
     // Relaciones
     @ManyToOne
-    @JoinColumn(name = "idTitular", nullable = false)
-    private Titular idTitular;
+    @JoinColumn(name = "titular", nullable = false)
+    private Titular titular;
 
-    @OneToMany(mappedBy = "idVehiculo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
     private List<Actividad> actividades;
 
-    @OneToOne(mappedBy = "idVehiculo", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "vehiculo", cascade = CascadeType.ALL)
     private Documentacion documentacion;
 
 
     // Constructor
     public Vehiculo(){}
 
-    public Vehiculo(String patente, String marca, String modelo, int anio, Titular idTitular, boolean isNuevo, double precioCompra, double precioLista){
+    public Vehiculo(String patente, String marca, String modelo, Integer anio, Titular titular, Boolean isNuevo, Double precioCompra, Double precioLista){
         this.patente = patente;
         this.marca = marca;
         this.modelo = modelo;
         this.anio = anio;
-        this.idTitular = idTitular;
+        this.titular = titular;
         this.isNuevo = isNuevo;
         this.precioCompra = precioCompra;
         this.precioLista = precioLista;
@@ -55,65 +67,88 @@ public class Vehiculo {
 
 
     // Getters y setters
-    long getId(){
+    public Long getId(){
         return this.id;
     }
 
-    String getPatente(){
+    public String getPatente(){
         return this.patente;
     }
-    void setPatente(String patente){
+    public void setPatente(String patente){
         this.patente = patente;
     }
 
-    String getMarca(){
+    public String getMarca(){
         return this.marca;
     }
-    void setMarca(String marca){
+    public void setMarca(String marca){
         this.marca = marca;
     }
 
-    String getModelo(){
+    public String getModelo(){
         return this.modelo;
     }
-    void setModelo(String modelo){
+    public void setModelo(String modelo){
         this.modelo = modelo;
     }
 
-    int getAnio(){
+    public Integer getAnio(){
         return this.anio;
     }
-    void setAnio(int anio){
+    public void setAnio(Integer anio){
         this.anio = anio;
     }
 
-    boolean getIsNuevo(){
+    public Boolean getIsNuevo(){
         return isNuevo;
     }
-    void setIsNuevo(boolean isNuevo){
+    public void setIsNuevo(Boolean isNuevo){
         this.isNuevo = isNuevo;
     }
 
-    double getPrecioCompra(){
+    public Double getPrecioCompra(){
         return this.precioCompra;
     }
-    void setPrecioCompra(double precioCompra){
+    public void setPrecioCompra(Double precioCompra){
         this.precioCompra = precioCompra;
     }
 
-    double getPrecioLista(){
+    public Double getPrecioLista(){
         return this.precioLista;
     }
-    void setPrecioLista(double precioLista){
+    public void setPrecioLista(Double precioLista){
         this.precioLista = precioLista;
     }
 
 
-    Titular getIdTitular(){
-        return this.idTitular;
+    public Titular getTitular(){
+        return this.titular;
     }
-    void setIdTitular(Titular idTitular){
-        this.idTitular = idTitular;
+    public void setTitular(Titular titular){
+        this.titular = titular;
+    }
+
+    public List<Actividad> getActividades() {
+        return actividades;
+    }
+    public void setActividades(List<Actividad> actividades) {
+        this.actividades = actividades;
+    }
+
+    public Documentacion getDocumentacion(){
+        return this.documentacion;
+    }
+    public void setDocumentacion(Documentacion documentacion){
+        this.documentacion = documentacion;
+    }
+
+    // Metodos
+    public Double getGastoTotal(){
+        if (actividades == null || actividades.isEmpty()){
+            return 0.0;
+        } else{
+            return actividades.stream().mapToDouble(actividad -> actividad.getGasto()).sum();
+        }
     }
 
 }
