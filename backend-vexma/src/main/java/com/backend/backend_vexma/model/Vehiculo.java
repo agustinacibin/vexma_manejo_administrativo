@@ -1,9 +1,12 @@
 package com.backend.backend_vexma.model;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,12 +34,21 @@ public class Vehiculo {
     private String modelo;
     @Column(name = "anio", precision = 4, nullable = false)
     private Integer anio;
+    @Column(name = "version", nullable = false)
+    private String version;
+    @Enumerated(EnumType.STRING)
+    private TipoVehiculo tipo;
     @Column(name = "isNuevo", nullable = false)
     private Boolean isNuevo;
     @Column(name = "precioCompra", nullable = false, scale = 3)
     private Double precioCompra;
     @Column(name = "precioLista", nullable = false, scale = 3)
     private Double precioLista;
+    @Column(name = "fechaIngreso", nullable = false)
+    private LocalDate fechaIngreso;
+    @Column(name = "fechaEgreso", nullable = true)
+    private LocalDate fechaEgreso;
+
 
 
     // Relaciones
@@ -54,15 +66,19 @@ public class Vehiculo {
     // Constructor
     public Vehiculo(){}
 
-    public Vehiculo(String patente, String marca, String modelo, Integer anio, Titular titular, Boolean isNuevo, Double precioCompra, Double precioLista){
+    public Vehiculo(String patente, String marca, String modelo, Integer anio, String version, TipoVehiculo tipo, Titular titular, Boolean isNuevo, Double precioCompra, Double precioLista, LocalDate fechaIngreso, LocalDate fechaEgreso){
         this.patente = patente;
         this.marca = marca;
         this.modelo = modelo;
         this.anio = anio;
+        this.version = version;
+        this.tipo = tipo;
         this.titular = titular;
         this.isNuevo = isNuevo;
         this.precioCompra = precioCompra;
         this.precioLista = precioLista;
+        this.fechaIngreso = fechaIngreso;
+        this.fechaEgreso = fechaEgreso;
     }
 
 
@@ -99,6 +115,20 @@ public class Vehiculo {
         this.anio = anio;
     }
 
+    public String getVersion(){
+        return this.version;
+    }
+    public void setVersion(String version){
+        this.version = version;
+    }
+
+    public TipoVehiculo getTipo(){
+        return this.tipo;
+    }
+    public void setTipo(TipoVehiculo tipo){
+        this.tipo = tipo;
+    }
+
     public Boolean getIsNuevo(){
         return isNuevo;
     }
@@ -120,6 +150,19 @@ public class Vehiculo {
         this.precioLista = precioLista;
     }
 
+    public LocalDate getFechaIngreso(){
+        return this.fechaIngreso;
+    }
+    public void setFechaIngreso(LocalDate fechaIngreso){
+        this.fechaIngreso = fechaIngreso;
+    }    
+
+    public LocalDate getFechaEgreso(){
+        return this.fechaEgreso;
+    }
+    public void setFechaEgreso(LocalDate fechaEgreso){
+        this.fechaEgreso = fechaEgreso;
+    }
 
     public Titular getTitular(){
         return this.titular;
@@ -147,7 +190,9 @@ public class Vehiculo {
         if (actividades == null || actividades.isEmpty()){
             return 0.0;
         } else{
-            return actividades.stream().mapToDouble(actividad -> actividad.getGasto()).sum();
+            return actividades.stream()
+                    .filter(actividad -> actividad.getGasto() != null).filter(actividad -> Boolean.FALSE.equals(actividad.getIsPendiente()))
+                    .mapToDouble(actividad -> actividad.getGasto()).sum();
         }
     }
 

@@ -19,7 +19,7 @@ public class Actividad {
     private Long id;
 
     @Column(name = "isPendiente", nullable = false)
-    private Boolean isPendiente;
+    private Boolean isPendiente = true;
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
     @Column(name = "fecha", nullable = false)

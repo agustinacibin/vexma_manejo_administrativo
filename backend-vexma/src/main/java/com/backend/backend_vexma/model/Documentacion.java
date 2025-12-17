@@ -137,6 +137,13 @@ public class Documentacion {
         this.duplicadoLlaves = duplicadoLlaves;
     }
 
+    public Boolean getItv(){
+        return this.itv;
+    }
+    public void setItv(Boolean itv){
+        this.itv = itv;
+    }
+
     // isCompleta --> en base al estado de determinados documentos, retorna si el estado general de la documentacion es completa o incompleta
     public Boolean isCompleta(){
         return this.formulario08 && 
@@ -145,8 +152,6 @@ public class Documentacion {
                 this.verificacionPolicial && 
                 this.informeDominioRnpa && 
                 this.informeMultasRnpa && 
-                this.estadoImpositivo && 
-                this.manuales && 
-                this.duplicadoLlaves;
+                this.estadoImpositivo;
     }
 }
