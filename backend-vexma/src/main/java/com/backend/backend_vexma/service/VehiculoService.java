@@ -21,6 +21,7 @@ public class VehiculoService {
     public List<Vehiculo> obtenerVehiculosTodos(){
         List<Vehiculo> vehiculos = vehiculoRepository.findAll();
 
+        // Primero muestra vehiculos activos (fechaEgreso = null), y luego los vendidos 
         return vehiculos.stream()
                 .sorted(Comparator.comparing(Vehiculo::getFechaEgreso,
                         Comparator.nullsFirst(Comparator.naturalOrder())))
@@ -32,25 +33,20 @@ public class VehiculoService {
     }
 
     public Vehiculo guardarVehiculo(Vehiculo vehiculo){
-
-        if( (vehiculo.getPatente() == null) || vehiculo.getPatente().isEmpty() ||
-            (vehiculo.getMarca() == null) || vehiculo.getMarca().isEmpty() ||
-            (vehiculo.getModelo() == null) || vehiculo.getModelo().isEmpty() ||
-            (vehiculo.getAnio() == null) ||
-            (vehiculo.getVersion() == null) || vehiculo.getVersion().isEmpty() ||
-            (vehiculo.getTipo() == null) || 
-            (vehiculo.getTitular() == null) ||
-            (vehiculo.getIsNuevo() == null) ||
-            (vehiculo.getPrecioCompra() == null) ||
-            (vehiculo.getPrecioLista() == null)){
-                
-            throw new IllegalArgumentException("Debe completar todos los campos obligatorios.");
+        
+        Integer anioActual = LocalDate.now().getYear();
+        // Validar año ingresado menor o igual al actual
+        if((vehiculo.getAnio() != null) && (vehiculo.getAnio() > anioActual)){
+            throw new IllegalArgumentException("El año " + vehiculo.getAnio()
+                                                + " es incorrecto. No puede ser mayor a " + anioActual);
         }
 
+        // Si no se ingreso una fecha de ingreso, se autocompleta con la actual
         if(vehiculo.getFechaIngreso() == null){
             vehiculo.setFechaIngreso(LocalDate.now());
         }
 
+        // Asegurar que al crear un nuevo vehiculo, no nazca vendido
         if(vehiculo.getId() == null){
             vehiculo.setFechaEgreso(null);
         }
@@ -66,6 +62,7 @@ public class VehiculoService {
         Vehiculo vehiculo = vehiculoRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Vehiculo no encontrado."));
         
+        // Si se ingresa una fecha, se guarda en fechaEgreso; si no se ingresa, se guarda en fechaEgreso la fecha actual
         if(fecha != null){
             vehiculo.setFechaEgreso(fecha);
         }else{
@@ -80,6 +77,7 @@ public class VehiculoService {
         Vehiculo vehiculo = vehiculoRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Vehiculo no encontrado."));
 
+        // Si se ingresa una fecha, se guarda en fechaIngreso; sino, se guardará la fecha actual 
         if(fecha != null){
             vehiculo.setFechaIngreso(fecha);
         } else {
@@ -92,8 +90,8 @@ public class VehiculoService {
         
     }
 
-    // public double calcularGastoTotal(Long idVehiculo) {
-    //     Optional<Vehiculo> v = vehiculoRepository.findById(idVehiculo);
+    // public double calcularGastoTotal(Long id) {
+    //     Optional<Vehiculo> v = vehiculoRepository.findById(id);
     //     if (v.isPresent()) {
     //         Vehiculo vehiculo = v.get();
     //         if(vehiculo.getActividades() == null){return 0.0;}

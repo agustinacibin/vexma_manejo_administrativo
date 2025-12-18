@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.backend_vexma.dtos.VehiculoDTO;
+import com.backend.backend_vexma.model.TipoVehiculo;
 import com.backend.backend_vexma.model.Vehiculo;
 import com.backend.backend_vexma.service.VehiculoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/vehiculos")
@@ -46,10 +50,21 @@ public class VehiculoController {
 
 
     @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody Vehiculo vehiculo){
+    public ResponseEntity<?> guardar(@Valid @RequestBody VehiculoDTO vehiculoDTO){
+       
         try {
+            Vehiculo vehiculo = new Vehiculo();
+            vehiculo.setPatente(vehiculoDTO.getPatente());
+            vehiculo.setMarca(vehiculoDTO.getMarca());
+            vehiculo.setModelo(vehiculoDTO.getModelo());
+            vehiculo.setAnio(vehiculoDTO.getAnio());
+            vehiculo.setVersion(vehiculoDTO.getVersion());
+            vehiculo.setTipo(TipoVehiculo.valueOf(vehiculoDTO.getTipo())); 
+
             Vehiculo guardado = vehiculoService.guardarVehiculo(vehiculo);
+            
             return ResponseEntity.ok(guardado);
+
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
