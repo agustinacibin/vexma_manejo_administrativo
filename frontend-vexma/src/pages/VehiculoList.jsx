@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import VehiculoService from "../services/VehiculoService";
-import {FaEdit, FaEye, FaTrash, FaMoneyBillWave, FaUndo} from "react-icons/fa";
+import {FaEdit, FaEye, FaTrash, FaMoneyBillWave, FaUndo, FaFileArchive} from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function VehiculoList(){
@@ -77,9 +77,9 @@ function VehiculoList(){
                             </td>
 
                             <td>
-                                {/*Editar (lápiz)*/}
+                                {/*Ver detalles*/}
                                 <Link to={`/vehiculos/${vehiculo.id}`}>
-                                    <button style={{marginRight:"5px"}} title="Editar">
+                                    <button style={{marginRight:"5px"}} title="Detalles">
                                         <FaEye color='#5d8bffff'/>
                                     </button>
                                 </Link>
@@ -96,6 +96,14 @@ function VehiculoList(){
                                         </button>
                                     )
                                 }
+
+                                {/* Ver Documentación Asociada */}
+                                <Link to={`/vehiculos/${vehiculo.id}/documentacion`}>
+                                    <button style={{marginRight:"5px"}} title="Documentacion">
+                                        <FaFileArchive color='' FaFileArchive/>
+                                    </button>
+                                </Link>
+
 
                                 {/*Borrar*/}
                                 <button onClick={() => borrarVehiculo(vehiculo.id)} style={{marginRight:"5px"}} title="Borrar">

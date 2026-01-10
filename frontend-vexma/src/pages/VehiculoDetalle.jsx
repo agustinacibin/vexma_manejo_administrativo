@@ -102,7 +102,7 @@ function VehiculoDetalle() {
         }
     }
 
-     const confirmarReingreso = async () => {
+    const confirmarReingreso = async () => {
         const fechaEnviar = fechaReingreso || null
         
         if (fechaEnviar > new Date().getDate()){
@@ -140,8 +140,37 @@ function VehiculoDetalle() {
     const actividadesCompletadas = vehiculo.actividades?.filter(a => !a.isPendiente) || [];
     const actividadesPendientes = vehiculo.actividades?.filter(a => a.isPendiente) || [];
 
+    const verificarDocumentacion = (documentacion) => {
+        if (!documentacion) return false
+
+        return (
+            documentacion.formulario08 && 
+            documentacion.cedulaVerde && 
+            documentacion.titulo && 
+            documentacion.verificacionPolicial && 
+            documentacion.informeDominioRnpa && 
+            documentacion.informeMultasRnpa && 
+            documentacion.estadoImpositivo
+        )
+    }
+
+    
+    // Variable del back que corresponde a qué Texto en pantalla
+    const formularios = [
+        { key: 'formulario08',         label: 'Formulario 08' },
+        { key: 'cedulaVerde',          label: 'Cédula Verde' },
+        { key: 'titulo',               label: 'Título del Automotor' },
+        { key: 'verificacionPolicial', label: 'Verificación Policial' },
+        { key: 'informeDominioRnpa',   label: 'Informe de Dominio' },
+        { key: 'informeMultasRnpa',    label: 'Informe de Multas' },
+        { key: 'estadoImpositivo',     label: 'Estado Impositivo' }
+    ];
+
+    const doc = vehiculo.documentacion || {}
+
     //const marca = vehiculo.marca[0].toUpperCase()+vehiculo.marca.substring(1).toLowerCase()
     //const modelo = vehiculo.modelo[0].toUpperCase()+vehiculo.modelo.substring(1).toLowerCase()
+
 
     return (
 
@@ -149,8 +178,7 @@ function VehiculoDetalle() {
             <Link to='/'> Volver al Listado </Link>
 
             <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "2px solid #333", marginBottom: "20px" }}>
-                <h1>{vehiculo.marca[0].toUpperCase()}{vehiculo.marca.substring(1).toLowerCase()} {vehiculo.modelo[0].toUpperCase()}{vehiculo.modelo.substring(1).toLowerCase()} <small>({vehiculo.anio})</small></h1>
-                <h2 style={{ color: "blue" }}>{vehiculo.patente}</h2>
+                <h1>{vehiculo.marca[0].toUpperCase()}{vehiculo.marca.substring(1).toLowerCase()} {vehiculo.modelo[0].toUpperCase()}{vehiculo.modelo.substring(1).toLowerCase()} ({vehiculo.anio})</h1> <h1><span style={{textAlign:"right"}}>{vehiculo.patente}</span></h1>
             </header>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
@@ -370,6 +398,33 @@ function VehiculoDetalle() {
                         </div>
 
                     </div>
+                </div>
+
+                {/* Documentacion */}
+                <div>
+                    <div style={{...cardStyle, width:"400px", borderColor: "black", color:"black"}}>
+                        <h3>Documentación del vehículo</h3>
+                        {verificarDocumentacion(vehiculo.documentacion) ? (
+                            <div style={{backgroundColor:"green", color:"white"}}>
+                                COMPLETA
+                            </div>
+                        ) : (
+                            <div>
+                                <div style={{backgroundColor:"red", color:"white"}}> INCOMPLETA </div> 
+                                    <p style={{textAlign:"left"}}>Documentación incompleta:</p>
+                                    <ul style={{textAlign:"left"}}>
+                                        {formularios.map(f => {
+                                            if (!doc[f.key]) {
+                                                return <li key={f.id}>{f.label}</li>
+
+                                            }
+                                            return null
+                                        })}
+                                    </ul>
+                            </div>
+                        ) }
+                    </div>
+
                 </div>
             </div>
 

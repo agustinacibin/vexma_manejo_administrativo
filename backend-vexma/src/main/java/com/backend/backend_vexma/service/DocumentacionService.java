@@ -39,7 +39,27 @@ public class DocumentacionService {
             throw new IllegalArgumentException("Debe completar todos los campos obligatorios.");
         }
 
-        return documentacionRepository.save(documentacion);
+        Optional<Documentacion> docExistente = documentacionRepository.findByVehiculo(documentacion.getVehiculo());
+
+        if (docExistente.isPresent()){
+            Documentacion docDb = docExistente.get();
+            
+            docDb.setFormulario08(documentacion.getFormulario08());
+            docDb.setCedulaVerde(documentacion.getCedulaVerde());
+            docDb.setTitulo(documentacion.getTitulo());
+            docDb.setVerificacionPolicial(documentacion.getVerificacionPolicial());
+            docDb.setInformeDominioRnpa(documentacion.getInformeDominioRnpa());
+            docDb.setInformeMultasRnpa(documentacion.getInformeMultasRnpa());
+            docDb.setEstadoImpositivo(documentacion.getEstadoImpositivo());
+            docDb.setManuales(documentacion.getManuales());
+            docDb.setDuplicadoLlaves(documentacion.getDuplicadoLlaves());
+            docDb.setItv(documentacion.getItv());
+
+            return documentacionRepository.save(docDb);
+        } else {
+            return documentacionRepository.save(documentacion);
+        }
+
     }
 
     public void borrarDocumentacion(Long id){
