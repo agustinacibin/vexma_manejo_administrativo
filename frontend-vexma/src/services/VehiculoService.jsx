@@ -23,7 +23,7 @@ class VehiculoService {
         let url = `${API_URL}/${id}/vender`;
 
         if(fecha){
-            url += '?fecha=${fecha}';
+            url += `?fecha=${fecha}`;
         }
 
         return axios.patch(url)
@@ -33,7 +33,7 @@ class VehiculoService {
         let url = `${API_URL}/${id}/reingresar`;
 
         if(fecha){
-            url += '?fecha=${fecha}';
+            url += `?fecha=${fecha}`;
         }
 
         return axios.patch(url);

@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.backend.backend_vexma.model.Titular;
 import com.backend.backend_vexma.model.Vehiculo;
+import com.backend.backend_vexma.repository.TitularRepository;
 import com.backend.backend_vexma.repository.VehiculoRepository;
 
 @Service
@@ -17,6 +19,9 @@ public class VehiculoService {
 
     @Autowired
     private VehiculoRepository vehiculoRepository;
+
+    @Autowired
+    private TitularRepository titularRepository;
 
     public List<Vehiculo> obtenerVehiculosTodos(){
         List<Vehiculo> vehiculos = vehiculoRepository.findAll();
@@ -46,9 +51,37 @@ public class VehiculoService {
             vehiculo.setFechaIngreso(LocalDate.now());
         }
 
+        if(vehiculo.getFechaIngreso().getYear() < vehiculo.getAnio()){
+            throw new IllegalArgumentException("El año de ingreso del vehículo no puede ser menor a la del año del vehículo.");
+        }
+
+        if(vehiculo.getFechaIngreso().getYear() > anioActual){
+            throw new IllegalArgumentException("El año " + vehiculo.getFechaIngreso().getYear()
+                                                + " en la fecha de ingreso del vehículo es incorrecto. No puede ser mayor a " + anioActual);
+        }
+
+        if(vehiculo.getAnio() > anioActual){
+            throw new IllegalArgumentException("El año " + vehiculo.getAnio() + " no puede ser mayor al año actual (" + anioActual + 
+                                                "). Modifíque la claúsula.");
+        }
+
         // Asegurar que al crear un nuevo vehiculo, no nazca vendido
         if(vehiculo.getId() == null){
             vehiculo.setFechaEgreso(null);
+        }
+
+        // Verificar si el titular tiene id
+        if (vehiculo.getTitular() != null && vehiculo.getTitular().getId() != null) {
+
+            Titular titularExistente = titularRepository.findById(vehiculo.getTitular().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("El titular seleccionado no existe"));
+            
+            vehiculo.setTitular(titularExistente);
+        }
+
+        
+        if (vehiculo.getIsNuevo() == null) {
+            throw new IllegalArgumentException("Es obligatorio indicar si el vehículo es Nuevo o Usado.");
         }
 
         return vehiculoRepository.save(vehiculo);
@@ -59,16 +92,25 @@ public class VehiculoService {
     }
 
     public Vehiculo marcarComoVendido(Long id, LocalDate fecha){
+
         Vehiculo vehiculo = vehiculoRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Vehiculo no encontrado."));
+
+        LocalDate fechaFinal = (fecha != null) ? fecha : LocalDate.now();
+
         
-        // Si se ingresa una fecha, se guarda en fechaEgreso; si no se ingresa, se guarda en fechaEgreso la fecha actual
-        if(fecha != null){
-            vehiculo.setFechaEgreso(fecha);
-        }else{
-            vehiculo.setFechaEgreso(LocalDate.now());
+        if (fechaFinal.isBefore(vehiculo.getFechaIngreso())){
+            throw new IllegalArgumentException("La fecha de venta (" + fechaFinal + ") no puede ser anterior a la fecha de ingreso (" + vehiculo.getFechaIngreso() + ").");
         }
 
+        if (fechaFinal.isAfter(LocalDate.now())){
+             throw new IllegalArgumentException("La fecha de venta no puede ser futura.");
+        }
+
+        
+        vehiculo.setFechaEgreso(fechaFinal);
+
+       
         return vehiculoRepository.save(vehiculo);
 
     }
@@ -77,13 +119,22 @@ public class VehiculoService {
         Vehiculo vehiculo = vehiculoRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Vehiculo no encontrado."));
 
-        // Si se ingresa una fecha, se guarda en fechaIngreso; sino, se guardará la fecha actual 
-        if(fecha != null){
-            vehiculo.setFechaIngreso(fecha);
-        } else {
-            vehiculo.setFechaIngreso(LocalDate.now());
+        LocalDate fechaFinal = fecha != null ? fecha : LocalDate.now();
+
+        if (vehiculo.getFechaEgreso() == null) {
+        throw new IllegalArgumentException("El vehículo no figura como vendido, no se puede reingresar.");
+        }
+
+        if(fechaFinal.isBefore(vehiculo.getFechaEgreso())){
+            throw new IllegalArgumentException("La fecha de reingreso " + fechaFinal + " no puede ser menor a que la de venta (" + vehiculo.getFechaEgreso() + ") del vehículo.");
+        }
+
+        if(fechaFinal.isAfter(LocalDate.now())){
+            throw new IllegalArgumentException("La fecha de reingreso no puede ser futura.");
         }
         
+
+        vehiculo.setFechaIngreso(fechaFinal);
         vehiculo.setFechaEgreso(null);
 
         return vehiculoRepository.save(vehiculo);

@@ -11,9 +11,13 @@ function VehiculoForm(){
         modelo: "",
         anio: "",
         version: "",
-        tipo: "AUTO",
+        isNuevo:"",
+        tipo: "",
         titular: null,
-        fechaIngreso:""
+        precioCompra:"",
+        precioLista:"",
+        fechaIngreso:"",
+        fechaEgreso: null
     })
 
     const [listaTitulares, setListaTitulares] = useState([]);
@@ -32,8 +36,12 @@ function VehiculoForm(){
 
     const handleChange = (e) => {
         const {name, value} = e.target;
+        if (name === "patente" || name === "marca" || name === "modelo"){
+            setVehiculo({...vehiculo, [name]:value.toUpperCase()})
+        } else {
+            setVehiculo({...vehiculo, [name]:value})
+        }
 
-        setVehiculo({...vehiculo, [name]:value})
     }
 
     
@@ -57,18 +65,42 @@ function VehiculoForm(){
             return
         }
 
+        if (vehiculo.isNuevo === "") {
+            alert("Por favor, indica si el vehículo es Nuevo o Usado.")
+            return
+        }
+
+        if(vehiculo.tipo === "") {
+            alert("Por favor, selecciona un Tipo de la lista.")
+            return
+        }
+
         try {
+
             const datosAEnviar = {...vehiculo}
+
             if (!datosAEnviar.fechaIngreso){
-                datosAEnviar.fechaIngreso == null
+                datosAEnviar.fechaIngreso = null
             }
 
-            await VehiculoService.guardar(datosAEnviar);
-            alert("Vehiculo guardado con éxito!");
-            navigate("/");
+            datosAEnviar.isNuevo = (vehiculo.isNuevo === "true")
+
+            datosAEnviar.precioCompra = parseFloat(vehiculo.precioCompra);
+            datosAEnviar.precioLista = parseFloat(vehiculo.precioLista);
+
+            if(isNaN(datosAEnviar.precioCompra) || isNaN(datosAEnviar.precioLista)){
+                alert("Por favor ingresa precios válidos");
+                return;
+            }
+
+            await VehiculoService.guardar(datosAEnviar)
+            alert("Vehiculo guardado con éxito!")
+            navigate("/")
+
         } catch (error) {
             console.error(error)
-            alert("Error al guardar: " + (error.response?.data || "Verifica los datos ingresados."))
+            const mensaje = error.response?.data ? JSON.stringify(error.response.data) : "Verifica los datos."
+            alert("Error al guardar: " + mensaje)
         }
     }
 
@@ -76,7 +108,7 @@ function VehiculoForm(){
 
     return (
 
-        <div style={{ maxWidth: "600px", margin: "20px auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
+        <div style={{ maxWidth: "800px", margin: "20px auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
             <Link to={"/"} style={{justifyContent:"right"}}>Volver</Link>
             <h2>Nuevo Vehículo</h2>
             <form onSubmit={handleSubmit}>
@@ -127,6 +159,7 @@ function VehiculoForm(){
                     <input 
                         type="number"
                         name="anio"
+                        max={new Date().getFullYear()}
                         value={vehiculo.anio}
                         onChange={handleChange}
                         required
@@ -157,7 +190,7 @@ function VehiculoForm(){
                         style={{ width: "100%", padding: "8px"}} 
                         
                     >
-                        <option value="">--- Seleccione un Tipo ---</option>
+                        <option value="AUTO">--- Seleccione un Tipo ---</option>
                         <option value="SEDAN_2P">Sedan 2P</option>
                         <option value="SEDAN_3P">Sedan 3P</option>
                         <option value="SEDAN_4P">Sedan 4P</option>
@@ -176,6 +209,50 @@ function VehiculoForm(){
 
                 </div>
 
+                {/* Estado */}
+                <div>
+                    <label>Estado:</label>
+                    <select 
+                        name="isNuevo" 
+                        value={vehiculo.isNuevo}
+                        onChange={handleChange}    
+                        style={{ width: "100%", padding: "8px"}} 
+                    >
+                        <option value="">--- Seleccione un Estado ---</option>
+                        <option value="true">Nuevo (0km)</option>
+                        <option value="false">Usado</option>
+
+                    </select>
+                </div>
+
+                {/* Precio de Compra */}
+                <div>
+                    <label>Precio de Compra:</label>
+                    <input
+                        type="number"
+                        name='precioCompra'
+                        value={vehiculo.precioCompra} 
+                        step="any" 
+                        min="0"
+                        onChange={handleChange}
+                        style={{ width: "100%", padding: "8px"}} 
+                    />
+                </div>
+
+                {/* Precio de Lista */}
+                <div>
+                    <label>Precio de Lista:</label>
+                    <input 
+                        type="number"
+                        name='precioLista'
+                        value={vehiculo.precioLista}
+                        step="any" 
+                        min="0"
+                        onChange={handleChange}
+                        style={{ width: "100%", padding: "8px"}} 
+                    />
+                </div>
+
                 {/* Fecha de Ingreso */}
                 <div>
                     <label>Fecha de Ingreso:</label>
@@ -188,29 +265,46 @@ function VehiculoForm(){
                     />
                 </div>
 
+                {/* Fecha de Egreso */}
+                {/* <div>
+                    <label>Fecha de Egreso:</label>
+                    <input
+                        type="date"
+                        name='fechaEgreso'
+                        value={vehiculo.fechaEgreso}
+                        onChange={handleChange}
+                        style={{ width: "100%", padding: "8px"}} 
+                    />
+                </div> */}
+
                 {/* Titular */}
-                <div style={{ display: 'flex', alignItems: 'end', gap: '10px', margin: '20px 0'}}>
+                <label>Titular:</label>
+                <div style={{ display: 'flex', gap: '50px', margin: '20px 0'}}>
                     <div>
-                        <label>Titular:</label>
                         <select 
                             onChange={handleTitularSelect} 
                             style={{flex: 1, padding: '5px'}}
                             defaultValue=""
                         >
 
-                        <option value="">--- Seleccione un Titular ---</option>
-                        {listaTitulares.map(t => (
-                            <option key={t.id} value={t.id}>
-                                {t.apellido}, {t.nombre} - DNI: {t.dni}
-                            </option>
-                        ))}
+                            <option value="">--- Seleccione un Titular ---</option>
+                            {
+                                listaTitulares
+                                    .sort((a,b) => a.apellido.localeCompare(b.apellido))
+                                    .map(t => (
+                                        <option key={t.id} value={t.id}>
+                                            {t.apellido}, {t.nombre} - DNI: {t.dni}
+                                        </option>
+                                    ))
+                            }
+                            
                         </select>
                     </div>
 
                     <button 
                         type='button'
                         onClick={() => navigate("/crear-titular")}
-                        style={{ padding: "10px", backgroundColor: "#007bff", color: "white", border: "none", cursor: "pointer",  margin: '20px 0' }}
+                        style={{ padding: "10px", backgroundColor: "#007bff", color: "white", border: "none", cursor: "pointer",  margin: '-0px 0' }}
                     >
                         Nuevo Titular
                     </button>

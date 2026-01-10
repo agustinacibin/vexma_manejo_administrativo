@@ -2,6 +2,8 @@ package com.backend.backend_vexma.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,7 +55,8 @@ public class Vehiculo {
 
     // Relaciones
     @ManyToOne
-    @JoinColumn(name = "titular", nullable = false)
+    @JoinColumn(name = "id_titular", nullable = false)
+    @JsonIgnoreProperties("vehiculos")
     private Titular titular;
 
     @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL)
@@ -79,6 +82,21 @@ public class Vehiculo {
         this.precioLista = precioLista;
         this.fechaIngreso = fechaIngreso;
         this.fechaEgreso = fechaEgreso;
+    }
+
+    public Vehiculo(String patente, String marca, String modelo, Integer anio, String version, TipoVehiculo tipo, Titular titular, Boolean isNuevo, Double precioCompra, Double precioLista, LocalDate fechaIngreso){
+        this.patente = patente;
+        this.marca = marca;
+        this.modelo = modelo;
+        this.anio = anio;
+        this.version = version;
+        this.tipo = tipo;
+        this.titular = titular;
+        this.isNuevo = isNuevo;
+        this.precioCompra = precioCompra;
+        this.precioLista = precioLista;
+        this.fechaIngreso = fechaIngreso;
+        this.fechaEgreso = null;
     }
 
 

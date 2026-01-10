@@ -36,7 +36,7 @@ public class Titular {
     // Constructor
     public Titular(){}
      
-    public Titular(int dni, String nombre, String apellido, LocalDate fechaNacimiento) {
+    public Titular(Integer dni, String nombre, String apellido, LocalDate fechaNacimiento) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;

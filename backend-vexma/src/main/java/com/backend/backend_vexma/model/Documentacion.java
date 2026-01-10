@@ -1,4 +1,6 @@
 package com.backend.backend_vexma.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +43,8 @@ public class Documentacion {
 
     // Relaciones
     @OneToOne
-    @JoinColumn(name = "vehiculo", nullable = false)
+    @JoinColumn(name = "id_vehiculo", nullable = false)
+    @JsonIgnoreProperties("documentacion")
     private Vehiculo vehiculo;
 
 

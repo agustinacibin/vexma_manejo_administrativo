@@ -60,6 +60,12 @@ public class VehiculoController {
             vehiculo.setAnio(vehiculoDTO.getAnio());
             vehiculo.setVersion(vehiculoDTO.getVersion());
             vehiculo.setTipo(TipoVehiculo.valueOf(vehiculoDTO.getTipo())); 
+            vehiculo.setIsNuevo(vehiculoDTO.getIsNuevo());
+            vehiculo.setFechaIngreso(vehiculoDTO.getFechaIngreso());
+            vehiculo.setFechaEgreso(vehiculoDTO.getFechaEgreso());
+            vehiculo.setTitular(vehiculoDTO.getTitular());
+            vehiculo.setPrecioCompra(vehiculoDTO.getPrecioCompra());
+            vehiculo.setPrecioLista(vehiculoDTO.getPrecioLista());
 
             Vehiculo guardado = vehiculoService.guardarVehiculo(vehiculo);
             

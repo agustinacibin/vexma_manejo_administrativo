@@ -3,6 +3,7 @@ import './App.css'
 import VehiculoList from './pages/VehiculoList'
 import VehiculoForm from './pages/VehiculoForm'
 import TitularForm from './pages/TitularForm.jsx'
+import VehiculoDetalle from './pages/VehiculoDetalle.jsx'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
             <Route path='/' element={<VehiculoList/>}/>
             <Route path='/crear' element={<VehiculoForm/>}/>
             <Route path='/crear-titular' element={<TitularForm/>}/>
+            <Route path='/vehiculos/:id' element={<VehiculoDetalle/>}/>
           </Routes>
       </div>
     </BrowserRouter>

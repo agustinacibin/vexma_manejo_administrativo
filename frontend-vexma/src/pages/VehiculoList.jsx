@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import VehiculoService from "../services/VehiculoService";
-import {FaEdit, FaTrash, FaMoneyBillWave, FaUndo} from "react-icons/fa";
+import {FaEdit, FaEye, FaTrash, FaMoneyBillWave, FaUndo} from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function VehiculoList(){
@@ -78,9 +78,11 @@ function VehiculoList(){
 
                             <td>
                                 {/*Editar (lápiz)*/}
-                                <button style={{marginRight:"5px"}} title="Editar">
-                                    <FaEdit color="blue"/>
-                                </button>
+                                <Link to={`/vehiculos/${vehiculo.id}`}>
+                                    <button style={{marginRight:"5px"}} title="Editar">
+                                        <FaEye color='#5d8bffff'/>
+                                    </button>
+                                </Link>
 
                                 {/*Vender o reingresar (segun fechaEgreso)*/}
                                 {
