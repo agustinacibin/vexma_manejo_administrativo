@@ -55,7 +55,7 @@ function VehiculoForm(){
 
     const handleChange = (e) => {
         const {name, value} = e.target;
-        if (name === "patente" || name === "marca" || name === "modelo"){
+        if (name === "patente"){
             setVehiculo({...vehiculo, [name]:value.toUpperCase()})
         } else {
             setVehiculo({...vehiculo, [name]:value})
@@ -167,7 +167,8 @@ function VehiculoForm(){
                         value={vehiculo.marca}
                         onChange={handleChange}
                         required
-                        style={{ width: "100%", padding: "8px"}} 
+                        style={{ width: "100%", padding: "8px", textTransform: "capitalize"}}
+                         
                     />
                 </div>
 
@@ -180,7 +181,8 @@ function VehiculoForm(){
                         value={vehiculo.modelo}
                         onChange={handleChange} 
                         required
-                        style={{ width: "100%", padding: "8px"}} 
+                        style={{ width: "100%", padding: "8px", textTransform: "capitalize"}}
+                         
                     />
                 </div>
 
@@ -207,7 +209,8 @@ function VehiculoForm(){
                         value={vehiculo.version}
                         onChange={handleChange}
                         required
-                        style={{ width: "100%", padding: "8px"}}  
+                        style={{ width: "100%", padding: "8px", textTransform: "capitalize"}}
+                          
                     />
                 </div>
 

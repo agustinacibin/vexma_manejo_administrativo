@@ -16,6 +16,10 @@ class TitularService {
         return axios.post(`${API_URL}`, titular)
     }
 
+    actualizar(titular){
+        return axios.post(API_URL, titular)
+    }
+
     borrar(id) {
         return axios.delete(`${API_URL}/${id}`)
     }

@@ -19,8 +19,8 @@ function VehiculoList(){
     };
 
     useEffect(() => {
-        cargarVehiculos();
-    }, []);
+        cargarVehiculos()
+    }, [])
 
 
     // Para borrar algun vehiculo
@@ -28,9 +28,9 @@ function VehiculoList(){
         if(window.confirm("¿Seguro que desea borrar permanentemente el vehiculo?")){
             VehiculoService.borrar(id)
                             .then(() => {
-                                cargarVehiculos();
+                                cargarVehiculos()
                             })
-                            .catch(error => console.error(error));
+                            .catch(error => console.error(error))
         }
     }
 
@@ -43,6 +43,10 @@ function VehiculoList(){
 
             <Link to='/crear'>
                 <button style={{marginBottom:"10px"}}>Nuevo vehículo</button>    
+            </Link>
+
+            <Link to='/titulares'>
+                <button style={{marginBottom:"10px"}}>Ver titulares</button>    
             </Link>
         
             <table border="1" style={{ width: '100%', borderCollapse: 'collapse' }}>

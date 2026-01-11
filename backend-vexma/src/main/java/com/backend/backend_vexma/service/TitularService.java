@@ -31,10 +31,33 @@ public class TitularService {
             
             throw new IllegalArgumentException("Debe completar todos los campos obligatorios.");
         }
+
+        titular.setNombre(formatearTexto(titular.getNombre()));
+        titular.setApellido(formatearTexto(titular.getApellido()));
+        
         return titularRepository.save(titular);
     }
 
     public void borrarTitular(Long id){
         titularRepository.deleteById(id);
+    }
+
+    // Método auxiliar para formatear texto (Capital Case)
+    private String formatearTexto(String texto) {
+        if (texto == null || texto.isEmpty()) {
+            return texto;
+        }
+
+        String[] palabras = texto.toLowerCase().split("\\s+");
+        StringBuilder resultado = new StringBuilder();
+
+        for (String palabra : palabras) {
+            if (palabra.length() > 0) {
+                resultado.append(Character.toUpperCase(palabra.charAt(0)))
+                         .append(palabra.substring(1))
+                         .append(" ");
+            }
+        }
+        return resultado.toString().trim();
     }
 }

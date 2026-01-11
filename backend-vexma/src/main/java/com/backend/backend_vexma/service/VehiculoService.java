@@ -84,6 +84,14 @@ public class VehiculoService {
             throw new IllegalArgumentException("Es obligatorio indicar si el vehículo es Nuevo o Usado.");
         }
 
+        vehiculo.setMarca(formatearTexto(vehiculo.getMarca()));
+        vehiculo.setModelo(formatearTexto(vehiculo.getModelo()));
+        vehiculo.setVersion(formatearTexto(vehiculo.getVersion()));
+
+        if (vehiculo.getPatente() != null) {
+            vehiculo.setPatente(vehiculo.getPatente().toUpperCase().trim());
+        }
+
         return vehiculoRepository.save(vehiculo);
     }
 
@@ -141,16 +149,24 @@ public class VehiculoService {
         
     }
 
-    // public double calcularGastoTotal(Long id) {
-    //     Optional<Vehiculo> v = vehiculoRepository.findById(id);
-    //     if (v.isPresent()) {
-    //         Vehiculo vehiculo = v.get();
-    //         if(vehiculo.getActividades() == null){return 0.0;}
-    //         return vehiculo.getActividades().stream()
-    //                 .mapToDouble(actividad -> actividad.getGasto()) // expresion Lambda
-    //                 .sum();
-    //     }
-    //     return 0.0;
-    // }
+
+    // Método auxiliar para formatear texto (Capital Case)
+    private String formatearTexto(String texto) {
+        if (texto == null || texto.isEmpty()) {
+            return texto;
+        }
+
+        String[] palabras = texto.toLowerCase().split("\\s+");
+        StringBuilder resultado = new StringBuilder();
+
+        for (String palabra : palabras) {
+            if (palabra.length() > 0) {
+                resultado.append(Character.toUpperCase(palabra.charAt(0)))
+                         .append(palabra.substring(1))
+                         .append(" ");
+            }
+        }
+        return resultado.toString().trim();
+    }
 
 }

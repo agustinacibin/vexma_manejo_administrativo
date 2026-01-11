@@ -1,5 +1,5 @@
-import {useState} from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import {useState, useEffect} from 'react'
+import { useNavigate, Link, useParams } from 'react-router-dom'
 import TitularService from '../services/TitularService'
 
 function TitularForm() {
@@ -13,6 +13,24 @@ function TitularForm() {
 
     const navigate = useNavigate();
 
+    const {id} = useParams()
+
+    useEffect(() => {
+        if (id) {
+            TitularService.obtenerPorId(id)
+                            .then(res => {
+                                const data = res.data
+
+                                setTitular({
+                                    ...data
+                                })
+                            })
+                            .catch(err => console.error(err))
+
+        }
+    }, [id])
+
+
     const handleChange = (e) => {
         const {name, value} = e.target;
 
@@ -24,22 +42,43 @@ function TitularForm() {
         e.preventDefault();
 
         try{ 
-            await TitularService.guardar(titular);
-            alert("Titular guardado con éxito!");
-            navigate("/crear");
+
+            if (id) {
+                await TitularService.actualizar(titular)
+                alert("Titular actualizado con éxito!")
+                navigate("/titulares")
+            } else {
+                await TitularService.guardar(titular);
+                alert("Titular guardado con éxito!");
+                navigate(-1);
+            }
+         
             
         } catch(error) {
             console.error(error)
-            alert("Error al guardar el titular.")
+            alert("Error al " + (id ? "guardar" : "actualizar") + " el titular.")
             console.error(error)
         }
+    }
+
+
+    const handleVolver = () => {
+        navigate(-1); // Navega un paso atrás en el historial
     }
 
 
     return (
 
         <div style={{ maxWidth: "400px", margin: "auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
-            <Link to={"/"}>Volver</Link>
+                
+            { 
+                id ? (
+                    <Link to={"/titulares"}>Volver</Link>
+                ) : (
+                    <button onClick={handleVolver}>Volver</button>
+                ) 
+
+            }    
             <h2>Nuevo Titular</h2>
             <form onSubmit={handleSubmit}>
                 <h3>Datos del Titular</h3>
