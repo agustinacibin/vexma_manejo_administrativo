@@ -19,6 +19,10 @@ class VehiculoService {
         return axios.delete(`${API_URL}/${id}`);
     }
 
+    actualizar(vehiculo){
+        return axios.post(API_URL, vehiculo)
+    }
+
     vender(id, fecha){
         let url = `${API_URL}/${id}/vender`;
 

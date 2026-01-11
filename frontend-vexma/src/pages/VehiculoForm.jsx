@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import VehiculoService from '../services/VehiculoService';
 import TitularService from '../services/TitularService'
 
@@ -20,9 +20,11 @@ function VehiculoForm(){
         fechaEgreso: null
     })
 
-    const [listaTitulares, setListaTitulares] = useState([]);
+    const [listaTitulares, setListaTitulares] = useState([])
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
+
+    const {id} = useParams()
 
     useEffect(() => {
         TitularService.obtenerTodos()
@@ -32,7 +34,24 @@ function VehiculoForm(){
                         .catch(error => {
                             console.error("Error al cargar titulares", error)
                         })
-    }, [])
+
+        
+        // En caso de actualizar un vehículo en particular
+
+        if (id) {
+            VehiculoService.obtenerPorId(id)
+                            .then(res => {
+                                const data = res.data
+
+                                setVehiculo({
+                                    ...data,
+                                    isNuevo: data.isNuevo.toString(),
+                                    titular: data.titular || null
+                                })
+                            })
+                            .catch(err => console.error(err))
+        }
+    }, [id])
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -85,17 +104,23 @@ function VehiculoForm(){
 
             datosAEnviar.isNuevo = (vehiculo.isNuevo === "true")
 
-            datosAEnviar.precioCompra = parseFloat(vehiculo.precioCompra);
-            datosAEnviar.precioLista = parseFloat(vehiculo.precioLista);
+            datosAEnviar.precioCompra = parseFloat(vehiculo.precioCompra)
+            datosAEnviar.precioLista = parseFloat(vehiculo.precioLista)
+
+            if (id) {
+                await VehiculoService.actualizar(datosAEnviar)
+                alert("Vehiculo actualizado con éxito!")
+                navigate(`/vehiculos/${id}`)
+            } else {
+                await VehiculoService.guardar(datosAEnviar)
+                alert("Vehiculo guardado con éxito!")
+                navigate("/")
+            }
 
             if(isNaN(datosAEnviar.precioCompra) || isNaN(datosAEnviar.precioLista)){
                 alert("Por favor ingresa precios válidos");
                 return;
             }
-
-            await VehiculoService.guardar(datosAEnviar)
-            alert("Vehiculo guardado con éxito!")
-            navigate("/")
 
         } catch (error) {
             console.error(error)
@@ -109,7 +134,13 @@ function VehiculoForm(){
     return (
 
         <div style={{ maxWidth: "800px", margin: "20px auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
-            <Link to={"/"} style={{justifyContent:"right"}}>Volver</Link>
+            {
+                id ? (
+                    <Link to={`/vehiculos/${id}`} style={{justifyContent:"right"}}>Volver</Link>
+                ) : (
+                    <Link to={"/"} style={{justifyContent:"right"}}>Volver</Link>
+                )}
+            
             <h2>Nuevo Vehículo</h2>
             <form onSubmit={handleSubmit}>
                 <h3>Datos del Vehículo</h3>
@@ -284,7 +315,7 @@ function VehiculoForm(){
                         <select 
                             onChange={handleTitularSelect} 
                             style={{flex: 1, padding: '5px'}}
-                            defaultValue=""
+                            value={vehiculo.titular?.id || ""}
                         >
 
                             <option value="">--- Seleccione un Titular ---</option>

@@ -17,6 +17,7 @@ function App() {
             <Route path='/crear' element={<VehiculoForm/>}/>
             <Route path='/crear-titular' element={<TitularForm/>}/>
             <Route path='/vehiculos/:id' element={<VehiculoDetalle/>}/>
+            <Route path='/vehiculos/:id/editar' element={<VehiculoForm/>}/>
             <Route path='/vehiculos/:id/documentacion' element={<VehiculoDocumentacion/>}/>
           </Routes>
       </div>

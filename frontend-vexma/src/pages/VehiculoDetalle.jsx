@@ -176,6 +176,12 @@ function VehiculoDetalle() {
 
         <div style={{ maxWidth: "900px", margin: "20px auto", padding: "20px", fontFamily: "Arial" }}>
             <Link to='/'> Volver al Listado </Link>
+            <button 
+                onClick={() => navigate(`/vehiculos/${vehiculo.id}/editar`)}
+                style={{cursor:"pointer", background:"#ffc107", border:"none", padding:"5px 10px", borderRadius:"5px", marginTop:"5px"}}
+            >
+                Editar Vehículo
+            </button>
 
             <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "2px solid #333", marginBottom: "20px" }}>
                 <h1>{vehiculo.marca[0].toUpperCase()}{vehiculo.marca.substring(1).toLowerCase()} {vehiculo.modelo[0].toUpperCase()}{vehiculo.modelo.substring(1).toLowerCase()} ({vehiculo.anio})</h1> <h1><span style={{textAlign:"right"}}>{vehiculo.patente}</span></h1>
