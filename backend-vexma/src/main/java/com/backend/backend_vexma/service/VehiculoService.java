@@ -26,11 +26,17 @@ public class VehiculoService {
     public List<Vehiculo> obtenerVehiculosTodos(){
         List<Vehiculo> vehiculos = vehiculoRepository.findAll();
 
-        // Primero muestra vehiculos activos (fechaEgreso = null), y luego los vendidos 
+        // Primero muestra vehiculos activos (fechaEgreso = null), y luego los vendidos // ordenamiento por 1) marca, 2) modelo, 3) año, 4) version
         return vehiculos.stream()
-                .sorted(Comparator.comparing(Vehiculo::getFechaEgreso,
-                        Comparator.nullsFirst(Comparator.naturalOrder())))
+                .sorted(Comparator.comparing(Vehiculo::getFechaEgreso, Comparator.nullsFirst(Comparator.naturalOrder()))
+
+                .thenComparing(Vehiculo::getMarca, String::compareToIgnoreCase)
+                .thenComparing(Vehiculo::getModelo, String::compareToIgnoreCase)
+                .thenComparing(Vehiculo::getAnio)
+                .thenComparing(Vehiculo::getVersion, String::compareToIgnoreCase))
+
                 .collect(Collectors.toList());
+
     }
 
     public Optional<Vehiculo> obtenerVehiculoPorId(Long id){

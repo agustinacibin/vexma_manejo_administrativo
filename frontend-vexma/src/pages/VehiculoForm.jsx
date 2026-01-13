@@ -1,7 +1,8 @@
 import {useState, useEffect} from 'react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import VehiculoService from '../services/VehiculoService';
-import TitularService from '../services/TitularService'
+import TitularService from '../services/TitularService';
+import TitularModal from './TitularModal';
 
 function VehiculoForm(){
 
@@ -21,6 +22,8 @@ function VehiculoForm(){
     })
 
     const [listaTitulares, setListaTitulares] = useState([])
+
+    const [showTitularModal, setShowTitularModal] = useState(false)
 
     const navigate = useNavigate()
 
@@ -76,6 +79,13 @@ function VehiculoForm(){
     }
 
 
+    const handleTitularCreado = (nuevoTitular) => {
+        setListaTitulares([...listaTitulares, nuevoTitular])
+        setVehiculo({...vehiculo, titular: nuevoTitular})
+        setShowTitularModal(false)
+    }
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -106,6 +116,8 @@ function VehiculoForm(){
 
             datosAEnviar.precioCompra = parseFloat(vehiculo.precioCompra)
             datosAEnviar.precioLista = parseFloat(vehiculo.precioLista)
+
+            console.log("Enviando al backend:", datosAEnviar);
 
             if (id) {
                 await VehiculoService.actualizar(datosAEnviar)
@@ -299,18 +311,6 @@ function VehiculoForm(){
                     />
                 </div>
 
-                {/* Fecha de Egreso */}
-                {/* <div>
-                    <label>Fecha de Egreso:</label>
-                    <input
-                        type="date"
-                        name='fechaEgreso'
-                        value={vehiculo.fechaEgreso}
-                        onChange={handleChange}
-                        style={{ width: "100%", padding: "8px"}} 
-                    />
-                </div> */}
-
                 {/* Titular */}
                 <label>Titular:</label>
                 <div style={{ display: 'flex', gap: '50px', margin: '20px 0'}}>
@@ -337,8 +337,9 @@ function VehiculoForm(){
 
                     <button 
                         type='button'
-                        onClick={() => navigate("/crear-titular")}
-                        style={{ padding: "10px", backgroundColor: "#007bff", color: "white", border: "none", cursor: "pointer",  margin: '-0px 0' }}
+                        //onClick={() => navigate("/crear-titular")}
+                        onClick={() => setShowTitularModal(true)}
+                        style={{ padding: "10px", backgroundColor: "#28a745", color: "white", border: "none", cursor: "pointer",  borderRadius:"4px", margin: '-0px 0' }}
                     >
                         Nuevo Titular
                     </button>
@@ -350,6 +351,13 @@ function VehiculoForm(){
                 </button>
 
             </form>
+
+            {showTitularModal && (
+                <TitularModal
+                    onClose={() => setShowTitularModal(false)}
+                    onTitularCreado={handleTitularCreado}
+                />
+            )}
 
         </div>
 

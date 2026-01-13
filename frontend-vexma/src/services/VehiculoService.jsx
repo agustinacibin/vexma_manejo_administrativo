@@ -20,7 +20,7 @@ class VehiculoService {
     }
 
     actualizar(vehiculo){
-        return axios.post(API_URL, vehiculo)
+        return axios.put(API_URL, vehiculo)
     }
 
     vender(id, fecha){

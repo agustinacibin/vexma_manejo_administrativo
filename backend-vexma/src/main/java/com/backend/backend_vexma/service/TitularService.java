@@ -1,7 +1,9 @@
 package com.backend.backend_vexma.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,12 @@ public class TitularService {
     private TitularRepository titularRepository;
 
     public List<Titular> obtenerTitularesTodos(){
-        return titularRepository.findAll();
+        List<Titular> titulares = titularRepository.findAll();
+
+        return titulares.stream()
+                        .sorted(Comparator.comparing(Titular::getApellido, String::compareToIgnoreCase)
+                                .thenComparing(Titular::getNombre, String::compareToIgnoreCase))
+                        .collect(Collectors.toList());
     }
 
     public Optional<Titular> obtenerTitularPorId(Long id){

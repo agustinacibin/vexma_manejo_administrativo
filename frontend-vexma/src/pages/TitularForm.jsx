@@ -92,7 +92,7 @@ function TitularForm() {
                         value={titular.nombre}
                         onChange={handleChange}
                         required
-                        style={{ width: "100%", padding: "8px"}} 
+                        style={{ width: "100%", padding: "8px", textTransform: "capitalize"}} 
                     />
                 </div>
 
@@ -105,7 +105,7 @@ function TitularForm() {
                         value={titular.apellido}
                         onChange={handleChange}
                         required
-                        style={{ width: "100%", padding: "8px"}} 
+                        style={{ width: "100%", padding: "8px", textTransform: "capitalize"}} 
                     />
                 </div>
 
@@ -119,6 +119,7 @@ function TitularForm() {
                         onChange={handleChange}
                         required
                         maxLength="8"
+                        minLength="8"
                         style={{ width: "100%", padding: "8px"}}
                     />
                 </div>
