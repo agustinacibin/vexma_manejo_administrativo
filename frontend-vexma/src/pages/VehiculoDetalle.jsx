@@ -351,6 +351,7 @@ function VehiculoDetalle() {
                                         </span>
                                         <div style={{display: 'flex', alignItems: 'center'}}>
                                             <strong style={{marginRight: "10px", color: "#e67e22"}}>${act.gasto}</strong>
+                                            <p>{act.fecha}</p>
                                             <button 
                                                 onClick={() => borrarActividad(act.id)} 
                                                 style={{color: "red", border: "1px solid red", borderRadius: "4px", background: "white", cursor: "pointer", padding: "2px 6px", fontSize: "0.8em"}}
@@ -425,32 +426,34 @@ function VehiculoDetalle() {
                         </div>
 
                     </div>
-                </div>
 
-                {/* Documentacion */}
-                <div>
-                    <div style={{...cardStyle, width:"400px", borderColor: "black", color:"black"}}>
-                        <h3>Documentación del vehículo</h3>
-                        {verificarDocumentacion(vehiculo.documentacion) ? (
-                            <div style={{backgroundColor:"green", color:"white"}}>
-                                COMPLETA
-                            </div>
-                        ) : (
-                            <div>
-                                <div style={{backgroundColor:"red", color:"white"}}> INCOMPLETA </div> 
-                                    <p style={{textAlign:"left"}}>Documentación incompleta:</p>
-                                    <ul style={{textAlign:"left"}}>
-                                        {formularios.map(f => {
-                                            if (!doc[f.key]) {
-                                                return <li key={f.key}>{f.label}</li>
+                    {/* Documentacion */}
+                    <div>
+                        <div style={{...cardStyle, width:"400px", borderColor: "black", color:"white"}}>
+                            <h3>Documentación del vehículo</h3>
+                            {verificarDocumentacion(vehiculo.documentacion) ? (
+                                <div style={{backgroundColor:"green", color:"white"}}>
+                                    COMPLETA
+                                </div>
+                            ) : (
+                                <div>
+                                    <div style={{backgroundColor:"red", color:"white"}}> INCOMPLETA </div> 
+                                        <p style={{textAlign:"left", color:"white"}}>Documentación faltante:</p>
+                                        <ul style={{textAlign:"left", color:"white"}}>
+                                            {formularios.map(f => {
+                                                if (!doc[f.key]) {
+                                                    return <li key={f.key}>{f.label}</li>
 
-                                            }
-                                            return null
-                                        })}
-                                    </ul>
-                            </div>
-                        ) }
+                                                }
+                                                return null
+                                            })}
+                                        </ul>
+                                </div>
+                            ) }
+                        </div>
                     </div>
+
+                
 
                 </div>
             </div>

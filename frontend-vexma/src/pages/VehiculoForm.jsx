@@ -108,6 +108,16 @@ function VehiculoForm(){
 
             const datosAEnviar = {...vehiculo}
 
+            // 2. LIMPIEZA: Borramos las relaciones que confunden al Backend
+            delete datosAEnviar.actividades;    // <--- ESTO ES LA CLAVE
+            delete datosAEnviar.documentacion;  // <--- ESTO TAMBIÉN
+
+            // 3. Ajuste del Titular (si es necesario)
+            // A veces enviar el objeto titular entero da problemas, mejor solo el ID
+            if (datosAEnviar.titular && datosAEnviar.titular.id) {
+                datosAEnviar.titular = { id: datosAEnviar.titular.id };
+            }
+
             if (!datosAEnviar.fechaIngreso){
                 datosAEnviar.fechaIngreso = null
             }
