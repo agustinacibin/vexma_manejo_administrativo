@@ -168,8 +168,21 @@ function VehiculoDetalle() {
 
     const doc = vehiculo.documentacion || {}
 
-    //const marca = vehiculo.marca[0].toUpperCase()+vehiculo.marca.substring(1).toLowerCase()
-    //const modelo = vehiculo.modelo[0].toUpperCase()+vehiculo.modelo.substring(1).toLowerCase()
+    const tipos = [
+        { key: 'SEDAN_2P',                  label: 'Sedán 2P' },
+        { key: 'SEDAN_3P',                  label: 'Sedán 3P' },
+        { key: 'SEDAN_4P',                  label: 'Sedán 4P' },
+        { key: 'SEDAN_5P',                  label: 'Sedán 5P' },
+        { key: 'RURAL_5P',                  label: 'Rural 5P' },
+        { key: 'SUV',                       label: 'SUV'},
+        { key: 'PICKUP_CABINA_SIMPLE',      label: 'Pick-Up Cabina Simple'},
+        { key: 'PICKUP_CABINA_DOBLE',       label: 'Pick-Up Cabina Doble'},
+        { key: 'FURGON',                    label: 'Furgón'},
+        { key: 'TODO_TERRENO',              label: 'Todo Terreno'},   
+        { key: 'CAMION',                    label: 'Camión'},
+        { key: 'TRANSPORTE_DE_PASAJEROS',   label: 'Transporte de Pasajeros'},
+        { key: 'OTRO',                      label: 'Otro'}
+    ]
 
 
     return (
@@ -184,7 +197,7 @@ function VehiculoDetalle() {
             </button>
 
             <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "2px solid #333", marginBottom: "20px" }}>
-                <h1>{vehiculo.marca[0].toUpperCase()}{vehiculo.marca.substring(1).toLowerCase()} {vehiculo.modelo[0].toUpperCase()}{vehiculo.modelo.substring(1).toLowerCase()} ({vehiculo.anio})</h1> <h1><span style={{textAlign:"right"}}>{vehiculo.patente}</span></h1>
+                <h1>{vehiculo.marca} {vehiculo.modelo} ({vehiculo.anio})</h1> <h1><span style={{textAlign:"right"}}>{vehiculo.patente}</span></h1>
             </header>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
@@ -193,8 +206,8 @@ function VehiculoDetalle() {
                 <div>
                     <div style={cardStyle}>
                         <h3>Datos Generales</h3>
-                        <p><strong>Versión:</strong> {vehiculo.version[0].toUpperCase()}{vehiculo.version.substring(1).toLowerCase()}</p>
-                        <p><strong>Tipo:</strong> {vehiculo.tipo[0]}{vehiculo.tipo.substring(1).toLowerCase().replace("_", " ")}</p>
+                        <p><strong>Versión:</strong> {vehiculo.version ? vehiculo.version : "-"}</p>
+                        <p><strong>Tipo:</strong> {tipos.find((t) => t.key === vehiculo.tipo)?.label || "" }</p>
                         <p><strong>Estado:</strong> {vehiculo.isNuevo ? "Nuevo 0km" : "Usado"}</p>
                         <p><strong>Titular:</strong> {vehiculo.titular ? `${vehiculo.titular.apellido}, ${vehiculo.titular.nombre} - DNI:${vehiculo.titular.dni}` : "Sin titular"}</p>
                         <p><strong>Ingreso:</strong> {vehiculo.fechaIngreso}</p>
@@ -274,6 +287,13 @@ function VehiculoDetalle() {
                                 onChange={e => setNuevaActividad({...nuevaActividad, gasto: e.target.value})}
                                 style={{width: "20%", marginRight: "5px"}}
                             />
+                            <input
+                                type="date" placeholder="$ Costo" 
+                                name="fecha"
+                                value={nuevaActividad.fecha}
+                                onChange={e => setNuevaActividad({...nuevaActividad, fecha: e.target.value})}
+                                style={{width: "40%", marginRight: "5px"}}
+                            />
                             <br />
                             <label style={{color:'black'}}>
                                 <input 
@@ -286,7 +306,7 @@ function VehiculoDetalle() {
                         </form>
 
                         {/* Lista de Actividades */}
-                        {/* Realizadas */}
+                        {/* Realizadas */} 
                         <h4 style={{ borderBottom: "2px solid green", paddingBottom: "5px", marginBottom: "10px", color: "green" }}>
                             Realizadas ({actividadesCompletadas.length})
                         </h4>
@@ -295,11 +315,12 @@ function VehiculoDetalle() {
                             <ul style={{ listStyle: "none", padding: 0, marginBottom: "20px" }}>
                                 {actividadesCompletadas.map(act => (
                                     <li key={act.id} style={{ borderBottom: "1px solid #eee", padding: "8px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                        <span style={{color: "#333"}}>
+                                        <span style={{color: "#ffffff"}}>
                                             {act.descripcion}
                                         </span>
                                         <div style={{display: 'flex', alignItems: 'center'}}>
                                             <strong style={{marginRight: "10px"}}>${act.gasto}</strong>
+                                            <p>{act.fecha}</p>
                                             <button 
                                                 onClick={() => borrarActividad(act.id)} 
                                                 style={{color: "red", border: "1px solid red", borderRadius: "4px", background: "white", cursor: "pointer", padding: "2px 6px", fontSize: "0.8em"}}
@@ -421,7 +442,7 @@ function VehiculoDetalle() {
                                     <ul style={{textAlign:"left"}}>
                                         {formularios.map(f => {
                                             if (!doc[f.key]) {
-                                                return <li key={f.id}>{f.label}</li>
+                                                return <li key={f.key}>{f.label}</li>
 
                                             }
                                             return null

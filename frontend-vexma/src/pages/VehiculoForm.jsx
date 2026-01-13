@@ -243,8 +243,8 @@ function VehiculoForm(){
                         <option value="SEDAN_5P">Sedan 5P</option>
                         <option value="RURAL_5P">Rural 5P</option>
                         <option value="SUV">Suv</option>
-                        <option value="PICKUP_CABINA_SIMPLE">Pick-up Cabina Simple</option>
-                        <option value="PICKUP_CABINA_DOBLE">Pick-up Cabina Doble</option>
+                        <option value="PICKUP_CABINA_SIMPLE">Pick-Up Cabina Simple</option>
+                        <option value="PICKUP_CABINA_DOBLE">Pick-Up Cabina Doble</option>
                         <option value="FURGON">Furgón</option>
                         <option value="TODO_TERRENO">Todo Terreno</option>
                         <option value="CAMION">Camión</option>

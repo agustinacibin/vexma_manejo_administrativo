@@ -3,6 +3,7 @@ package com.backend.backend_vexma.model;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +35,7 @@ public class Actividad {
     @ManyToOne
     @JoinColumn(name = "id_vehiculo", nullable = false)
     @JsonIgnoreProperties("actividades")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Vehiculo vehiculo;
 
 
