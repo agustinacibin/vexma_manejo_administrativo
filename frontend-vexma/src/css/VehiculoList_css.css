@@ -1,0 +1,206 @@
+
+.vehiculo-list-container{
+    width: 100%
+}
+
+
+.main-vehicle-container{
+    width: 100%;
+    height: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    text-align: center;
+    background-color: aliceblue;
+    color: black;
+
+    border: 2px solid #22222214;   
+    border-radius: 8px;        
+    margin-bottom: 10px;       
+    padding: 10px;             
+    box-sizing: border-box;
+    box-shadow: 5px 5px #33333347;
+
+    padding: 1%;
+}
+
+
+.vehiculo-container{
+    display: flex;           
+    flex-direction: row;
+    align-items: center;       
+    width: 85%;
+}
+
+.acciones-container{
+    display: flex;
+    flex-direction: row;   
+    justify-content: center;
+    align-items: center;
+    margin-right: 2%;
+    margin-left: 0%;
+    
+    width: 15%;                
+    border-left: 2px solid #99999982; 
+    padding-left: 30px;
+    gap: 5px;
+}
+
+.acciones-container button {
+    width: 60px;    
+    height: 40px;   
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin: 0 !important;
+    border-radius: 8px;  
+}
+
+.vehiculo-informacion-container{
+    flex: 2;            
+    text-align: left;          
+    padding-left: 10px;
+    margin-left: 2%;
+}
+
+
+#main-car-info{
+    font-size:30px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+#car-owner{
+    font-size:20px;
+}
+
+
+.vehiculo-estado-container{
+    flex: 1;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    opacity: 100%;
+}
+
+.vehiculo-estado-container p {
+    background-color: #000000dd;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 13px;      
+    border: 2px solid #333;
+    font-weight: bold;
+}
+
+
+/************************************************************/
+
+.vehiculos-agencia{
+    flex: 1;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    opacity: 100%;
+}
+
+
+.vehiculos-agencia-numero{
+    width: 100%;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    font-size: 60px;
+
+    color: black;
+
+    border: 2px solid #22222214;   
+    border-radius: 25px;        
+    padding: 10px;             
+    box-sizing: border-box;
+    box-shadow: 5px 5px #79797947;
+}
+
+.vehiculos-agencia-texto{
+    font-size: 20px;
+    margin-top: -25%;
+}
+
+
+.vehiculo-datos-lista-divisor{
+    width: 100%;
+    height: 3px;
+    margin: 3% 0%;
+    background-color: #9e9e9e1e;
+}
+
+
+
+
+/* --- RESPONSIVE PARA LISTA DE VEHICULOS --- */
+@media (max-width: 768px) {
+
+  /* 1. Las tarjetas dejan de ser filas y pasan a ser columnas */
+  .main-vehicle-container {
+    flex-direction: column; /* Apilar uno arriba del otro */
+    height: auto;           /* Altura automática (que crezca lo que necesite) */
+    padding: 15px;
+    gap: 15px;              /* Espacio entre elementos */
+  }
+
+  /* 2. Los contenedores internos ocupan todo el ancho */
+  .vehiculo-container {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .vehiculo-informacion-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center; /* Centrar texto en celular */
+  }
+  
+  /* 3. Ajustar fuentes gigantes */
+  #main-car-info {
+    font-size: 18px;    /* Mucho más chico */
+    justify-content: center; /* Centrado */
+    flex-direction: column; /* Nombre arriba, patente abajo */
+    gap: 5px;
+  }
+  
+  .vehiculos-agencia-numero {
+      font-size: 30px;
+      height: 80px;
+  }
+
+  /* 4. Acomodar la sección de estado y acciones */
+  .vehiculo-estado-container {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .acciones-container {
+    width: 100%;
+    border-left: none;      /* Quitamos la línea divisoria vertical */
+    border-top: 1px solid #ccc; /* Ponemos una línea horizontal */
+    padding-left: 0;
+    padding-top: 10px;
+    justify-content: space-around; /* Botones separados equitativamente */
+  }
+
+  /* 5. Ajustar las estadísticas de arriba */
+  .vehiculos-agencia {
+    flex-direction: column; /* Una tarjeta debajo de la otra */
+    gap: 10px;
+  }
+  
+  .vehiculos-agencia > div {
+      width: 100%;
+  }
+}
