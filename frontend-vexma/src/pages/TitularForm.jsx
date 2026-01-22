@@ -1,6 +1,8 @@
 import {useState, useEffect} from 'react'
 import { useNavigate, Link, useParams } from 'react-router-dom'
+import { SlArrowLeft } from "react-icons/sl";
 import TitularService from '../services/TitularService'
+import "../css/Form_css.css"
 
 function TitularForm() {
 
@@ -69,80 +71,76 @@ function TitularForm() {
 
     return (
 
-        <div style={{ maxWidth: "400px", margin: "auto", padding: "20px", border: "1px solid #ccc", borderRadius: "8px" }}>
-                
-            { 
-                id ? (
-                    <Link to={"/titulares"}>Volver</Link>
+        <div className="form-container" style={{marginTop:"8%"}}>
+            
+            {/* HEADER CON FLECHA Y TÍTULO */}
+            <div className="form-header">
+                {id ? (
+                    <Link to={"/titulares"}>
+                        <SlArrowLeft />
+                    </Link>
                 ) : (
-                    <button onClick={handleVolver}>Volver</button>
-                ) 
+                    <a onClick={handleVolver} style={{cursor:"pointer"}}>
+                        <SlArrowLeft />
+                    </a>
+                )}
+                <h3>{id ? "Editar Titular" : "Nuevo Titular"}</h3>
+            </div>
 
-            }    
-            <h2>Nuevo Titular</h2>
-            <form onSubmit={handleSubmit}>
-                <h3>Datos del Titular</h3>
-
-                {/* Nombre */}
-                <div>
-                    <label>Nombre: </label>
+            <form onSubmit={handleSubmit} style={{display:'flex', flexDirection:'column', gap:'15px'}}>
+                
+                {/* FILA 1: Nombre y Apellido */}
+                <div className="form-row">
                     <input
+                        className="styled-input"
                         type="text"
                         name='nombre'
+                        placeholder="Nombre"
                         value={titular.nombre}
                         onChange={handleChange}
                         required
-                        style={{ width: "100%", padding: "8px", textTransform: "capitalize"}} 
+                        style={{ textTransform: "capitalize" }}
                     />
-                </div>
-
-                {/* Apellido */}
-                <div>
-                    <label>Apellido: </label>
                     <input
+                        className="styled-input"
                         type="text"
                         name='apellido'
+                        placeholder="Apellido"
                         value={titular.apellido}
                         onChange={handleChange}
                         required
-                        style={{ width: "100%", padding: "8px", textTransform: "capitalize"}} 
+                        style={{ textTransform: "capitalize" }}
                     />
                 </div>
 
-                {/* DNI */}
-                <div>
-                    <label>DNI: </label>
-                    <input 
-                        type="numeric"
-                        name="dni"
-                        value={titular.dni}
-                        onChange={handleChange}
-                        required
-                        maxLength="8"
-                        minLength="8"
-                        style={{ width: "100%", padding: "8px"}}
-                    />
-                </div>
+                {/* FILA 2: DNI */}
+                <input
+                    className="styled-input"
+                    type="number" // numeric a veces da problemas, number es estandar
+                    name="dni"
+                    placeholder="DNI"
+                    value={titular.dni}
+                    onChange={handleChange}
+                    required
+                    // maxLength no funciona bien con type="number", mejor controlarlo en change si es vital
+                />
 
-                {/* Fecha de Nacimiento */}
-                <div>
-                    <label>Fecha de Nacimiento: </label>
-                    <input
-                        type="date"
-                        name='fechaNacimiento'
-                        value={titular.fechaNacimiento}
-                        onChange={handleChange}
-                        required
-                        style={{ width: "100%", padding: "8px"}}
-                    />
-                </div>
+                {/* FILA 3: Fecha (Con el truco del CSS) */}
+                <input
+                    className="styled-input"
+                    type="date"
+                    name='fechaNacimiento'
+                    placeholder="Fecha de Nacimiento"
+                    value={titular.fechaNacimiento}
+                    onChange={handleChange}
+                    required
+                />
 
-                <button type='submit' style={{padding: "10px 20px", cursor:"pointer"}}>
+                <button type='submit' className="submit-btn">
                     Guardar Titular
                 </button>
 
             </form>
-
         </div>
     )
 }

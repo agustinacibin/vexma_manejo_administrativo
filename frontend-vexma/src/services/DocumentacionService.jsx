@@ -16,6 +16,10 @@ class DocumentacionService{
         return axios.post(API_URL, documentacion)
     }
 
+    actualizar(documentacion){
+        return axios.put(API_URL, documentacion)
+    }
+
     borrar(id){
         return axios.delete(`${API_URL}/${id}`)
     }

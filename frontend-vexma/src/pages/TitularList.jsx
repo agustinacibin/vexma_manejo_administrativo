@@ -1,34 +1,46 @@
 import {useState, useEffect} from "react";
 import TitularService from "../services/TitularService";
-import {FaEdit, FaEye, FaTrash, FaMoneyBillWave, FaUndo, FaFileArchive} from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import {FaEdit, FaTrash} from "react-icons/fa";
+import { Link } from "react-router-dom";
+import VehiculoService from "../services/VehiculoService";
+import "../css/TitularList-css.css"
+import { SlArrowLeft } from "react-icons/sl";
 
 
 function TitularList(){
 
     const [titulares, setTitulares] = useState([])
+    const [vehiculos, setVehiculos] = useState([])
+    const [vehiculosPopUp, setVehiculosPopUp] = useState(null)
 
     const cargarTitulares = () => {
-
         TitularService.obtenerTodos()
                         .then(res => {
                             setTitulares(res.data)
-                            console.log("Datos recibidos: ", res)
                         })
-                        .catch(err => console.log("Error al cargar los titulares: ", err))
+                        .catch(err => console.log("Error al cargar los titulares.", err))
+    }
 
+    const cargarVehiculos = () => {
+        VehiculoService.obtenerTodos()
+                        .then(res => {
+                            setVehiculos(res.data)
+                        })
+                        .catch(err => console.error("Error al cargar los vehiculos,", err))
     }
 
     useEffect(() => {
         cargarTitulares()
+        cargarVehiculos()
     }, [])
 
-    const navigate = useNavigate()
-
-    const handleVolver = () => {
-        navigate("/")
+    const handleVehiculos = (listaVehiculos) => {
+        setVehiculosPopUp(listaVehiculos)
     }
 
+    const cerrarPopup = () => {
+        setVehiculosPopUp(null)
+    }
 
     const borrarTitular = (id) => {
         if(window.confirm("Esta seguro que desea borrar el titular?")){
@@ -39,61 +51,100 @@ function TitularList(){
                                 console.error(err)
                             })
         }
-    } 
+    }
 
+    const formatearFecha = (fecha) => {
+        if (!fecha) return "-";
+        const [anio, mes, dia] = fecha.toString().split('-');
+        return `${dia}/${mes}/${anio}`;
+    }
 
     return(
-        <div className="container">
+        <div className="titular-list-container">
             <h2>Listado de Titulares</h2>
-
-            <button onClick={handleVolver}>Volver</button>
-
-            <Link to='/crear-titular'>
-                <button style={{marginBottom:"10px"}}>Nuevo titular</button>    
-            </Link>
         
-            <table border="1" style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <table className="main-table">
                 <thead>
                     <tr>
                         <th>DNI</th>
                         <th>Apellido</th>
                         <th>Nombre</th>
                         <th>Fecha de Nacimiento</th>
+                        <th>Vehiculos a su Nombre</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {titulares.map(titular => (
-                        <tr key={titular.id} style={{ textAlign:"center"}}>
-                            <td>{titular.dni}</td>
-                            <td>{titular.apellido}</td>
-                            <td>{titular.nombre}</td>
-                            <td>{titular.fechaNacimiento}</td>
+                    {titulares.map(titular => {
+                        const nombreVehiculos = vehiculos.filter(v => v.titular?.id === titular.id && !v.fechaEgreso)
+                        const cantidadVehiculos = nombreVehiculos.length 
 
-                            <td>
-                                {/*Editar*/}
-                                <Link to={`/titulares/${titular.id}/editar`}>
-                                    <button style={{marginRight:"5px"}} title="Editar titular">
-                                        <FaEdit color='#5d8bffff'/>
+                        return (
+                            <tr key={titular.id}>
+                                <td>{titular.dni}</td>
+                                <td>{titular.apellido}</td>
+                                <td>{titular.nombre}</td>
+                                <td>{formatearFecha(titular.fechaNacimiento)}</td>
+                                
+                                {/* COLUMNA DE VEHÍCULOS */}
+                                <td>
+                                    {cantidadVehiculos > 0 ? (
+                                        <button 
+                                            onClick={() => handleVehiculos(nombreVehiculos)}
+                                            className="vehicle-count-badge"
+                                            title="Ver detalle"
+                                        >
+                                            {cantidadVehiculos}
+                                        </button>
+                                    ) : (
+                                        <span className="no-data">-</span>
+                                    )}
+                                </td>
+                                <td>
+                                    {/*Editar*/}
+                                    <Link to={`/titulares/${titular.id}/editar`}>
+                                        <button className="action-btn" title="Editar titular">
+                                            <FaEdit color='rgb(153, 182, 255)'/>
+                                        </button>
+                                    </Link>
+
+                                    {/*Borrar*/}
+                                    <button onClick={() => borrarTitular(titular.id)} className="action-btn" title="Borrar titular">
+                                        <FaTrash color='#e05656'/>
                                     </button>
-                                </Link>
-
-                                {/*Borrar*/}
-                                <button onClick={() => borrarTitular(titular.id)} style={{marginRight:"5px"}} title="Borrar titular">
-                                    <FaTrash color="red"/>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                    
+                                </td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </table>
+
+            {/* MODAL POPUP */}
+            {vehiculosPopUp && (
+                <div className="modal-overlay">
+                    <div className="modal-box">
+                        <div className="modal-header">
+                            <button onClick={cerrarPopup} className="close-icon-btn"><SlArrowLeft/></button>
+                            <h3>Vehículos a su Nombre</h3>
+                        </div>
+                        
+                        <ul className="modal-vehicle-list">
+                            {vehiculosPopUp.map(v => (
+                                <li key={v.id} className="modal-vehicle-item">
+                                    <strong>{v.marca} {v.modelo} {v.anio}</strong>
+                                    <span className="modal-vehicle-details">
+                                        Patente: {v.patente}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+
+                    </div>
+                </div>
+            )}
         
         </div>
     )
-
-    
-
 }
 
 export default TitularList

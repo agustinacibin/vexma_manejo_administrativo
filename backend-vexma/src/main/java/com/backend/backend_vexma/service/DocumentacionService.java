@@ -39,7 +39,7 @@ public class DocumentacionService {
             throw new IllegalArgumentException("Debe completar todos los campos obligatorios.");
         }
 
-        Optional<Documentacion> docExistente = documentacionRepository.findByVehiculo(documentacion.getVehiculo());
+        Optional<Documentacion> docExistente = documentacionRepository.findByVehiculo_Id(documentacion.getVehiculo().getId());
 
         if (docExistente.isPresent()){
             Documentacion docDb = docExistente.get();

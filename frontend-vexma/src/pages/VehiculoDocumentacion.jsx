@@ -1,224 +1,144 @@
-import {useState, useEffect} from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import DocumentacionService from '../services/DocumentacionService'
-
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import DocumentacionService from "../services/DocumentacionService";
+import VehiculoService from "../services/VehiculoService";
+import "../css/VehiculoDocumentacion-css.css";
+import { SlArrowLeft } from "react-icons/sl";
 
 function VehiculoDocumentacion() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-    const {id} = useParams()
-    const navigate = useNavigate()
+  const [vehiculo, setVehiculo] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    const [formulario, setFormulario] = useState({
-        formulario08: false,
-        cedulaVerde: false,
-        titulo: false,
-        verificacionPolicial: false,
-        informeDominioRnpa: false,
-        informeMultasRnpa: false,
-        estadoImpositivo: false,
-        manuales: false,
-        duplicadoLlaves: false,
-        itv: false,
-        vehiculo: {id: ""}
-    })
+  const [formulario, setFormulario] = useState({
+    id: null,
+    formulario08: false,
+    cedulaVerde: false,
+    titulo: false,
+    verificacionPolicial: false,
+    informeDominioRnpa: false,
+    informeMultasRnpa: false,
+    estadoImpositivo: false,
+    manuales: false,
+    duplicadoLlaves: false,
+    itv: false,
+  });
 
-    const cargarDocumentos = async () => {
-        DocumentacionService.obtenerPorId(id)
-                            .then(res => setFormulario(res.data))
-                            .catch(err => console.error("Error al cargar los documentos", err))
+  const itemsDocumentacion = [
+    { name: "formulario08", label: "Formulario 08" },
+    { name: "cedulaVerde", label: "Cédula Verde" },
+    { name: "titulo", label: "Título del Automotor" },
+    { name: "verificacionPolicial", label: "Verificación Policial" },
+    { name: "informeDominioRnpa", label: "Informe de Dominio - RNPA" },
+    { name: "informeMultasRnpa", label: "Informe de Multas - RNPA" },
+    { name: "estadoImpositivo", label: "Estado Impositivo" },
+    { name: "manuales", label: "Manuales" },
+    { name: "duplicadoLlaves", label: "Duplicado de Llaves" },
+    { name: "itv", label: "ITV" },
+  ];
+
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        if (id) {
+          const res = await VehiculoService.obtenerPorId(id);
+          setVehiculo(res.data);
+          
+          if (res.data.documentacion) {
+            setFormulario(res.data.documentacion);
+          }
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    cargarDatos();
+  }, [id]);
+
+  const handleChange = (e) => {
+    const { name, checked } = e.target;
+    setFormulario({ ...formulario, [name]: checked });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const payload = { ...formulario, vehiculo: { id: Number(id) } };
+
+    try {
+      if (formulario.id) {
+        await DocumentacionService.actualizar(payload);
+      } else {
+        await DocumentacionService.guardar(payload);
+      }
+      alert("Documentación guardada correctamente");
+      navigate(-1);
+    } catch (error) {
+      alert("Error al guardar.",error);
     }
+  };
 
-    useEffect(() => {
-        cargarDocumentos()
-    }, [id])
+  if (loading) return <div className="doc-loading">Cargando...</div>;
+  if (!vehiculo) return <div className="doc-loading">Vehículo no encontrado</div>;
 
-    const handleChange = (e) => {
-        const {name, checked} = e.target
+  return (
+    <div className="doc-container">
+    
+        <h2>Documentación del Vehículo</h2>
 
-        setFormulario({
-            ...formulario, 
-            [name]: checked
-        })
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        if (!id){
-            alert("Error: No se identificó el vehículo.")
-            return
-        }
-
-        const payload = {
-            ...formulario,
-            vehiculo: {id: Number(id)}
-        }
-
-        // Datos que se envían al back
-        console.log("Datos enviados al backend:", payload);
-
-        try {
-            await DocumentacionService.guardar(payload)
-            alert("Documentacion actualizada correctamente")
-            navigate(`/`)
-        } catch (error) {
-            console.error("Error al guardar", error)
-            alert("Error al guardar: " + (error.response?.data || error.message));
-        }
-
-
-
+      <form onSubmit={handleSubmit} className="doc-card">
         
+        {/* HEADER */}
+        <div className="doc-header">
+            
+            <button type="button" onClick={() => navigate(-1)} className="doc-btn-volver">
+                <SlArrowLeft/>
+            </button>
 
-    }
-
-
-
-    return (
-
-        <div className='container'>
-
-            <Link to={`/vehiculos/${id}`}>
-                <button style={{marginBottom:"10px"}}>Volver al Vehiculo</button>
-            </Link>
-
-            <h2>Documentación</h2>
-
-            <form onSubmit={handleSubmit}>
-
-                {/* Formulario 08 */}
-                <div>
-                    <label className='grupo-check'>
-                        <input 
-                            type="checkbox"
-                            name='formulario08'
-                            checked={formulario.formulario08}
-                            onChange={handleChange} 
-                        />Formulario 08
-                    </label>
-                </div>
-
-                {/* Cédula Verde */}
-                <div>
-                    <label className='grupo-check'>
-                        <input 
-                            type="checkbox"
-                            name='cedulaVerde'
-                            checked={formulario.cedulaVerde}
-                            onChange={handleChange} 
-                        />Cédula Verde
-                    </label>
-                </div>
-
-                {/* Título del Automotor */}
-                <div>
-                    <label className='grupo-check'>
-                        <input 
-                            type="checkbox"
-                            name='titulo'
-                            checked={formulario.titulo}
-                            onChange={handleChange} 
-                        />Título del Automotor
-                    </label>
-                </div>
-
-                {/* Verificación Policial */}
-                <div>
-                    <label className='grupo-check'>
-                        <input 
-                            type="checkbox"
-                            name='verificacionPolicial'
-                            checked={formulario.verificacionPolicial}
-                            onChange={handleChange} 
-                        />Verificación Policial
-                    </label>
-                </div>
-
-                {/* Informe de Dominio - RNPA */}
-                <div>
-                    <label className='grupo-check'>
-                        <input 
-                            type="checkbox"
-                            name='informeDominioRnpa'
-                            checked={formulario.informeDominioRnpa}
-                            onChange={handleChange} 
-                        />Informe de Dominio - RNPA
-                    </label>
-                </div>
-
-                {/* Informe de Multas - RNPA */}
-                <div>
-                    <label className='grupo-check'>
-                        <input 
-                            type="checkbox"
-                            name='informeMultasRnpa'
-                            checked={formulario.informeMultasRnpa}
-                            onChange={handleChange} 
-                        />Informe de Multas - RNPA
-                    </label>
-                </div>
-
-                {/* Estado Impositivo */}
-                <div>
-                    <label className='grupo-check'>
-                        <input 
-                            type="checkbox"
-                            name='estadoImpositivo'
-                            checked={formulario.estadoImpositivo}
-                            onChange={handleChange} 
-                        />Estado Impositivo
-                    </label>
-                </div>
-
-                {/* Manuales */}
-                <div>
-                    <label className='grupo-check'>
-                        <input 
-                            type="checkbox"
-                            name='manuales'
-                            checked={formulario.manuales}
-                            onChange={handleChange} 
-                        />Manuales
-                    </label>
-                </div>
-
-                {/* Duplicado de Llaves */}
-                <div>
-                    <label className='grupo-check'>
-                        <input 
-                            type="checkbox"
-                            name='duplicadoLlaves'
-                            checked={formulario.duplicadoLlaves}
-                            onChange={handleChange} 
-                        />Duplicado de Llaves
-                    </label>
-                </div>
-
-                {/* ITV */}
-                <div>
-                    <label className='grupo-check'>
-                        <input 
-                            type="checkbox"
-                            name='itv'
-                            checked={formulario.itv}
-                            onChange={handleChange} 
-                        />ITV
-                    </label>
-                </div>
-
-                <button type='submit'>Guardar Cambios</button>
-
-
-            </form>
-
-
-
-
+            <div className="doc-header-titles">
+                <h2 className="doc-title">{vehiculo.marca} {vehiculo.modelo} {vehiculo.anio}</h2>
+                <span className="doc-subtitle">{vehiculo.patente}</span>
+            </div>
         </div>
 
+        {/* CUERPO LISTA */}
+        <div className="doc-body">
+          {itemsDocumentacion.map((item) => (
+            <div key={item.name} className="doc-row">
+              
+              <div className="checkbox-wrapper-31">
+                <input
+                  type="checkbox"
+                  id={item.name}
+                  name={item.name}
+                  checked={formulario[item.name] || false}
+                  onChange={handleChange}
+                />
+                <label htmlFor={item.name}>
+                  <svg viewBox="0 0 100 100">
+                    <path className="box" d="M82,89H18c-3.87,0-7-3.13-7-7V18c0-3.87,3.13-7,7-7h64c3.87,0,7,3.13,7,7v64C89,85.87,85.87,89,82,89z"/>
+                    <polyline className="check" points="25.5,53.5 39.5,67.5 72.5,34.5 "/>
+                  </svg>
+                  <span>{item.label}</span>
+                </label>
+              </div>
 
-    )
+            </div>
+          ))}
+        </div>
+
+        {/* FOOTER */}
+        <div className="doc-footer">
+          <button type="submit" className="doc-btn-guardar">
+            Guardar Cambios
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 }
 
-
-export default VehiculoDocumentacion
+export default VehiculoDocumentacion;

@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { FaArrowCircleLeft } from "react-icons/fa";
 import { SlArrowLeft } from "react-icons/sl";
 import VehiculoService from "../services/VehiculoService";
 import TitularService from "../services/TitularService";
 import TitularModal from "./TitularModal";
-import "../css/VehiculoForm_css.css";
+import "../css/Form_css.css";
 
 function VehiculoForm() {
   const [vehiculo, setVehiculo] = useState({
@@ -118,7 +117,7 @@ function VehiculoForm() {
 
   return (
     <div>
-      <form className="form-container" onSubmit={handleSubmit}>
+      <form className="form-container" onSubmit={handleSubmit} style={{marginTop:"5%"}}>
         
         {/* Header dentro del formulario */}
         <div className="form-header">
@@ -128,7 +127,7 @@ function VehiculoForm() {
           <h3>{id ? "Editar Vehículo" : "Nuevo Vehículo"}</h3>
         </div>
 
-        {/* Fila 1: Patente (Sola o combinada) */}
+        {/* Patente */}
         <input
           className="styled-input"
           type="text"
@@ -140,7 +139,7 @@ function VehiculoForm() {
           maxLength="7"
         />
 
-        {/* Fila 2: Marca y Modelo */}
+        {/* Marca y Modelo */}
         <div className="form-row">
           <input
             className="styled-input"
@@ -164,7 +163,7 @@ function VehiculoForm() {
           />
         </div>
 
-        {/* Fila 3: Año y Versión */}
+        {/* Año y Versión */}
         <div className="form-row">
           <input
             className="styled-input"
@@ -188,7 +187,7 @@ function VehiculoForm() {
           />
         </div>
 
-        {/* Fila 4: Tipo y Estado (Selects) */}
+        {/* Tipo y Estado */}
         <div className="form-row">
           <select
             className="styled-input"
@@ -223,7 +222,7 @@ function VehiculoForm() {
           </select>
         </div>
 
-        {/* Fila 5: Precios */}
+        {/* Precios */}
         <div className="form-row">
           <input
             className="styled-input"

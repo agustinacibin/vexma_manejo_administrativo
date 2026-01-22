@@ -12,5 +12,6 @@ import com.backend.backend_vexma.model.Vehiculo;
 public interface DocumentacionRepository extends JpaRepository<Documentacion, Long>{
 
     Optional<Documentacion> findByVehiculo(Vehiculo vehiculo);
+    Optional<Documentacion> findByVehiculo_Id(Long idVehiculo);
     
 }

@@ -2,7 +2,9 @@ import {useState, useEffect} from 'react'
 import {useParams, useNavigate, Link} from 'react-router-dom'
 import VehiculoService from '../services/VehiculoService'
 import ActividadService from '../services/ActividadService'
-
+import { SlArrowLeft } from 'react-icons/sl'
+import { FaEdit, FaTrash, FaCheck, FaTimes } from 'react-icons/fa'
+import "../css/VehiculoDetalle-css.css"
 
 function VehiculoDetalle() {
 
@@ -28,8 +30,8 @@ function VehiculoDetalle() {
 
     const cargarDatosVehiculo = () => {
         VehiculoService.obtenerPorId(id)
-                        .then(res => setVehiculo(res.data))
-                        .catch(err => console.error("Error al cargar el vehiculo", err))
+            .then(res => setVehiculo(res.data))
+            .catch(err => console.error("Error al cargar el vehiculo", err))
     } 
 
     useEffect(() => {
@@ -65,84 +67,58 @@ function VehiculoDetalle() {
         if(window.confirm("¿Desea borrar la actividad?")) {
             await ActividadService.borrar(idActividad)
             cargarDatosVehiculo()
-            navigate()
         }
     }
 
 
     const confirmarVenta = async () => {
         const fechaEnviar = fechaVenta || null
-
         if (fechaEnviar > new Date().getDate()){
-            alert("La fecha enviada no puede ser mayor al día de hoy (" + new Date().getDate() + ").")
+            alert("La fecha enviada no puede ser mayor al día de hoy.")
         }
-        
         try {
             await VehiculoService.vender(vehiculo.id, fechaEnviar)
             setShowVentaInput(false)
             setFechaVenta("")
             cargarDatosVehiculo()
         } catch (error) {
-            console.error("Detalle del error:", error)
-            let mensajeBackend = ""
-            
-            if (error.response && error.response.data) {
-                if (typeof error.response.data === 'string') {
-                    mensajeBackend = error.response.data
-                } 
-                else {
-                    mensajeBackend = JSON.stringify(error.response.data)
-                }
-            } else {
-                mensajeBackend = "Error de conexión o desconocido."
-            }
-
-            alert("No se pudo vender:\n" + mensajeBackend)
-            setFechaVenta("")
+            console.error(error)
+            alert("Error al registrar venta")
         }
     }
 
     const confirmarReingreso = async () => {
         const fechaEnviar = fechaReingreso || null
-        
-        if (fechaEnviar > new Date().getDate()){
-            alert("La fecha enviada no puede ser mayor al día de hoy (" + new Date().getDate() + ").")
-        }
-        
         try {
             await VehiculoService.reingresar(vehiculo.id, fechaEnviar)
             setShowReingresoInput(false)
             setFechaReingreso("")
             cargarDatosVehiculo()
         } catch (error) {
-            alert("Error al reingresar el vehículo.")
             console.error(error)
-            setFechaReingreso("")
+            alert("Error al reingresar")
         }
     }
 
     if (!vehiculo) return <div style={{padding:"20px"}}>Cargando datos del vehículo...</div>
 
-    // Gasto Total de actividades NO pendientes
+    // --- CÁLCULOS ---
     const gastoTotalCalculado = vehiculo.actividades 
         ? vehiculo.actividades
             .filter(a => !a.isPendiente && a.gasto)
             .reduce((acc, curr) => acc + curr.gasto, 0)
         : 0
 
-    
     const precioMinimoVenta = (vehiculo.precioCompra || 0) + gastoTotalCalculado
-
     const precioContado = precioMinimoVenta * (1 + (rentabilidad/100))
-
     const precioDescuentoContado = precioContado * (1-(descuento/100))
 
     const actividadesCompletadas = vehiculo.actividades?.filter(a => !a.isPendiente) || [];
     const actividadesPendientes = vehiculo.actividades?.filter(a => a.isPendiente) || [];
 
+    // --- DOCUMENTACIÓN ---
     const verificarDocumentacion = (documentacion) => {
         if (!documentacion) return false
-
         return (
             documentacion.formulario08 && 
             documentacion.cedulaVerde && 
@@ -154,8 +130,6 @@ function VehiculoDetalle() {
         )
     }
 
-    
-    // Variable del back que corresponde a qué Texto en pantalla
     const formularios = [
         { key: 'formulario08',         label: 'Formulario 08' },
         { key: 'cedulaVerde',          label: 'Cédula Verde' },
@@ -167,316 +141,237 @@ function VehiculoDetalle() {
     ];
 
     const doc = vehiculo.documentacion || {}
-
     const tipos = [
-        { key: 'SEDAN_2P',                  label: 'Sedán 2P' },
-        { key: 'SEDAN_3P',                  label: 'Sedán 3P' },
-        { key: 'SEDAN_4P',                  label: 'Sedán 4P' },
-        { key: 'SEDAN_5P',                  label: 'Sedán 5P' },
-        { key: 'RURAL_5P',                  label: 'Rural 5P' },
-        { key: 'SUV',                       label: 'SUV'},
-        { key: 'PICKUP_CABINA_SIMPLE',      label: 'Pick-Up Cabina Simple'},
-        { key: 'PICKUP_CABINA_DOBLE',       label: 'Pick-Up Cabina Doble'},
-        { key: 'FURGON',                    label: 'Furgón'},
-        { key: 'TODO_TERRENO',              label: 'Todo Terreno'},   
-        { key: 'CAMION',                    label: 'Camión'},
-        { key: 'TRANSPORTE_DE_PASAJEROS',   label: 'Transporte de Pasajeros'},
-        { key: 'OTRO',                      label: 'Otro'}
+        { key: 'SEDAN_2P', label: 'Sedán 2P' }, { key: 'SEDAN_3P', label: 'Sedán 3P' },
+        { key: 'SEDAN_4P', label: 'Sedán 4P' }, { key: 'SEDAN_5P', label: 'Sedán 5P' },
+        { key: 'RURAL_5P', label: 'Rural 5P' }, { key: 'SUV', label: 'SUV'},
+        { key: 'PICKUP_CABINA_SIMPLE', label: 'Pick-Up Simple'}, { key: 'PICKUP_CABINA_DOBLE', label: 'Pick-Up Doble'},
+        { key: 'FURGON', label: 'Furgón'}, { key: 'TODO_TERRENO', label: 'Todo Terreno'},   
+        { key: 'CAMION', label: 'Camión'}, { key: 'TRANSPORTE_DE_PASAJEROS', label: 'Transporte Pasajeros'},
+        { key: 'OTRO', label: 'Otro'}
     ]
 
+    const fechaFormater = (fecha) => {
+        if (!fecha) return ("-")
+        const [anio, mes, dia] = fecha.toString().split("-")
+        return (`${dia}/${mes}/${anio}`)
+    }
 
     return (
-
-        <div style={{ maxWidth: "900px", margin: "20px auto", padding: "20px", fontFamily: "Arial" }}>
-            <Link to='/'> Volver al Listado </Link>
-            <button 
-                onClick={() => navigate(`/vehiculos/${vehiculo.id}/editar`)}
-                style={{cursor:"pointer", background:"#ffc107", border:"none", padding:"5px 10px", borderRadius:"5px", marginTop:"5px"}}
-            >
-                Editar Vehículo
-            </button>
-
-            <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "2px solid #333", marginBottom: "20px" }}>
-                <h1>{vehiculo.marca} {vehiculo.modelo} ({vehiculo.anio})</h1> <h1><span style={{textAlign:"right"}}>{vehiculo.patente}</span></h1>
+        <div className="detalle-container">
+            
+            {/* HEADER */}
+            <header className="detalle-header">
+                <div style={{display:'flex', alignItems:'center', gap:'15px'}}>
+                    <Link to='/' className="btn-volver"> <SlArrowLeft/> </Link>
+                    <div>
+                        <h1 className="titulo-principal">{vehiculo.marca} {vehiculo.modelo} {vehiculo.anio} <span className='subtitulo-patente'>{vehiculo.patente}</span></h1>
+                    </div>
+                </div>
+                
+                <button 
+                    onClick={() => navigate(`/vehiculos/${vehiculo.id}/editar`)}
+                    className="btn-header-edit"
+                >
+                    Editar Datos <FaEdit/>
+                </button>
             </header>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+            {/* GRID PRINCIPAL (2 COLUMNAS) */}
+            <div className="detalle-grid">
                 
-                {/* Datos y Actividades */}
+                {/* ------------------------------------------------ */}
+                {/* COLUMNA 1 (IZQUIERDA): DATOS + ACTIVIDADES */}
+                {/* ------------------------------------------------ */}
                 <div>
-                    <div style={cardStyle}>
+                    
+                    {/* 1. DATOS GENERALES */}
+                    <div className="detalle-card">
                         <h3>Datos Generales</h3>
-                        <p><strong>Versión:</strong> {vehiculo.version ? vehiculo.version : "-"}</p>
-                        <p><strong>Tipo:</strong> {tipos.find((t) => t.key === vehiculo.tipo)?.label || "" }</p>
-                        <p><strong>Estado:</strong> {vehiculo.isNuevo ? "Nuevo 0km" : "Usado"}</p>
-                        <p><strong>Titular:</strong> {vehiculo.titular ? `${vehiculo.titular.apellido}, ${vehiculo.titular.nombre} - DNI:${vehiculo.titular.dni}` : "Sin titular"}</p>
-                        <p><strong>Ingreso:</strong> {vehiculo.fechaIngreso}</p>
-                        {vehiculo.fechaEgreso && <p style={{color:"red", fontWeight:"bold"}}>Vendido el: {vehiculo.fechaEgreso}</p>}
                         
-                        <div style={{marginTop: "10px"}}>
+                        <div className="info-row"><span className="label">Versión:</span> <span className="valor">{vehiculo.version || "-"}</span></div>
+                        <div className="info-row"><span className="label">Tipo:</span> <span className="valor">{tipos.find((t) => t.key === vehiculo.tipo)?.label || vehiculo.tipo || ""}</span></div>
+                        <div className="info-row"><span className="label">Estado:</span> <span className="valor">{vehiculo.isNuevo ? "Nuevo 0km" : "Usado"}</span></div>
+                        <div className="info-row"><span className="label">Titular:</span> <span className="valor">{vehiculo.titular ? `${vehiculo.titular.apellido}, ${vehiculo.titular.nombre}` : "Sin titular"}</span></div>
+                        <div className="info-row"><span className="label">Ingreso:</span> <span className="valor">{fechaFormater(vehiculo.fechaIngreso)}</span></div>
+                        {vehiculo.fechaEgreso && <div className="info-row" style={{background:'#fee2e2'}}><span className="label" style={{color:'#ef4444'}}>Vendido el:</span> <span className="valor" style={{color:'#ef4444'}}>{fechaFormater(vehiculo.fechaEgreso)}</span></div>}
+                        
+                        {/* Botones de Acción (Venta/Reingreso) */}
+                        <div style={{marginTop: "20px"}}>
                             {!vehiculo.fechaEgreso ? (
-                                
                                 !showVentaInput ? (
-                                    <button 
-                                        onClick={() => setShowVentaInput(true)} 
-                                        style={{...btnStyle, background: "green"}}
-                                    >
-                                        VENDER
+                                    <button onClick={() => setShowVentaInput(true)} className="btn-vender-principal">
+                                        REGISTRAR VENTA
                                     </button>
                                 ) : (
-                                    <div style={{background: "#e8f5e9", padding: "10px", borderRadius: "5px", border: "1px solid green"}}>
-                                        <p style={{margin:"0 0 5px 0", fontSize:"0.9em"}}>Fecha de Venta (Vacío = Hoy):</p>
-                                        <div style={{display: "flex", gap: "5px"}}>
-                                            <input 
-                                                type="date" 
-                                                value={fechaVenta}
-                                                onChange={(e) => setFechaVenta(e.target.value)}
-                                                style={{flex: 1, padding: "5px"}}
-                                            />
-                                            <button onClick={confirmarVenta} style={{cursor:"pointer", background:"green", color:"white", border:"none", padding:"5px 10px", borderRadius:"3px"}}>OK</button>
-                                            <button onClick={() => setShowVentaInput(false)} style={{cursor:"pointer", background:"gray", color:"white", border:"none", padding:"5px 10px", borderRadius:"3px"}}>X</button>
+                                    <div style={{padding:'10px', background:'#f0fdf4', borderRadius:'8px', border:'1px solid #bbf7d0'}}>
+                                        <small style={{color: 'green'}}>Confirmar Fecha (Vacío = Fecha Actual):</small>
+                                        <div style={{display:'flex', gap:'5px', marginTop:'5px'}}>
+                                            <input type="date" required placeholder="Fecha de Venta" value={fechaVenta} onChange={(e) => setFechaVenta(e.target.value)} className="input-actividad" style={{flex:1}}/>
+                                            <button onClick={confirmarVenta} style={{background:'#10b981', color:'white', border:'none', borderRadius:'5px', padding:'0 10px', cursor:'pointer'}}><FaCheck/></button>
+                                            <button onClick={() => setShowVentaInput(false)} style={{background:'#64748b', color:'white', border:'none', borderRadius:'5px', padding:'0 10px', cursor:'pointer'}}><FaTimes/></button>
                                         </div>
                                     </div>
                                 )
                             ) : (
-
                                 !showReingresoInput ? (
-                                    <button 
-                                        onClick={() => setShowReingresoInput(true)} 
-                                        style={{...btnStyle, background: "orange"}}
-                                    >
-                                        REINGRESAR
+                                    <button onClick={() => setShowReingresoInput(true)} className="btn-vender-principal" style={{background:'#f59e0b'}}>
+                                        REINGRESAR VEHÍCULO
                                     </button>
                                 ) : (
-                                    <div style={{background: "#e8f5e9", padding: "10px", borderRadius: "5px", border: "1px solid orange"}}>
-                                        <p style={{margin:"0 0 5px 0", fontSize:"0.9em"}}>Fecha de Reingreso (Vacío = Hoy):</p>
-                                        <div style={{display: "flex", gap: "5px"}}>
-                                            <input 
-                                                type="date" 
-                                                value={fechaReingreso}
-                                                onChange={(e) => setFechaReingreso(e.target.value)}
-                                                style={{flex: 1, padding: "5px"}}
-                                            />
-                                            <button onClick={confirmarReingreso} style={{cursor:"pointer", background:"orange", color:"white", border:"none", padding:"5px 10px", borderRadius:"3px"}}>OK</button>
-                                            <button onClick={() => setShowReingresoInput(false)} style={{cursor:"pointer", background:"gray", color:"white", border:"none", padding:"5px 10px", borderRadius:"3px"}}>X</button>
+                                    <div style={{padding:'10px', background:'#fff7ed', borderRadius:'8px', border:'1px solid #fed7aa'}}>
+                                        <small style={{color: 'orange'}}>Confirmar Reingreso (Vacío = Fecha Actual):</small>
+                                        <div style={{display:'flex', gap:'5px', marginTop:'5px'}}>
+                                            <input type="date" required placeholder="Fecha de Reingreso" value={fechaReingreso} onChange={(e) => setFechaReingreso(e.target.value)} className="input-actividad" style={{flex:1}}/>
+                                            <button onClick={confirmarReingreso} style={{background:'#f97316', color:'white', border:'none', borderRadius:'5px', padding:'0 10px', cursor:'pointer'}}><FaCheck/></button>
+                                            <button onClick={() => setShowReingresoInput(false)} style={{background:'#64748b', color:'white', border:'none', borderRadius:'5px', padding:'0 10px', cursor:'pointer'}}>X</button>
                                         </div>
                                     </div>
                                 )
-                                
                             )}
                         </div>
                     </div>
 
-                    <div style={cardStyle}>
+
+                    {/* 2. ACTIVIDADES */}
+                    <div className="detalle-card" style={{marginTop:'25px'}}>
                         <h3>Actividades</h3>
                         
-                        {/* Formulario para agregar actividad */}
-                        <form onSubmit={handleGuardarActividad} style={{ background: "#f0f0f0", padding: "10px", borderRadius: "5px", marginBottom: "10px" }}>
-                            <input 
-                                placeholder="Descripción" 
-                                name="descripcion"
-                                value={nuevaActividad.descripcion}
-                                onChange={e => setNuevaActividad({...nuevaActividad, descripcion: e.target.value})}
-                                style={{width: "60%", marginRight: "5px"}}
-                            />
-                            <input 
-                                type="number" placeholder="$ Costo" 
-                                name="gasto"
-                                min={0}
-                                value={nuevaActividad.gasto}
-                                onChange={e => setNuevaActividad({...nuevaActividad, gasto: e.target.value})}
-                                style={{width: "20%", marginRight: "5px"}}
-                            />
-                            <input
-                                type="date" placeholder="$ Costo" 
-                                name="fecha"
-                                value={nuevaActividad.fecha}
-                                onChange={e => setNuevaActividad({...nuevaActividad, fecha: e.target.value})}
-                                style={{width: "40%", marginRight: "5px"}}
-                            />
-                            <br />
-                            <label style={{color:'black'}}>
-                                <input 
-                                    type="checkbox" 
-                                    checked={!nuevaActividad.isPendiente}
-                                    onChange={e => setNuevaActividad({...nuevaActividad, isPendiente: !e.target.checked})}
-                                /> Completada
-                            </label>
-                            <button type="submit" style={{float: "right", cursor: "pointer"}}>+ Agregar</button>
+                        {/* Formulario de carga */}
+                        <form onSubmit={handleGuardarActividad} className="form-actividad">
+                            <input placeholder="Descripción..." className="input-actividad" value={nuevaActividad.descripcion} onChange={e => setNuevaActividad({...nuevaActividad, descripcion: e.target.value})} style={{width:'100%', boxSizing:'border-box'}}/>
+                            <div className="actividad-inputs-row">
+                                <input type="number" placeholder="Costo" className="input-actividad" style={{width:'80px'}} value={nuevaActividad.gasto} onChange={e => setNuevaActividad({...nuevaActividad, gasto: e.target.value})}/>
+                                <input type="date" required placeholder='Fecha de la Actividad' className="input-actividad" style={{flex:1}} value={nuevaActividad.fecha} onChange={e => setNuevaActividad({...nuevaActividad, fecha: e.target.value})} />
+                            </div>
+                            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                                    <label class="container" style={{fontSize:'0.6em', display:'flex', alignItems:'center', gap:'5px'}}>
+                                        <input type="checkbox" checked={!nuevaActividad.isPendiente} onChange={e => setNuevaActividad({...nuevaActividad, isPendiente: !e.target.checked})}/> 
+                                            <span style={{fontSize: "1.5em", marginLeft:"5px", color:"#4f4949"}}>{nuevaActividad.isPendiente ? "Pendiente" : "Completada"}</span>
+                                        <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                            <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+                                        </svg>
+                                </label>
+                                <button type="submit" style={{background:'royalblue', color:'white', border:'none', padding:'5px 15px', borderRadius:'6px', cursor:'pointer'}}>+ Agregar</button>
+                            </div>
                         </form>
 
-                        {/* Lista de Actividades */}
-                        {/* Realizadas */} 
-                        <h4 style={{ borderBottom: "2px solid green", paddingBottom: "5px", marginBottom: "10px", color: "green" }}>
-                            Realizadas ({actividadesCompletadas.length})
-                        </h4>
+                        {/* Lista REALIZADAS */}
+                        <h4 style={{fontSize:'1.3rem', color:'#10b981', margin:'15px 0 5px 0', borderBottom:'1px solid #10b981'}}>Realizadas ({actividadesCompletadas.length})</h4>
                         
                         {actividadesCompletadas.length > 0 ? (
-                            <ul style={{ listStyle: "none", padding: 0, marginBottom: "20px" }}>
+                            <ul className="lista-actividades">
                                 {actividadesCompletadas.map(act => (
-                                    <li key={act.id} style={{ borderBottom: "1px solid #eee", padding: "8px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                        <span style={{color: "#ffffff"}}>
-                                            {act.descripcion}
-                                        </span>
-                                        <div style={{display: 'flex', alignItems: 'center'}}>
-                                            <strong style={{marginRight: "10px"}}>${act.gasto}</strong>
-                                            <p>{act.fecha}</p>
-                                            <button 
-                                                onClick={() => borrarActividad(act.id)} 
-                                                style={{color: "red", border: "1px solid red", borderRadius: "4px", background: "white", cursor: "pointer", padding: "2px 6px", fontSize: "0.8em"}}
-                                                title="Eliminar"
-                                            >
-                                                X
-                                            </button>
+                                    <li key={act.id} className="item-actividad">
+                                        <div><span style={{display:'block', fontWeight:500, fontSize:"1.07em"}}>{act.descripcion}</span><small style={{color:'#94a3b8'}}>{fechaFormater(act.fecha)}</small></div>
+                                        <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+                                            <strong style={{color:'#334155'}}>${act.gasto}</strong>
+                                            <FaTrash color="#ef4444" style={{cursor:'pointer'}} onClick={() => borrarActividad(act.id)}/>
                                         </div>
                                     </li>
                                 ))}
                             </ul>
-                        ) : (
-                            <p style={{ fontStyle: "italic", color: "#888", fontSize: "0.9em" }}>No hay actividades realizadas.</p>
-                        )}
+                        ) : <p style={{fontStyle:"italic", color:"#9d9d9d", fontSize:'0.8em'}}>No hay actividades realizadas.</p>}
 
 
-                        {/* Pendientes */}
-                        <h4 style={{ borderBottom: "2px solid orange", paddingBottom: "5px", marginBottom: "10px", color: "#e67e22", marginTop: "20px" }}>
-                            Pendientes ({actividadesPendientes.length})
-                        </h4>
-
+                        {/* Lista PENDIENTES */}
+                        <h4 style={{fontSize:'1.3rem', color:'#f59e0b', margin:'20px 0 5px 0', borderBottom:'1px solid #f59e0b'}}>Pendientes ({actividadesPendientes.length})</h4>
+                        
                         {actividadesPendientes.length > 0 ? (
-                            <ul style={{ listStyle: "none", padding: 0 }}>
+                            <ul className="lista-actividades">
                                 {actividadesPendientes.map(act => (
-                                    <li key={act.id} style={{ borderBottom: "1px solid #eee", padding: "8px 0", display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#fff8e1" }}>
-                                        <span style={{color: "#555"}}>
-                                            {act.descripcion}
-                                        </span>
-                                        <div style={{display: 'flex', alignItems: 'center'}}>
-                                            <strong style={{marginRight: "10px", color: "#e67e22"}}>${act.gasto}</strong>
-                                            <p>{act.fecha}</p>
-                                            <button 
-                                                onClick={() => borrarActividad(act.id)} 
-                                                style={{color: "red", border: "1px solid red", borderRadius: "4px", background: "white", cursor: "pointer", padding: "2px 6px", fontSize: "0.8em"}}
-                                                title="Eliminar"
-                                            >
-                                                X
-                                            </button>
+                                    <li key={act.id} className="item-actividad">
+                                        <div>
+                                            <span style={{display:'block', fontWeight:500, fontSize:"1.07em"}}>{act.descripcion}</span>
+                                            <small style={{color:'#720000'}}>Pendiente - {fechaFormater(act.fecha)}</small>
+                                        </div>
+                                        <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+                                            <strong style={{color:'#334155'}}>${act.gasto}</strong>
+                                            <FaTrash color="#ef4444" style={{cursor:'pointer'}} onClick={() => borrarActividad(act.id)}/>
                                         </div>
                                     </li>
                                 ))}
                             </ul>
-                        ) : (
-                            <p style={{ fontStyle: "italic", color: "#888", fontSize: "0.9em" }}>No hay pendientes.</p>
-                        )}
+                        ) : <p style={{fontStyle:"italic", color:"#9d9d9d", fontSize:'0.8em'}}>No hay actividades pendientes.</p>}
+
                     </div>
+
                 </div>
 
-                {/* Precios */}
+                {/* ------------------------------------------------ */}
+                {/* COLUMNA 2 (DERECHA): PRECIOS + DOCUMENTACIÓN */}
+                {/* ------------------------------------------------ */}
                 <div>
-                    <div style={{...cardStyle, width:"400px", backgroundColor: "#f9fff9", borderColor: "green", color:"black"}}>
+                    
+                    {/* 3. PRECIOS */}
+                    <div className="detalle-card">
                         <h3>Precios del Vehículo</h3>
                         
-                        <div style={rowStyle}>
-                            <span>Precio Compra:</span>
-                            <strong>$ {vehiculo.precioCompra}</strong>
-                        </div>
-                        <div style={rowStyle}>
-                            <span>+ Gastos Totales:</span>
-                            <strong>$ {gastoTotalCalculado}</strong>
-                        </div>
-                        <hr />
-                        <div style={rowStyle}>
-                            <span>Precio de Costo:</span>
-                            <strong>$ {precioMinimoVenta}</strong>
-                        </div>
+                        <div className="info-row"><span className="label">Precio Compra:</span> <span className="valor">$ {vehiculo.precioCompra}</span></div>
+                        <div className="info-row"><span className="label">+ Gastos:</span> <span className="valor">$ {gastoTotalCalculado}</span></div>
+                        <hr style={{borderColor:'#f1f5f9'}}/>
+                        <div className="info-row"><span className="label" style={{color:'#2c3e50'}}>Costo Total:</span> <span className="valor" style={{fontWeight:'bold'}}>$ {precioMinimoVenta}</span></div>
                         
                         <br />
                         
-                        <div style={rowStyle}>
-                            <span>Precio de Lista:</span>
-                            <strong style={{fontSize: "1.2em"}}>$ {vehiculo.precioLista}</strong>
+                        <div className="info-row"><span className="label">Precio Lista:</span> <span className="valor" style={{fontSize: "1.2em"}}>$ {vehiculo.precioLista}</span></div>
+
+                        <div className="info-row" style={{background:"#f8fafc", padding:"5px", borderRadius:"5px", marginTop:"5px"}}>
+                            <span className="label">Rentabilidad (%):</span>
+                            <input type="number" value={rentabilidad} onChange={(e) => setRentabilidad(e.target.value)} className="input-pequeno"/>
                         </div>
 
-                        <div style={{...rowStyle, background: "#eee", padding: "5px", borderRadius: "5px", marginTop: "10px"}}>
-                            <span>Rentabilidad (%):</span>
-                            <input 
-                                type="number" 
-                                value={rentabilidad} 
-                                onChange={(e) => setRentabilidad(e.target.value)}
-                                style={{width: "50px", textAlign: "center"}}
-                            />
+                        <div className="precio-destacado">
+                            <span style={{color:'#64748b', fontSize:'0.9rem'}}>Precio Sugerido:</span>
+                            <span className="precio-grande">$ {precioContado.toFixed(2)}</span>
                         </div>
 
-                        <div style={{...rowStyle, textAlign:"center", marginTop: "10px", color: "green"}}>
-                            <span style={{fontSize: "1.2em"}}>Precio: 
-                            <strong style={{fontSize: "1.5em"}}> $ {precioContado.toFixed(2)}</strong></span>
+                        <div className="info-row" style={{background:"#f8fafc", padding:"5px", borderRadius:"5px"}}>
+                            <span className="label">Descuento Contado (%):</span>
+                            <input type="number" value={descuento} onChange={(e) => setDescuento(e.target.value)} className="input-pequeno"/>
                         </div>
+                        
+                        <div className="info-row" style={{marginTop:'10px'}}>
+                            <span className="label">Precio Final:</span>
+                            <span className="valor" style={{color:'royalblue', fontSize:'1.2rem', fontWeight:'bold'}}>$ {precioDescuentoContado.toFixed(2)}</span>
+                        </div>
+                    </div>
 
-                        <div style={rowStyle}>
-                            <span>Precio de Contado:<br/>
-                            <strong>$ {precioDescuentoContado.toFixed(2)}</strong></span>
-                            <div  style={{...rowStyle, background: "#eee", padding: "5px", borderRadius: "5px", marginTop: "10px"}}>
-                                <span>Descuento (%):</span>
-                                <input 
-                                    type="number" 
-                                    value={descuento} 
-                                    onChange={(e) => setDescuento(e.target.value)}
-                                    style={{width: "50px", textAlign: "center"}}
-                                />
+
+                    {/* 4. DOCUMENTACIÓN */}
+                    <div className="detalle-card" style={{marginTop:'25px'}}>
+                        <h3>Documentación</h3>
+                        {verificarDocumentacion(vehiculo.documentacion) ? (
+                            <div className="status-badge status-ok">
+                                ✓ DOCUMENTACIÓN COMPLETA
                             </div>
+                        ) : (
+                            <div>
+                                <div className="status-badge status-error"> ⚠ INCOMPLETA </div> 
+                                <ul className="lista-faltantes">
+                                    {formularios.map(f => {
+                                        if (!doc[f.key]) return <li key={f.key}>{f.label}</li>
+                                        return null
+                                    })}
+                                </ul>
+                            </div>
+                        )}
 
-                        </div>
-
+                        <button 
+                            onClick={() => navigate(`/vehiculos/${id}/documentacion`)} 
+                            className="btn-editar-docs"
+                        >
+                            Gestionar Documentación
+                        </button>
                     </div>
 
-                    {/* Documentacion */}
-                    <div>
-                        <div style={{...cardStyle, width:"400px", borderColor: "black", color:"white"}}>
-                            <h3>Documentación del vehículo</h3>
-                            {verificarDocumentacion(vehiculo.documentacion) ? (
-                                <div style={{backgroundColor:"green", color:"white"}}>
-                                    COMPLETA
-                                </div>
-                            ) : (
-                                <div>
-                                    <div style={{backgroundColor:"red", color:"white"}}> INCOMPLETA </div> 
-                                        <p style={{textAlign:"left", color:"white"}}>Documentación faltante:</p>
-                                        <ul style={{textAlign:"left", color:"white"}}>
-                                            {formularios.map(f => {
-                                                if (!doc[f.key]) {
-                                                    return <li key={f.key}>{f.label}</li>
-
-                                                }
-                                                return null
-                                            })}
-                                        </ul>
-                                </div>
-                            ) }
-                        </div>
-                    </div>
-
-                
+                    
 
                 </div>
+
             </div>
-
-
-
-
-
-
-
-
-
         </div>
-
     )
-
-
-
 }
-
-const cardStyle = { border: "1px solid #ddd", borderRadius: "8px", padding: "15px", marginBottom: "20px", boxShadow: "0 2px 4px rgba(0,0,0,0.1)" };
-const rowStyle = { display: "flex", justifyContent: "space-between", marginBottom: "5px" };
-const btnStyle = { padding: "10px 20px", color: "white", border: "none", borderRadius: "5px", cursor: "pointer", width: "100%", fontWeight: "bold" };
-
 
 export default VehiculoDetalle
