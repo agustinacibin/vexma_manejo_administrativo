@@ -183,14 +183,19 @@ html, body {
     padding: 10px;
     margin-top: 70px; /* Debajo del Header */
     
-    /* ESTO ES LO QUE ARREGLA EL SCROLL: */
-    /* Altura = 100% de la pantalla - Header (70px) */
+    /* CAMBIO 1: Usamos 'dvh' para respetar la barra de Safari/Chrome */
+    /* Si el navegador no soporta dvh, usa vh como respaldo */
     height: calc(100vh - 70px); 
+    height: calc(100dvh - 70px); 
     
     /* Scroll interno activado */
     overflow-y: auto; 
     
-    /* Espacio extra abajo para que el último elemento no quede tapado por la barra */
-    padding-bottom: 90px; 
+    /* CAMBIO 2: Mucho más espacio abajo para que no lo tape NADA */
+    /* 70px de tu barra + 50px de aire extra = 120px */
+    padding-bottom: 120px !important; 
+    
+    /* Asegura que el padding se sume dentro del scroll */
+    box-sizing: border-box;
   }
 }
