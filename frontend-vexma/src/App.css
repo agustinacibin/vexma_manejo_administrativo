@@ -113,19 +113,85 @@ html, body {
 
 
 /* 8. RESPONSIVE (Móvil) */
+/* 8. RESPONSIVE (Móvil) - BARRA DE NAVEGACIÓN INFERIOR */
 @media (max-width: 768px) {
-  .sidebar-class { display: none; }
+  
+  /* Transformamos la Sidebar en Bottom Bar */
+  .sidebar-class {
+    display: flex; /* ¡Ahora visible! */
+    position: fixed;
+    top: auto;    /* Soltamos de arriba */
+    bottom: 0;    /* Pegamos abajo */
+    left: 0;
+    width: 100%;  /* Ancho completo */
+    height: 70px; /* Altura de la barra */
+    
+    border-right: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1); 
+    padding-top: 0;
+    
+    flex-direction: row; /* Elementos en horizontal */
+    align-items: center;
+    justify-content: center;
+    z-index: 2000; /* Por encima del contenido */
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+  }
 
+  /* Ajustamos la lista interna para que se expanda */
+  .sidebar-class nav { width: 100%; }
+  
+  .sidebar-class ul { 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around; /* Distribuye los iconos equitativamente */
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .sidebar-class li {
+    margin: 0; 
+    border-radius: 10px;
+  }
+
+  /* Estilo de los enlaces en móvil (Icono arriba, texto abajo) */
+  .sidebar-class a {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px;
+    font-size: 0.75em; /* Texto más pequeño */
+    text-align: center;
+  }
+  
+  .sidebar-class a:hover {
+    padding-left: 8px; /* Quitamos el efecto de escritorio */
+    background-color: transparent;
+    color: royalblue;
+  }
+
+  /* Ocultamos el título "Menú" que ocupa espacio */
+  .sidebar-class li > span {
+    display: none;
+  }
+
+  /* --- AJUSTES DEL CONTENEDOR PRINCIPAL --- */
   .main-content-container {
     margin-left: 0;
     width: 100%;
     padding: 10px;
-    margin-top: 70px;
-    height: calc(100vh - 70px);
+    margin-top: 70px; /* Espacio para el header arriba */
+    
+    /* Importante: Dejar espacio abajo para que la barra no tape el último item */
+    margin-bottom: 80px; 
+    height: auto; /* Dejamos que el scroll sea natural */
+    min-height: calc(100vh - 150px);
+    overflow-y: visible; /* Scroll en toda la página */
   }
 
+  /* Ajustar Header */
   .header-class {
-    font-size: 28px;
+    font-size: 24px;
     height: 70px;
     padding: 0 10px;
   }
