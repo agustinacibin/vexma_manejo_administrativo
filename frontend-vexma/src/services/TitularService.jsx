@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = "http://localhost:8080/api/titulares"
+const API_URL = "https://vexmaadministracion.up.railway.app/api/titulares"
 
 class TitularService {
 
