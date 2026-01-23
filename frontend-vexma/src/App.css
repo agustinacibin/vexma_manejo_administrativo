@@ -1,11 +1,14 @@
-/* 1. RESET GLOBAL */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* 1. RESET GLOBAL: Elimina scroll del body para evitar doble barra */
 html, body {
   margin: 0;
   padding: 0;
   background-color: aliceblue; 
   height: 100%;
-  overflow: hidden; 
-  /* La fuente ya viene heredada de index.css */
+  width: 100%;
+  overflow: hidden; /* CLAVE: La app no se mueve, solo el contenido interno */
+  font-family: 'Montserrat', sans-serif;
 }
 
 /* 2. LAYOUT GENERAL */
@@ -41,7 +44,7 @@ html, body {
 /* 4. SIDEBAR FIJA A LA IZQUIERDA */
 .sidebar-class {
   position: fixed;
-  top: 90px;
+  top: 90px; /* Debajo del header */
   left: 0;
   bottom: 0;
   width: 250px;          
@@ -72,18 +75,22 @@ html, body {
 .active-link { background-color: rgba(0, 0, 0, 0.05); }
 
 
-/* 5. CONTENEDOR PRINCIPAL */
+/* 5. CONTENEDOR PRINCIPAL (ESCRITORIO) */
 .main-content-container {
-  margin-top: 90px;  
-  margin-left: 250px; 
+  /* POSICIONAMIENTO */
+  margin-top: 90px;  /* Espacio para el header */
+  margin-left: 250px; /* Espacio para la sidebar */
   
+  /* TAMAÑO EXACTO */
   width: calc(100% - 250px);
-  height: calc(100vh - 90px);
+  height: calc(100vh - 90px); /* Altura total menos el header */
   
+  /* SCROLL INTERNO */
   overflow-y: auto;
   box-sizing: border-box;
   padding: 20px;
   
+  /* CENTRADO DE HIJOS */
   display: flex;
   flex-direction: column;
   align-items: center; 
@@ -91,8 +98,9 @@ html, body {
 
 .main-content-container > div {
   width: 100%;
-  max-width: 1200px; 
+  max-width: 1200px;
 }
+
 
 /* 6. LOGO */
 .logo { height: 6em; padding: 1.5em; will-change: filter; transition: filter 300ms; }
@@ -112,87 +120,77 @@ html, body {
 * { scrollbar-width: thin; scrollbar-color: #cbd5e0 rgb(235, 247, 255); }
 
 
-/* 8. RESPONSIVE (Móvil) */
-/* 8. RESPONSIVE (Móvil) - BARRA DE NAVEGACIÓN INFERIOR */
+/* 8. RESPONSIVE (Móvil) - BARRA INFERIOR Y SCROLL CORREGIDO */
 @media (max-width: 768px) {
   
-  /* Transformamos la Sidebar en Bottom Bar */
+  /* Header más chico */
+  .header-class {
+    font-size: 24px;
+    height: 70px;
+    padding: 0 10px;
+  }
+
+  /* Sidebar convertida en Barra Inferior */
   .sidebar-class {
-    display: flex; /* ¡Ahora visible! */
+    display: flex; 
     position: fixed;
-    top: auto;    /* Soltamos de arriba */
-    bottom: 0;    /* Pegamos abajo */
+    top: auto;    
+    bottom: 0;    
     left: 0;
-    width: 100%;  /* Ancho completo */
-    height: 70px; /* Altura de la barra */
+    width: 100%;  
+    height: 70px; 
     
     border-right: none;
     border-top: 1px solid rgba(0, 0, 0, 0.1); 
     padding-top: 0;
+    background-color: #fff; /* Asegura fondo sólido para que no se trasluzca */
     
-    flex-direction: row; /* Elementos en horizontal */
+    flex-direction: row; 
     align-items: center;
     justify-content: center;
-    z-index: 2000; /* Por encima del contenido */
+    z-index: 2000; 
     box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
   }
 
-  /* Ajustamos la lista interna para que se expanda */
   .sidebar-class nav { width: 100%; }
   
   .sidebar-class ul { 
     display: flex;
     flex-direction: row;
-    justify-content: space-around; /* Distribuye los iconos equitativamente */
+    justify-content: space-around; 
     align-items: center;
     width: 100%;
     margin: 0;
     padding: 0;
   }
 
-  .sidebar-class li {
-    margin: 0; 
-    border-radius: 10px;
-  }
+  .sidebar-class li { margin: 0; }
 
-  /* Estilo de los enlaces en móvil (Icono arriba, texto abajo) */
   .sidebar-class a {
     flex-direction: column;
     gap: 4px;
     padding: 8px;
-    font-size: 0.75em; /* Texto más pequeño */
+    font-size: 0.75em; 
     text-align: center;
   }
   
-  .sidebar-class a:hover {
-    padding-left: 8px; /* Quitamos el efecto de escritorio */
-    background-color: transparent;
-    color: royalblue;
-  }
+  .sidebar-class li > span { display: none; }
 
-  /* Ocultamos el título "Menú" que ocupa espacio */
-  .sidebar-class li > span {
-    display: none;
-  }
-
-  /* --- AJUSTES DEL CONTENEDOR PRINCIPAL --- */
+  /* --- CORRECCIÓN DEL SCROLL EN CELULAR --- */
   .main-content-container {
     margin-left: 0;
     width: 100%;
     padding: 10px;
-    margin-top: 70px; /* Espacio para el header arriba */
+    margin-top: 70px; /* Debajo del Header */
     
-    /* Importante: Dejar espacio abajo para que la barra no tape el último item */
-    margin-bottom: 80px; 
-    height: auto; /* Dejamos que el scroll sea natural */
-    min-height: calc(100vh - 150px);
-    overflow-y: visible; /* Scroll en toda la página */
-  }
-
-  /* Ajustar Header */
-  .header-class {
-    font-size: 24px;
-    height: 70px;
-    padding: 0 10px;
+    /* ESTO ES LO QUE ARREGLA EL SCROLL: */
+    /* Altura = 100% de la pantalla - Header (70px) */
+    height: calc(100vh - 70px); 
+    
+    /* Scroll interno activado */
+    overflow-y: auto; 
+    
+    /* Espacio extra abajo para que el último elemento no quede tapado por la barra */
+    padding-bottom: 90px; 
   }
 }
