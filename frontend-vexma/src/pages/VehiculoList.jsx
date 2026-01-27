@@ -153,10 +153,8 @@ function VehiculoList() {
                   </strong>
                 </span>
 
-                <div id="main-car-info-line-container"
-                >
-                  <div id="main-car-info-line"
-                  ></div>
+                <div id="main-car-info-line-container">
+                  <div id="main-car-info-line"></div>
                 </div>
 
                 <span style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
@@ -195,7 +193,7 @@ function VehiculoList() {
             {/* Ver Documentación Asociada */}
             <Link to={`/vehiculos/${vehiculo.id}/documentacion`}>
               <button style={{ marginRight: "5px" }} title="Ver documentación">
-                <FaFileArchive color="" />
+                <FaFileArchive color="white" />
               </button>
             </Link>
 

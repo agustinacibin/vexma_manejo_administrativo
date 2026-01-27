@@ -361,6 +361,45 @@
       margin: 0;
       display: block;
   }
+
+  .vehiculo-list-container .modal-box {
+      padding: 15px; /* Menos borde interno */
+      width: 90% !important;
+      font-size: 0.9em; /* Achicamos todo el contenido del modal */
+  }
+
+  .vehiculo-list-container .modal-header {
+      min-height: auto;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      
+      /* ARREGLO DE SUPERPOSICIÓN */
+      display: flex;
+      justify-content: center; 
+      align-items: center;
+      position: relative;
+  }
+
+  .vehiculo-list-container .modal-header h3 {
+      font-size: 1.1rem !important; /* Título más chico */
+      margin: 0;
+      padding: 0 40px; /* Damos aire a los costados para que no choque con la flecha */
+  }
+
+  .vehiculo-list-container .close-icon-btn {
+      width: 30px;
+      height: 30px;
+      font-size: 1rem;
+      left: 0; /* Pegada a la izquierda */
+  }
+
+  /* Filas del modal más chicas */
+  .vehiculo-list-container .modal-vehicle-row {
+      padding: 10px 5px;
+  }
+  
+  .vehiculo-list-container .vehicle-info-left strong { font-size: 1rem; }
+  .vehiculo-list-container .vehicle-days-right strong { font-size: 1.1rem; }
 }
 
 /* ------------------------------------------------ */

@@ -157,30 +157,26 @@
 @media (max-width: 768px) {
     .titular-list-container {
         width: 100%;
-        padding: 5px; /* Casi sin borde */
+        padding: 0 5px;
         margin: 10px auto !important;
     }
 
-    .titular-list-container h2 {
-        font-size: 1.3rem;
-        margin-bottom: 15px;
-    }
-
-    /* Tabla Compacta */
+    /* Tabla súper compacta */
     .main-table {
-        min-width: 0 !important; /* Permite que se achique */
+        font-size: 0.75rem; /* Letra bien chica */
         width: 100%;
-        font-size: 0.8em; /* Letra chiquita para que entre todo */
     }
 
     .main-table th, .main-table td {
-        padding: 8px 4px; /* Muy poco padding lateral */
+        padding: 8px 2px; /* Mínimo espacio lateral */
+        white-space: nowrap; /* Evita que se rompa feo si es posible */
     }
 
-    /* Botones de acción más chicos en la tabla */
+    /* Botones de acción diminutos */
     .action-btn {
-        width: 35px;
-        height: 35px;
-        padding: 5px;
+        width: 28px;
+        height: 28px;
+        padding: 4px;
+        margin: 0 1px;
     }
 }

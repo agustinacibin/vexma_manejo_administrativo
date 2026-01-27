@@ -174,3 +174,40 @@
     color: #0f172a; 
     font-weight: bold;
 }
+
+
+
+@media (max-width: 600px) {
+    .doc-container { margin: 15px auto; padding: 0 10px; }
+    
+    .doc-header { padding: 10px; min-height: 40px; }
+    .doc-title { font-size: 1.1rem; } /* Título del auto más chico */
+    .doc-subtitle { 
+        font-size: 0.8rem; 
+        width: auto; 
+        padding: 2px 8px; 
+        margin-top: 5px; 
+    }
+
+    .doc-row {
+        padding: 10px 15px; /* Menos aire entre filas */
+        gap: 5px;
+    }
+
+    /* Checkbox y Texto */
+    .checkbox-wrapper-31 span { font-size: 0.9rem; } /* Letra del documento chica */
+    .checkbox-wrapper-31 svg { width: 20px; height: 20px; margin-right: 10px; }
+
+    /* Fecha */
+    .doc-row input[type="date"] {
+        font-size: 0.8rem;
+        padding: 4px;
+        width: 110px; /* Fecha compacta */
+    }
+
+    .doc-footer { padding: 15px; }
+    .doc-btn-guardar {
+        padding: 10px;
+        font-size: 1rem;
+    }
+}
