@@ -55,6 +55,17 @@ public class DocumentacionService {
             docDb.setDuplicadoLlaves(documentacion.getDuplicadoLlaves());
             docDb.setItv(documentacion.getItv());
 
+            docDb.setFechaFormulario08(documentacion.getFechaFormulario08());
+            docDb.setFechaCedulaVerde(documentacion.getFechaCedulaVerde());
+            docDb.setFechaTitulo(documentacion.getFechaTitulo());
+            docDb.setFechaVerificacionPolicial(documentacion.getFechaVerificacionPolicial());
+            docDb.setFechaInformeDominioRnpa(documentacion.getFechaInformeDominioRnpa());
+            docDb.setFechaInformeMultasRnpa(documentacion.getFechaInformeMultasRnpa());
+            docDb.setFechaEstadoImpositivo(documentacion.getFechaEstadoImpositivo());
+            docDb.setFechaManuales(documentacion.getFechaManuales());
+            docDb.setFechaDuplicadoLlaves(documentacion.getFechaDuplicadoLlaves());
+            docDb.setFechaItv(documentacion.getFechaItv());
+
             return documentacionRepository.save(docDb);
         } else {
             return documentacionRepository.save(documentacion);
