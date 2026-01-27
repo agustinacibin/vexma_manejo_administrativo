@@ -1,6 +1,7 @@
 package com.backend.backend_vexma.model;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -44,24 +45,34 @@ public class Documentacion {
     private Boolean itv;
 
     @Column(name = "fecha_formulario08")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaFormulario08;
     @Column(name = "fecha_cedula_verde")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaCedulaVerde;
     @Column(name = "fecha_titulo")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaTitulo;
     @Column(name = "fecha_verificacion_policial")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaVerificacionPolicial;
     @Column(name = "fecha_informe_dominio_rnpa")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaInformeDominioRnpa;
     @Column(name = "fecha_informe_multas_rnpa")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaInformeMultasRnpa;
     @Column(name = "fecha_estado_impositivo")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaEstadoImpositivo;
     @Column(name = "fecha_manuales")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaManuales;
     @Column(name = "fecha_duplicado_llaves")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaDuplicadoLlaves;
     @Column(name = "fecha_itv")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaItv;
 
 
