@@ -181,7 +181,7 @@
 @media (max-width: 600px) {
     .doc-container { margin: 5px auto; padding: 0 5px; }
 
-    .doc-container h2{font-size: 0.8em;}
+    .doc-container h2{font-size: 1.1em;}
     
     /* CABECERA ULTRA COMPACTA */
     .doc-header { 
@@ -209,7 +209,7 @@
     }
 
     .doc-title { 
-        font-size: 0.5rem; /* Título chico */
+        font-size: 0.8rem; /* Título chico */
         font-weight: 600;
         white-space: nowrap; /* Que no baje de renglón */
         line-height: 1;
