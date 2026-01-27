@@ -160,4 +160,6 @@
 @media (max-width: 768px) {
     .lists-grid { grid-template-columns: 1fr; } 
     .chart-container { padding: 20px; }
+
+    .page-title{ font-size: 1.3em ;}
 }
