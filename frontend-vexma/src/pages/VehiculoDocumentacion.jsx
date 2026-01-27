@@ -27,17 +27,17 @@ function VehiculoDocumentacion() {
   });
 
   const itemsDocumentacion = [
-    { name: "formulario08", label: "Formulario 08" },
-    { name: "cedulaVerde", label: "Cédula Verde" },
-    { name: "titulo", label: "Título del Automotor" },
-    { name: "verificacionPolicial", label: "Verificación Policial" },
-    { name: "informeDominioRnpa", label: "Informe de Dominio - RNPA" },
-    { name: "informeMultasRnpa", label: "Informe de Multas - RNPA" },
-    { name: "estadoImpositivo", label: "Estado Impositivo" },
-    { name: "manuales", label: "Manuales" },
-    { name: "duplicadoLlaves", label: "Duplicado de Llaves" },
-    { name: "itv", label: "ITV" },
-  ];
+    { name: "formulario08", label: "Formulario 08", dateKey: "fechaFormulario08" },
+    { name: "cedulaVerde", label: "Cédula Verde", dateKey: "fechaCedulaVerde" },
+    { name: "titulo", label: "Título del Automotor", dateKey: "fechaTitulo" },
+    { name: "verificacionPolicial", label: "Verificación Policial", dateKey: "fechaVerificacionPolicial" },
+    { name: "informeDominioRnpa", label: "Informe de Dominio - RNPA", dateKey: "fechaInformeDominioRnpa" },
+    { name: "informeMultasRnpa", label: "Informe de Multas - RNPA", dateKey: "fechaInformeMultasRnpa" },
+    { name: "estadoImpositivo", label: "Estado Impositivo", dateKey: "fechaEstadoImpositivo" },
+    { name: "manuales", label: "Manuales", dateKey: "fechaManuales" },
+    { name: "duplicadoLlaves", label: "Duplicado de Llaves", dateKey: "fechaDuplicadoLlaves" },
+    { name: "itv", label: "ITV", dateKey: "fechaItv" },
+  ]
 
   useEffect(() => {
     const cargarDatos = async () => {
@@ -60,9 +60,11 @@ function VehiculoDocumentacion() {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, checked } = e.target;
-    setFormulario({ ...formulario, [name]: checked });
-  };
+    const { name, value, type, checked } = e.target;
+    const valorFinal = type === 'checkbox' ? checked : value;
+    
+    setFormulario({ ...formulario, [name]: valorFinal });
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -124,6 +126,23 @@ function VehiculoDocumentacion() {
                   </svg>
                   <span>{item.label}</span>
                 </label>
+              </div>
+
+              <div style={{ marginLeft: 'auto' }}>
+                  <input 
+                    type="date"
+                    name={item.dateKey} // Usamos la clave nueva (ej: fechaItv)
+                    value={formulario[item.dateKey] || ""}
+                    onChange={handleChange}
+                    disabled={!formulario[item.name]} // Se bloquea si no está tildado
+                    className="input-fecha-doc" 
+                    style={{
+                        padding: '5px',
+                        borderRadius: '5px',
+                        border: '1px solid #ccc',
+                        opacity: formulario[item.name] ? 1 : 0.5
+                    }}
+                  />
               </div>
 
             </div>

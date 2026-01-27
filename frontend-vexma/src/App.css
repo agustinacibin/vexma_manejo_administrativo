@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
-/* 1. RESET GLOBAL: Elimina scroll del body para evitar doble barra */
+/* Eliminar scroll del body */
 html, body {
   margin: 0;
   padding: 0;
@@ -11,14 +11,14 @@ html, body {
   font-family: 'Montserrat', sans-serif;
 }
 
-/* 2. LAYOUT GENERAL */
+/* LAYOUT GENERAL */
 .app-layout {
   display: flex;
   width: 100%;
   height: 100vh;
 }
 
-/* 3. HEADER FIJO ARRIBA */
+/* HEADER FIJO ARRIBA */
 .header-class {
   position: fixed;
   top: 0;
@@ -41,10 +41,10 @@ html, body {
   box-sizing: border-box;
 }
 
-/* 4. SIDEBAR FIJA A LA IZQUIERDA */
+/* SIDEBAR FIJA A LA IZQUIERDA */
 .sidebar-class {
   position: fixed;
-  top: 90px; /* Debajo del header */
+  top: 90px;
   left: 0;
   bottom: 0;
   width: 250px;          
@@ -75,22 +75,18 @@ html, body {
 .active-link { background-color: rgba(0, 0, 0, 0.05); }
 
 
-/* 5. CONTENEDOR PRINCIPAL (ESCRITORIO) */
+/* CONTENEDOR PRINCIPAL (ESCRITORIO) */
 .main-content-container {
-  /* POSICIONAMIENTO */
-  margin-top: 90px;  /* Espacio para el header */
-  margin-left: 250px; /* Espacio para la sidebar */
+  margin-top: 90px;  
+  margin-left: 250px; 
   
-  /* TAMAÑO EXACTO */
   width: calc(100% - 250px);
   height: calc(100vh - 90px); /* Altura total menos el header */
   
-  /* SCROLL INTERNO */
   overflow-y: auto;
   box-sizing: border-box;
   padding: 20px;
   
-  /* CENTRADO DE HIJOS */
   display: flex;
   flex-direction: column;
   align-items: center; 
@@ -102,7 +98,7 @@ html, body {
 }
 
 
-/* 6. LOGO */
+/* LOGO */
 .logo { height: 6em; padding: 1.5em; will-change: filter; transition: filter 300ms; }
 .logo:hover { filter: drop-shadow(0 0 2em #646cffaa); }
 .logo.react:hover { filter: drop-shadow(0 0 2em #61dafbaa); }
@@ -112,7 +108,7 @@ html, body {
 .read-the-docs { color: #888; }
 
 
-/* 7. SCROLLBAR */
+/* SCROLLBAR */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: rgb(235, 247, 255); }
 ::-webkit-scrollbar-thumb { background-color: #cbd5e0; border-radius: 6px; border: 2px solid rgb(235, 247, 255); }
@@ -120,17 +116,15 @@ html, body {
 * { scrollbar-width: thin; scrollbar-color: #cbd5e0 rgb(235, 247, 255); }
 
 
-/* 8. RESPONSIVE (Móvil) - BARRA INFERIOR Y SCROLL CORREGIDO */
+/* RESPONSIVE - BARRA INFERIOR Y SCROLL  */
 @media (max-width: 768px) {
   
-  /* Header más chico */
   .header-class {
     font-size: 24px;
     height: 70px;
     padding: 0 10px;
   }
 
-  /* Sidebar convertida en Barra Inferior */
   .sidebar-class {
     display: flex; 
     position: fixed;
@@ -143,7 +137,7 @@ html, body {
     border-right: none;
     border-top: 1px solid rgba(0, 0, 0, 0.1); 
     padding-top: 0;
-    background-color: #fff; /* Asegura fondo sólido para que no se trasluzca */
+    background-color: #fff; 
     
     flex-direction: row; 
     align-items: center;
@@ -176,26 +170,20 @@ html, body {
   
   .sidebar-class li > span { display: none; }
 
-  /* --- CORRECCIÓN DEL SCROLL EN CELULAR --- */
+  /* --- SCROLL EN MÓVIL --- */
   .main-content-container {
     margin-left: 0;
     width: 100%;
     padding: 10px;
-    margin-top: 70px; /* Debajo del Header */
+    margin-top: 70px;
     
-    /* CAMBIO 1: Usamos 'dvh' para respetar la barra de Safari/Chrome */
-    /* Si el navegador no soporta dvh, usa vh como respaldo */
     height: calc(100vh - 70px); 
     height: calc(100dvh - 70px); 
     
-    /* Scroll interno activado */
     overflow-y: auto; 
     
-    /* CAMBIO 2: Mucho más espacio abajo para que no lo tape NADA */
-    /* 70px de tu barra + 50px de aire extra = 120px */
     padding-bottom: 120px !important; 
     
-    /* Asegura que el padding se sume dentro del scroll */
     box-sizing: border-box;
   }
 }

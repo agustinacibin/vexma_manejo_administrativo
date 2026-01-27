@@ -1,4 +1,6 @@
 package com.backend.backend_vexma.model;
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -41,6 +43,27 @@ public class Documentacion {
     @Column(name = "itv", nullable = false)
     private Boolean itv;
 
+    @Column(name = "fecha_formulario08")
+    private LocalDate fechaFormulario08;
+    @Column(name = "fecha_cedula_verde")
+    private LocalDate fechaCedulaVerde;
+    @Column(name = "fecha_titulo")
+    private LocalDate fechaTitulo;
+    @Column(name = "fecha_verificacion_policial")
+    private LocalDate fechaVerificacionPolicial;
+    @Column(name = "fecha_informe_dominio_rnpa")
+    private LocalDate fechaInformeDominioRnpa;
+    @Column(name = "fecha_informe_multas_rnpa")
+    private LocalDate fechaInformeMultasRnpa;
+    @Column(name = "fecha_estado_impositivo")
+    private LocalDate fechaEstadoImpositivo;
+    @Column(name = "fecha_manuales")
+    private LocalDate fechaManuales;
+    @Column(name = "fecha_duplicado_llaves")
+    private LocalDate fechaDuplicadoLlaves;
+    @Column(name = "fecha_itv")
+    private LocalDate fechaItv;
+
 
     // Relaciones
     @OneToOne
@@ -53,18 +76,49 @@ public class Documentacion {
     // Constructor
     public Documentacion(){}
 
-    public Documentacion(Vehiculo vehiculo, Boolean formulario08, Boolean cedulaVerde, Boolean titulo, Boolean verificacionPolicial, Boolean informeDominioRnpa, Boolean informeMultasRnpa, Boolean estadoImpositivo, Boolean manuales, Boolean duplicadoLlaves, Boolean itv){
+    public Documentacion(Vehiculo vehiculo, 
+                         Boolean formulario08, LocalDate fechaFormulario08,
+                         Boolean cedulaVerde, LocalDate fechaCedulaVerde,
+                         Boolean titulo, LocalDate fechaTitulo,
+                         Boolean verificacionPolicial, LocalDate fechaVerificacionPolicial,
+                         Boolean informeDominioRnpa, LocalDate fechaInformeDominioRnpa,
+                         Boolean informeMultasRnpa, LocalDate fechaInformeMultasRnpa,
+                         Boolean estadoImpositivo, LocalDate fechaEstadoImpositivo,
+                         Boolean manuales, LocalDate fechaManuales,
+                         Boolean duplicadoLlaves, LocalDate fechaDuplicadoLlaves,
+                         Boolean itv, LocalDate fechaItv) {
+        
         this.vehiculo = vehiculo;
+        
         this.formulario08 = formulario08;
+        this.fechaFormulario08 = fechaFormulario08;
+        
         this.cedulaVerde = cedulaVerde;
+        this.fechaCedulaVerde = fechaCedulaVerde;
+        
         this.titulo = titulo;
+        this.fechaTitulo = fechaTitulo;
+        
         this.verificacionPolicial = verificacionPolicial;
+        this.fechaVerificacionPolicial = fechaVerificacionPolicial;
+        
         this.informeDominioRnpa = informeDominioRnpa;
+        this.fechaInformeDominioRnpa = fechaInformeDominioRnpa;
+        
         this.informeMultasRnpa = informeMultasRnpa;
+        this.fechaInformeMultasRnpa = fechaInformeMultasRnpa;
+        
         this.estadoImpositivo = estadoImpositivo;
+        this.fechaEstadoImpositivo = fechaEstadoImpositivo;
+        
         this.manuales = manuales;
+        this.fechaManuales = fechaManuales;
+        
         this.duplicadoLlaves = duplicadoLlaves;
+        this.fechaDuplicadoLlaves = fechaDuplicadoLlaves;
+        
         this.itv = itv;
+        this.fechaItv = fechaItv;
     }
 
     // Getters y setters
@@ -149,6 +203,8 @@ public class Documentacion {
         this.itv = itv;
     }
 
+    
+
     // isCompleta --> en base al estado de determinados documentos, retorna si el estado general de la documentacion es completa o incompleta
     public Boolean isCompleta(){
         return this.formulario08 && 
@@ -158,5 +214,86 @@ public class Documentacion {
                 this.informeDominioRnpa && 
                 this.informeMultasRnpa && 
                 this.estadoImpositivo;
+    }
+
+
+    public LocalDate getFechaFormulario08() {
+        return fechaFormulario08;
+    }
+
+    public void setFechaFormulario08(LocalDate fechaFormulario08) {
+        this.fechaFormulario08 = fechaFormulario08;
+    }
+
+    public LocalDate getFechaCedulaVerde() {
+        return fechaCedulaVerde;
+    }
+
+    public void setFechaCedulaVerde(LocalDate fechaCedulaVerde) {
+        this.fechaCedulaVerde = fechaCedulaVerde;
+    }
+
+    public LocalDate getFechaTitulo() {
+        return fechaTitulo;
+    }
+
+    public void setFechaTitulo(LocalDate fechaTitulo) {
+        this.fechaTitulo = fechaTitulo;
+    }
+
+    public LocalDate getFechaVerificacionPolicial() {
+        return fechaVerificacionPolicial;
+    }
+
+    public void setFechaVerificacionPolicial(LocalDate fechaVerificacionPolicial) {
+        this.fechaVerificacionPolicial = fechaVerificacionPolicial;
+    }
+
+    public LocalDate getFechaInformeDominioRnpa() {
+        return fechaInformeDominioRnpa;
+    }
+
+    public void setFechaInformeDominioRnpa(LocalDate fechaInformeDominioRnpa) {
+        this.fechaInformeDominioRnpa = fechaInformeDominioRnpa;
+    }
+
+    public LocalDate getFechaInformeMultasRnpa() {
+        return fechaInformeMultasRnpa;
+    }
+
+    public void setFechaInformeMultasRnpa(LocalDate fechaInformeMultasRnpa) {
+        this.fechaInformeMultasRnpa = fechaInformeMultasRnpa;
+    }
+
+    public LocalDate getFechaEstadoImpositivo() {
+        return fechaEstadoImpositivo;
+    }
+
+    public void setFechaEstadoImpositivo(LocalDate fechaEstadoImpositivo) {
+        this.fechaEstadoImpositivo = fechaEstadoImpositivo;
+    }
+
+    public LocalDate getFechaManuales() {
+        return fechaManuales;
+    }
+
+    public void setFechaManuales(LocalDate fechaManuales) {
+        this.fechaManuales = fechaManuales;
+    }
+
+    public LocalDate getFechaDuplicadoLlaves() {
+        return fechaDuplicadoLlaves;
+    }
+
+    public void setFechaDuplicadoLlaves(LocalDate fechaDuplicadoLlaves) {
+        this.fechaDuplicadoLlaves = fechaDuplicadoLlaves;
+    }
+
+    public LocalDate getFechaItv() {
+        return fechaItv;
+    }
+
+    public void setFechaItv(LocalDate fechaItv) {
+        this.fechaItv = fechaItv;
     }
 }
