@@ -438,6 +438,14 @@ input[type="date"]:valid::before {
     .item-actividad { padding: 8px 0; font-size: 0.8rem; }
     .item-actividad strong { font-size: 0.9em; }
 
+    .form-actividad button[type="submit"] {
+        padding: 5px 12px;     
+        font-size: 0.8rem;      
+        width: auto;            
+        align-self: flex-end;  
+        margin-top: 5px;
+    }
+
     .status-badge {
         padding: 8px;
         font-size: 0.9rem; /* Letra más chica en la barra roja/verde */

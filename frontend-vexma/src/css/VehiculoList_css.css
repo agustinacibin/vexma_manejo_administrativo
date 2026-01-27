@@ -365,57 +365,38 @@
   
   /* --- MODAL DE STOCK --- */
   .vehiculo-list-container .modal-box {
-      padding: 15px;
-      width: 90% !important;
-      font-size: 0.85em; /* Base general más chica */
+      padding: 10px !important;       /* Relleno mínimo */
+      width: 85% !important;          /* Menos ancho */
+      max-width: 300px !important;    /* Tope de ancho real */
+      font-size: 0.75rem !important;  /* Letra base MUY chica */
   }
 
   .vehiculo-list-container .modal-header {
-      min-height: auto; margin-bottom: 5px; padding-bottom: 8px;
-      display: flex; justify-content: center; align-items: center; position: relative;
+      margin-bottom: 5px; padding-bottom: 5px; min-height: auto;
   }
 
   .vehiculo-list-container .modal-header h3 {
-      font-size: 1rem !important; /* Título chico */
-      margin: 0; padding: 0 35px;
+      font-size: 0.95rem !important; /* Título modal chico */
+      padding: 0 30px;
   }
 
   .vehiculo-list-container .close-icon-btn {
-      width: 25px; height: 25px; font-size: 0.9rem; left: 0;
+      width: 20px; height: 20px; font-size: 0.8rem;
   }
 
-  /* Filas super compactas */
+  /* Filas */
   .vehiculo-list-container .modal-vehicle-row {
-      padding: 8px 0; /* Casi sin aire vertical */
-      gap: 5px;
+      padding: 6px 0; gap: 5px;
   }
   
-  /* Nombre del auto */
-  .vehiculo-list-container .vehicle-info-left strong { 
-      font-size: 0.9rem; 
-  }
-  
-  /* Patente */
-  .vehiculo-list-container .vehicle-sub-text {
-      font-size: 0.8rem;
-      padding-left: 5px;
-      border-left-width: 2px; /* Línea más fina */
-  }
+  .vehiculo-list-container .vehicle-info-left strong { font-size: 0.85rem; }
+  .vehiculo-list-container .vehicle-sub-text { font-size: 0.75rem; height: auto; }
 
-  /* Tarjeta de días (Derecha) */
   .vehiculo-list-container .vehicle-days-right {
-      padding: 5px 10px;
-      min-width: auto; /* Que se achique lo necesario */
+      padding: 4px 8px; min-width: auto;
   }
-
-  .vehiculo-list-container .vehicle-days-right strong { 
-      font-size: 1rem; /* Número de días chico */
-  }
-  
-  .vehiculo-list-container .vehicle-days-right small { 
-      font-size: 0.75rem; /* Fecha 'desde' muy chica */
-      margin-top: 0;
-  }
+  .vehiculo-list-container .vehicle-days-right strong { font-size: 0.9rem; }
+  .vehiculo-list-container .vehicle-days-right small { font-size: 0.65rem; }
 }
 
 /* ------------------------------------------------ */
