@@ -99,11 +99,20 @@ function VehiculoDocumentacion() {
     const valorFinal = type === "checkbox" ? checked : value;
 
     setFormulario({ ...formulario, [name]: valorFinal });
-  };
+  }
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { ...formulario, vehiculo: { id: Number(id) } };
+    const datosAEnviar = { ...formulario };
+
+    Object.keys(datosAEnviar).forEach((key) => {
+      if (key.startsWith("fecha") && datosAEnviar[key] === "") {
+        datosAEnviar[key] = null;
+      }
+    });
+
+    const payload = { ...datosAEnviar, vehiculo: { id: Number(id) } };
 
     try {
       if (formulario.id) {
@@ -112,9 +121,10 @@ function VehiculoDocumentacion() {
         await DocumentacionService.guardar(payload);
       }
       alert("Documentación guardada correctamente");
-      cargarDatos()
+      cargarDatos();
     } catch (error) {
-      alert("Error al guardar.", error);
+      console.error(error); 
+      alert("Error al guardar.");
     }
   };
 

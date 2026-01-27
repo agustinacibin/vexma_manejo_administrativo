@@ -3,8 +3,8 @@ package com.backend.backend_vexma.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional; // Importante importar esto
 
 import com.backend.backend_vexma.model.Documentacion;
 import com.backend.backend_vexma.repository.DocumentacionRepository;
@@ -12,8 +12,11 @@ import com.backend.backend_vexma.repository.DocumentacionRepository;
 @Service
 public class DocumentacionService {
     
-    @Autowired
-    private DocumentacionRepository documentacionRepository;
+    private final DocumentacionRepository documentacionRepository;
+
+    public DocumentacionService(DocumentacionRepository documentacionRepository) {
+        this.documentacionRepository = documentacionRepository;
+    }
 
     public List<Documentacion> obtenerDocumentacionToda(){
         return documentacionRepository.findAll();
@@ -23,54 +26,40 @@ public class DocumentacionService {
         return documentacionRepository.findById(id);
     }
 
-    public Documentacion guardarDocumentacion(Documentacion documentacion){
-        if( (documentacion.getVehiculo() == null) ||
-            (documentacion.getFormulario08() == null) ||
-            (documentacion.getCedulaVerde() == null) ||
-            (documentacion.getTitulo() == null) ||
-            (documentacion.getVerificacionPolicial() == null) ||
-            (documentacion.getInformeDominioRnpa() == null) ||
-            (documentacion.getInformeMultasRnpa() == null) ||
-            (documentacion.getEstadoImpositivo() == null) ||
-            (documentacion.getManuales() == null) ||
-            (documentacion.getDuplicadoLlaves() == null) ||
-            (documentacion.getItv() == null)){
-            
-            throw new IllegalArgumentException("Debe completar todos los campos obligatorios.");
-        }
-
-        Optional<Documentacion> docExistente = documentacionRepository.findByVehiculo_Id(documentacion.getVehiculo().getId());
+    @Transactional
+    public Documentacion guardarDocumentacion(Documentacion documentacionNuevosDatos){
+        
+        Optional<Documentacion> docExistente = documentacionRepository.findByVehiculo_Id(documentacionNuevosDatos.getVehiculo().getId());
 
         if (docExistente.isPresent()){
             Documentacion docDb = docExistente.get();
             
-            docDb.setFormulario08(documentacion.getFormulario08());
-            docDb.setCedulaVerde(documentacion.getCedulaVerde());
-            docDb.setTitulo(documentacion.getTitulo());
-            docDb.setVerificacionPolicial(documentacion.getVerificacionPolicial());
-            docDb.setInformeDominioRnpa(documentacion.getInformeDominioRnpa());
-            docDb.setInformeMultasRnpa(documentacion.getInformeMultasRnpa());
-            docDb.setEstadoImpositivo(documentacion.getEstadoImpositivo());
-            docDb.setManuales(documentacion.getManuales());
-            docDb.setDuplicadoLlaves(documentacion.getDuplicadoLlaves());
-            docDb.setItv(documentacion.getItv());
+            docDb.setFormulario08(documentacionNuevosDatos.getFormulario08());
+            docDb.setCedulaVerde(documentacionNuevosDatos.getCedulaVerde());
+            docDb.setTitulo(documentacionNuevosDatos.getTitulo());
+            docDb.setVerificacionPolicial(documentacionNuevosDatos.getVerificacionPolicial());
+            docDb.setInformeDominioRnpa(documentacionNuevosDatos.getInformeDominioRnpa());
+            docDb.setInformeMultasRnpa(documentacionNuevosDatos.getInformeMultasRnpa());
+            docDb.setEstadoImpositivo(documentacionNuevosDatos.getEstadoImpositivo());
+            docDb.setManuales(documentacionNuevosDatos.getManuales());
+            docDb.setDuplicadoLlaves(documentacionNuevosDatos.getDuplicadoLlaves());
+            docDb.setItv(documentacionNuevosDatos.getItv());
 
-            docDb.setFechaFormulario08(documentacion.getFechaFormulario08());
-            docDb.setFechaCedulaVerde(documentacion.getFechaCedulaVerde());
-            docDb.setFechaTitulo(documentacion.getFechaTitulo());
-            docDb.setFechaVerificacionPolicial(documentacion.getFechaVerificacionPolicial());
-            docDb.setFechaInformeDominioRnpa(documentacion.getFechaInformeDominioRnpa());
-            docDb.setFechaInformeMultasRnpa(documentacion.getFechaInformeMultasRnpa());
-            docDb.setFechaEstadoImpositivo(documentacion.getFechaEstadoImpositivo());
-            docDb.setFechaManuales(documentacion.getFechaManuales());
-            docDb.setFechaDuplicadoLlaves(documentacion.getFechaDuplicadoLlaves());
-            docDb.setFechaItv(documentacion.getFechaItv());
+            docDb.setFechaFormulario08(documentacionNuevosDatos.getFechaFormulario08());
+            docDb.setFechaCedulaVerde(documentacionNuevosDatos.getFechaCedulaVerde());
+            docDb.setFechaTitulo(documentacionNuevosDatos.getFechaTitulo());
+            docDb.setFechaVerificacionPolicial(documentacionNuevosDatos.getFechaVerificacionPolicial());
+            docDb.setFechaInformeDominioRnpa(documentacionNuevosDatos.getFechaInformeDominioRnpa());
+            docDb.setFechaInformeMultasRnpa(documentacionNuevosDatos.getFechaInformeMultasRnpa());
+            docDb.setFechaEstadoImpositivo(documentacionNuevosDatos.getFechaEstadoImpositivo());
+            docDb.setFechaManuales(documentacionNuevosDatos.getFechaManuales());
+            docDb.setFechaDuplicadoLlaves(documentacionNuevosDatos.getFechaDuplicadoLlaves());
+            docDb.setFechaItv(documentacionNuevosDatos.getFechaItv());
 
             return documentacionRepository.save(docDb);
         } else {
-            return documentacionRepository.save(documentacion);
+            return documentacionRepository.save(documentacionNuevosDatos);
         }
-
     }
 
     public void borrarDocumentacion(Long id){
