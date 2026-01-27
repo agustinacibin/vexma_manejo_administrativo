@@ -153,20 +153,9 @@ function VehiculoList() {
                   </strong>
                 </span>
 
-                <div
-                  style={{
-                    flex: 1,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
+                <div id="main-car-info-line-container"
                 >
-                  <div
-                    style={{
-                      height: "30px",
-                      width: "1px",
-                      backgroundColor: "#99999970",
-                    }}
+                  <div id="main-car-info-line"
                   ></div>
                 </div>
 

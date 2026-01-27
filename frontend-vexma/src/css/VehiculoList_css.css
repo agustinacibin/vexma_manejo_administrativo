@@ -90,6 +90,19 @@
     font-size: 1.3em;
 }
 
+#main-car-info-line-container{
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+#main-car-info-line{
+    height: 30px;
+    width: 1px;
+    background-color: #99999970
+}
+
 .vehiculo-estado-container{
     flex: 1;
     display: flex;
@@ -157,14 +170,12 @@
     z-index: 2;
     margin-top: 20px;
     
-    /* --- CAMBIOS CLAVE PARA FORZAR CENTRADO --- */
-    width: 100%;             /* Ocupa todo el ancho disponible */
-    display: flex;           /* Activa modo flexible */
-    justify-content: center; /* Centra horizontalmente a la fuerza */
-    align-items: center;     /* Centra verticalmente si hiciera falta */
-    text-align: center;      /* Respaldo para el texto */
+    width: 100%;  
+    display: flex;         
+    justify-content: center;
+    align-items: center;     
+    text-align: center;     
     
-    /* Limpieza de cualquier basura que lo empuje */
     padding-right: 50%;
     left: 0;
     right: 0;
