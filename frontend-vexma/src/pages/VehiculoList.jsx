@@ -146,7 +146,7 @@ function VehiculoList() {
               }
             >
               <div id="main-car-info">
-                <span style={{ whiteSpace: "nowrap" }}>
+                <span style={{ whiteSpace: "normal" }}>
                   <strong>
                     {vehiculo.marca} {vehiculo.modelo} {vehiculo.version}{" "}
                     {vehiculo.anio}

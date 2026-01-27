@@ -14,16 +14,16 @@ function VehiculoDocumentacion() {
 
   const [formulario, setFormulario] = useState({
     id: null,
-    formulario08: false,
-    cedulaVerde: false,
-    titulo: false,
-    verificacionPolicial: false,
-    informeDominioRnpa: false,
-    informeMultasRnpa: false,
-    estadoImpositivo: false,
-    manuales: false,
-    duplicadoLlaves: false,
-    itv: false,
+    formulario08: false, fechaFormulario08: "",
+    cedulaVerde: false, fechaCedulaVerde: "",
+    titulo: false, fechaTitulo: "",
+    verificacionPolicial: false, fechaVerificacionPolicial: "",
+    informeDominioRnpa: false, fechaInformeDominioRnpa: "",
+    informeMultasRnpa: false, fechaInformeMultasRnpa: "",
+    estadoImpositivo: false, fechaEstadoImpositivo: "",
+    manuales: false, fechaManuales: "",
+    duplicadoLlaves: false, fechaDuplicadoLlaves: "",
+    itv: false, fechaItv: "",
   });
 
   const itemsDocumentacion = [
