@@ -191,24 +191,61 @@ html, body {
 /* VISTA DE NOTEBOOK / LAPTOP (Pantallas medianas) */
 @media (min-width: 769px) and (max-width: 1440px) {
     
-    .vehiculo-list-container,
-    .detalle-container,
-    .form-container,
-    .doc-container,
-    .titular-list-container,
-    .doc-list-container {
-        font-size: 85% !important; 
-        max-width: 95% !important; 
+    @media (min-width: 769px) and (max-width: 1500px) {
+    
+    /* 1. Achicamos la base de toda la página */
+    html {
+        font-size: 13px !important; /* Normalmente es 16px. Esto baja todo un ~20% */
     }
 
-    .modal-box, 
-    .modal-content {
-        font-size: 0.9em !important;
+    /* 2. Forzamos a los contenedores principales a respetar la reducción */
+    /* Usamos "body" delante para ganar prioridad sobre otros archivos */
+    body .form-container,
+    body .vehiculo-list-container,
+    body .titular-list-container,
+    body .detalle-container,
+    body .doc-container,
+    body .doc-list-container {
+        font-size: 0.9em !important; /* Un 10% extra menos sobre la base */
+        max-width: 90% !important;   /* Que no toquen los bordes */
+        margin-top: 10px !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* 3. Ajustes específicos para que no se vean gigantes */
+    
+    /* Formulario: Vencemos el "100% !important" que tenías */
+    body .form-container {
+        padding: 20px !important;
+        width: 80% !important;
     }
     
-    .detalle-card, 
-    .list-card,
-    .doc-card {
+    /* Modales: Que no ocupen toda la pantalla */
+    body .modal-box,
+    body .modal-content {
+        font-size: 0.9em !important;
+        transform: scale(0.9); /* Truco: los achica visualmente un 10% más */
+        max-height: 85vh; /* Evita que se corten verticalmente */
+    }
+
+    /* Tarjetas de Detalle y Documentación */
+    body .detalle-card,
+    body .doc-card,
+    body .list-card {
         padding: 15px !important;
     }
+
+    /* Inputs y Botones más compactos */
+    input, select, button, .styled-input {
+        font-size: 0.9em !important;
+        padding: 8px !important;
+        height: auto !important;
+    }
+    
+    /* Achicar títulos exagerados */
+    h2, h3, .page-title, .titulo-principal {
+        font-size: 1.5em !important;
+        margin-bottom: 15px !important;
+    }
+}
 }
