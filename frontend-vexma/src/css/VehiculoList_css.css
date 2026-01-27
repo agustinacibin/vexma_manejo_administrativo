@@ -327,6 +327,7 @@
     border: none;
     padding: 0;
     margin: 0;
+    padding: 0;
     
     /* Ubicados a la derecha, en la misma línea visual que el estado */
     justify-content: flex-end; 
