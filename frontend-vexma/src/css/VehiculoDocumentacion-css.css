@@ -183,9 +183,8 @@
 
     .doc-container h2{font-size: 1.1em;}
     
-    /* CABECERA ULTRA COMPACTA */
     .doc-header { 
-        padding: 5px 10px; /* Relleno mínimo */
+        padding: 5px 10px;
         min-height: 40px; 
         flex-direction: row; 
         gap: 10px; 
@@ -195,24 +194,29 @@
     .doc-btn-volver {
         position: static; 
         transform: none;
-        font-size: 1.1rem; /* Flecha chica */
+        font-size: 1.1rem;
         margin-right: 5px;
+        flex-shrink: 0;
     }
 
     /* Contenedor de Textos: Título y Patente en línea */
     .doc-header-titles {
         display: flex;
-        flex-direction: row; /* Uno al lado del otro */
+        flex-direction: row;
         align-items: center;
         gap: 8px;
-        width: 100%;
+        justify-content: space-between;
+        flex: 1;
+        width: auto;
     }
 
     .doc-title { 
-        font-size: 0.8rem; /* Título chico */
+        font-size: 0.9rem; 
         font-weight: 600;
-        white-space: nowrap; /* Que no baje de renglón */
+        white-space: nowrap; 
         line-height: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
     } 
     
     .doc-subtitle { 
@@ -222,6 +226,8 @@
         margin: 0;
         border-radius: 4px;
         line-height: 1;
+        white-space: nowrap; 
+        flex-shrink: 0;
     }
 
     /* Resto del cuerpo más compacto */
