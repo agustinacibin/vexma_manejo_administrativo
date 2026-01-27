@@ -13,7 +13,6 @@ function VehiculoDetalle() {
 
     const [vehiculo, setVehiculo] = useState(null)
     
-    // Estado para nueva actividad
     const [nuevaActividad, setNuevaActividad] = useState({
         descripcion:"", 
         gasto:"", 
@@ -21,7 +20,6 @@ function VehiculoDetalle() {
         isPendiente:false
     })
 
-    // Estado para el MODAL de edición (null = cerrado, objeto = abierto)
     const [actividadAEditar, setActividadAEditar] = useState(null)
 
     const [descuento, setDescuento] = useState(2)
@@ -42,7 +40,6 @@ function VehiculoDetalle() {
         cargarDatosVehiculo()
     }, [])
 
-    // --- LOGICA AGREGAR ---
     const handleGuardarActividad = async (e) => {
         e.preventDefault()
         if (!nuevaActividad.descripcion) return alert("Descripción requerida.")
@@ -63,14 +60,10 @@ function VehiculoDetalle() {
         }
     }
 
-    // --- LOGICA EDITAR ---
     const abrirModalEditar = (actividad) => {
-        // Formatear la fecha para que el input type="date" la lea bien (yyyy-MM-dd)
         let fechaFormat = "";
         if(actividad.fecha) {
-            // Asumiendo que viene como array [2024, 1, 20] o string ISO
             if(Array.isArray(actividad.fecha)) {
-               // Ajuste rápido para array de fechas de Java LocalDate
                const [y, m, d] = actividad.fecha;
                fechaFormat = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             } else {
@@ -81,7 +74,6 @@ function VehiculoDetalle() {
         setActividadAEditar({
             ...actividad,
             fecha: fechaFormat,
-            // Aseguramos que gasto sea string para el input o numero
             gasto: actividad.gasto 
         })
     }
@@ -90,18 +82,18 @@ function VehiculoDetalle() {
         e.preventDefault();
         try {
             const actividadUpdate = {
-                ...actividadAEditar,
+                ...actividadAEditar, 
                 gasto: parseFloat(actividadAEditar.gasto) || 0,
-                fecha: actividadAEditar.fecha || new Date()
+                fecha: actividadAEditar.fecha || new Date().toISOString().split('T')[0], 
+                vehiculo: { id: vehiculo.id } 
             };
-            
-            // Asumimos que ActividadService.guardar hace update si tiene ID
+                        
             await ActividadService.guardar(actividadUpdate);
-            setActividadAEditar(null); // Cerrar modal
-            cargarDatosVehiculo(); // Recargar lista
+            setActividadAEditar(null); 
+            cargarDatosVehiculo(); 
         } catch (error) {
-            console.error(error);
-            alert("Error al actualizar la actividad");
+            console.error("Error al actualizar:", error);
+            alert("Error al actualizar la actividad: " + (error.response?.data || error.message));
         }
     }
 
@@ -144,7 +136,6 @@ function VehiculoDetalle() {
 
     if (!vehiculo) return <div style={{padding:"20px"}}>Cargando datos del vehículo...</div>
 
-    // --- CÁLCULOS ---
     const gastoTotalCalculado = vehiculo.actividades 
         ? vehiculo.actividades
             .filter(a => !a.isPendiente && a.gasto)
@@ -158,7 +149,6 @@ function VehiculoDetalle() {
     const actividadesCompletadas = vehiculo.actividades?.filter(a => !a.isPendiente) || [];
     const actividadesPendientes = vehiculo.actividades?.filter(a => a.isPendiente) || [];
 
-    // --- UTILS ---
     const verificarDocumentacion = (documentacion) => {
         if (!documentacion) return false
         return (
@@ -234,7 +224,6 @@ function VehiculoDetalle() {
                         {vehiculo.fechaEgreso && <div className="info-row" style={{background:'#fee2e2'}}><span className="label" style={{color:'#ef4444'}}>Vendido el:</span> <span className="valor" style={{color:'#ef4444'}}>{fechaFormater(vehiculo.fechaEgreso)}</span></div>}
                         
                         <div style={{marginTop: "20px"}}>
-                           {/* Logica botones venta/reingreso... (sin cambios) */}
                            {!vehiculo.fechaEgreso ? (
                                 !showVentaInput ? (
                                     <button onClick={() => setShowVentaInput(true)} className="btn-vender-principal">REGISTRAR VENTA</button>
@@ -273,7 +262,6 @@ function VehiculoDetalle() {
                             <input placeholder="Descripción..." className="input-actividad" value={nuevaActividad.descripcion} onChange={e => setNuevaActividad({...nuevaActividad, descripcion: e.target.value})} style={{width:'100%', boxSizing:'border-box'}}/>
                             <div className="actividad-inputs-row">
                                 <input type="number" placeholder="Costo" className="input-actividad" style={{width:'80px'}} value={nuevaActividad.gasto} onChange={e => setNuevaActividad({...nuevaActividad, gasto: e.target.value})}/>
-                                {/* CAMBIO: Fecha sin required y con clase dinámica */}
                                 <input 
                                     type="date" 
                                     placeholder='Fecha (Opcional)' 
@@ -304,8 +292,7 @@ function VehiculoDetalle() {
                                         <div><span style={{display:'block', fontWeight:500, fontSize:"1.07em"}}>{act.descripcion}</span><small style={{color:'#94a3b8'}}>{fechaFormater(act.fecha)}</small></div>
                                         <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
                                             <strong style={{color:'#334155'}}>${act.gasto}</strong>
-                                            {/* Botón Editar */}
-                                            <FaEdit color="#64748b" style={{cursor:'pointer'}} onClick={() => abrirModalEditar(act)}/>
+                                            <FaEdit color="#35537c" style={{cursor:'pointer'}} onClick={() => abrirModalEditar(act)}/>
                                             <FaTrash color="#ef4444" style={{cursor:'pointer'}} onClick={() => borrarActividad(act.id)}/>
                                         </div>
                                     </li>
@@ -338,7 +325,6 @@ function VehiculoDetalle() {
 
                 {/* COLUMNA 2 (DERECHA): PRECIOS + DOCUMENTACIÓN */}
                 <div>
-                    {/* ... (Se mantiene igual que antes la parte de precios y doc) ... */}
                     <div className="detalle-card">
                         <h3>Precios del Vehículo</h3>
                         <div className="info-row"><span className="label">Precio Compra:</span> <span className="valor">$ {vehiculo.precioCompra}</span></div>
@@ -393,7 +379,7 @@ function VehiculoDetalle() {
                         
                         <form onSubmit={handleActualizarActividad} className="form-actividad" style={{background:'transparent', padding:0}}>
                             
-                            <label style={{fontWeight:'bold', fontSize:'0.9em', color:'#64748b'}}>Descripción:</label>
+                            <label style={{fontWeight:'bold', fontSize:'0.9em', color:'#161718'}}>Descripción:</label>
                             <input 
                                 className="input-actividad" 
                                 value={actividadAEditar.descripcion} 
@@ -403,7 +389,7 @@ function VehiculoDetalle() {
 
                             <div style={{display:'flex', gap:'10px', marginBottom:'15px'}}>
                                 <div style={{flex:1}}>
-                                    <label style={{fontWeight:'bold', fontSize:'0.9em', color:'#64748b', display:'block'}}>Costo ($):</label>
+                                    <label style={{fontWeight:'bold', fontSize:'0.9em', color:'#161718', display:'block'}}>Costo ($):</label>
                                     <input 
                                         type="number" 
                                         className="input-actividad" 
@@ -413,7 +399,7 @@ function VehiculoDetalle() {
                                     />
                                 </div>
                                 <div style={{flex:1}}>
-                                    <label style={{fontWeight:'bold', fontSize:'0.9em', color:'#64748b', display:'block'}}>Fecha:</label>
+                                    <label style={{fontWeight:'bold', fontSize:'0.9em', color:'#161718', display:'block'}}>Fecha:</label>
                                     <input 
                                         type="date" 
                                         className="input-actividad" 
@@ -432,7 +418,7 @@ function VehiculoDetalle() {
                                         checked={!actividadAEditar.isPendiente} 
                                         onChange={e => setActividadAEditar({...actividadAEditar, isPendiente: !e.target.checked})}
                                     /> 
-                                    <span style={{fontSize: "1.5em", marginLeft:"5px", color: actividadAEditar.isPendiente ? "#f59e0b" : "#10b981", fontWeight:'bold'}}>
+                                    <span style={{fontSize: "1.5em", marginLeft:"5px", color: "black", fontWeight:'500'}}>
                                         {actividadAEditar.isPendiente ? "Pendiente" : "Completada"}
                                     </span>
                                     <svg viewBox="0 0 64 64" height="2em" width="2em">
