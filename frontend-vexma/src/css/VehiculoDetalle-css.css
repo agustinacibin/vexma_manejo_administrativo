@@ -390,37 +390,42 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- REGLAS FECHAS (Modificadas para funcionar sin 'required') --- */
-/* Usaremos una clase .date-empty controlada por React */
+/* ---  FECHAS --- */
 
-input[type="date"] {
-  position: relative; 
-  color: #333;
-  font-family: 'Montserrat', sans-serif;
+input[type="date"].date-empty {
+    color: transparent; 
 }
 
-/* Si tiene la clase .date-empty, ocultamos el texto por defecto (dd/mm/aaaa) */
 input[type="date"].date-empty::-webkit-datetime-edit { 
     color: transparent; 
 }
 
-/* Si tiene la clase .date-empty, mostramos el placeholder */
+
 input[type="date"].date-empty::before {
   content: attr(placeholder); 
   position: absolute; 
-  left: 10px; 
-  color: #888; 
+  left: 12px; 
+  color: #9ca3af; 
   pointer-events: none;       
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.9em; /* Ajuste visual */
+  font-size: 0.9em; 
   top: 50%;
   transform: translateY(-50%);
+  white-space: nowrap;
 }
 
-/* Cuando hacemos focus, mostramos el selector nativo */
-input[type="date"]:focus::-webkit-datetime-edit { 
-    color: #333 !important; 
+
+input[type="date"]:focus,
+input[type="date"]:not(.date-empty) { 
+    color: #334155 !important; 
 }
-input[type="date"]:focus::before { 
+
+input[type="date"]:focus::-webkit-datetime-edit,
+input[type="date"]:not(.date-empty)::-webkit-datetime-edit { 
+    color: #334155 !important; 
+}
+
+input[type="date"]:focus::before,
+input[type="date"]:valid::before { 
     display: none; 
 }
