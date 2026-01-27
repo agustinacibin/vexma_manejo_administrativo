@@ -158,8 +158,59 @@
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-    .lists-grid { grid-template-columns: 1fr; } 
-    .chart-container { padding: 20px; }
+    /* Ajuste del contenedor principal */
+    .doc-list-container {
+        padding: 0 10px; /* Aprovechamos más el ancho */
+    }
 
-    .page-title{ font-size: 1.3em ;}
+    .page-title {
+        font-size: 1.4em;
+        margin-bottom: 15px;
+    }
+
+    /* Gráfico un poco más chico */
+    .chart-container {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .lists-grid {
+        grid-template-columns: 1fr;
+        gap: 15px; /* Menos espacio entre la tarjeta verde y roja */
+    }
+
+    /* --- TARJETAS COMPACTAS --- */
+    .list-card {
+        border-radius: 12px; /* Bordes un poco menos agresivos */
+    }
+
+    /* Cabecera de la tarjeta más fina */
+    .list-header {
+        padding: 10px 15px; 
+        font-size: 1em; 
+        min-height: auto;
+    }
+
+    /* Filas de la lista más delgadas */
+    .list-item {
+        padding: 10px 12px; 
+        gap: 10px;
+    }
+
+    /* Texto del auto y patente más chico */
+    .item-title {
+        font-size: 0.95em;
+    }
+    
+    .item-subtitle {
+        font-size: 0.85em;
+    }
+
+    /* Botón (ojo) más pequeño */
+    .btn-view {
+        width: 32px;
+        height: 32px;
+        font-size: 1em; /* Icono más chico */
+        border-radius: 6px;
+    }
 }
