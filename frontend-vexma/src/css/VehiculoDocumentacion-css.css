@@ -177,46 +177,56 @@
 
 
 
+/* AL FINAL DE VehiculoDocumentacion-css.css */
 @media (max-width: 600px) {
-    .doc-container { margin: 10px auto; padding: 0 5px; }
+    .doc-container { margin: 5px auto; padding: 0 5px; }
     
-    /* CABECERA COMPACTA */
+    /* CABECERA ULTRA COMPACTA */
     .doc-header { 
-        padding: 8px 10px; 
-        min-height: auto; 
+        padding: 5px 10px; /* Relleno mínimo */
+        min-height: 40px; 
         flex-direction: row; 
-        gap: 15px; 
-    }
-
-    .doc-header-titles {
-        align-items: flex-start; /* Alineado a la izquierda */
-        text-align: left;
-    }
-
-    .doc-title { 
-        font-size: 1rem; /* Título mucho más chico */
-        line-height: 1.1;
-    } 
-    
-    .doc-subtitle { 
-        font-size: 0.85rem; /* Patente chica */
-        width: auto; 
-        padding: 2px 8px; 
-        margin-top: 3px; 
-        display: inline-block;
+        gap: 10px; 
+        justify-content: flex-start;
     }
 
     .doc-btn-volver {
-        position: static; /* Quitamos absolute para que fluya en flex */
+        position: static; 
         transform: none;
-        font-size: 1.2rem;
+        font-size: 1.1rem; /* Flecha chica */
+        margin-right: 5px;
     }
 
-    /* Resto del cuerpo */
-    .doc-row { padding: 8px 10px; gap: 5px; }
-    .checkbox-wrapper-31 span { font-size: 0.85rem; } 
+    /* Contenedor de Textos: Título y Patente en línea */
+    .doc-header-titles {
+        display: flex;
+        flex-direction: row; /* Uno al lado del otro */
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .doc-title { 
+        font-size: 0.9rem; /* Título chico */
+        font-weight: 600;
+        white-space: nowrap; /* Que no baje de renglón */
+        line-height: 1;
+    } 
+    
+    .doc-subtitle { 
+        font-size: 0.8rem; 
+        width: auto; 
+        padding: 2px 6px; 
+        margin: 0; /* Sin margen */
+        border-radius: 4px;
+        line-height: 1;
+    }
+
+    /* Resto del cuerpo más compacto */
+    .doc-row { padding: 8px 10px; gap: 5px; min-height: 35px; }
+    .checkbox-wrapper-31 span { font-size: 0.8rem; } 
     .checkbox-wrapper-31 svg { width: 18px; height: 18px; margin-right: 8px; }
-    .doc-row input[type="date"] { font-size: 0.75rem; padding: 2px; width: 100px; }
+    .doc-row input[type="date"] { font-size: 0.75rem; padding: 1px 4px; width: 95px; height: 25px; }
     .doc-footer { padding: 10px; }
-    .doc-btn-guardar { padding: 10px; font-size: 0.95rem; }
+    .doc-btn-guardar { padding: 8px; font-size: 0.9rem; }
 }
