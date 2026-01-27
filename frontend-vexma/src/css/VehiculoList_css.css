@@ -190,74 +190,129 @@
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+  
+  /* 1. Contenedor Principal: Tarjeta compacta */
   .main-vehicle-container {
-    flex-direction: column;
-    height: auto;
-    padding: 15px;
-    gap: 15px;
+    flex-direction: column; 
+    height: auto;           
+    min-height: auto; /* Quitamos altura forzada */
+    padding: 12px 15px; /* Menos relleno */
+    gap: 10px;
+    align-items: stretch; /* Para que ocupe todo el ancho */
+    text-align: left; /* Todo alineado a la izquierda se lee mejor */
   }
 
+  /* 2. Bloque de Info del Auto */
   .vehiculo-container {
     flex-direction: column;
     width: 100%;
-    gap: 10px;
+    gap: 2px; /* Pegaditos */
+    align-items: flex-start;
   }
 
   .vehiculo-informacion-container {
     width: 100%;
     margin: 0;
     padding: 0;
-    text-align: center;
+    text-align: left;
   }
-
+  
+  /* 3. FILA SUPERIOR: Nombre y Patente */
   #main-car-info {
-    font-size: 1.2em; /* Antes 18px */
-    justify-content: center;
-    flex-direction: column;
-    gap: 5px;
+    font-size: 1.1em;    
+    justify-content: space-between; /* Uno a cada punta */
+    flex-direction: row; 
+    width: 100%;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0; /* Línea sutil separadora */
+    padding-bottom: 5px;
+    margin-bottom: 5px;
   }
 
-  .vehiculos-agencia-numero {
-    font-size: 2em; /* Antes 30px */
-    height: 80px;
+  /* Ocultamos la línea divisora vertical fea del desktop */
+  #main-car-info > div {
+     display: none !important;
+  }
+
+  /* Estilo de la Patente en móvil */
+  #main-car-info span:last-child {
+      background-color: #e2e8f0;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      color: #333;
+      border: 1px solid #cbd5e0;
+  }
+  
+  /* 4. Titular: Pequeño y discreto */
+  #car-owner {
+      font-size: 0.85em;
+      color: #64748b;
+      margin: 0;
+      font-weight: 500;
+  }
+
+  /* 5. Estado y Botones en la misma fila inferior */
+  /* Aquí usamos un truco: movemos el contenedor de estado visualmente */
+  .vehiculo-container {
+      position: relative; /* Para poder ubicar cosas si hiciera falta */
+      padding-bottom: 0;
   }
 
   .vehiculo-estado-container {
-    width: 100%;
-    margin-bottom: 10px;
+    width: auto;
+    margin: 0;
+    /* Lo queremos abajo a la izquierda, pero el orden HTML es info -> estado */
+    align-self: flex-start; 
+    margin-top: 8px;
   }
 
+  /* Badge de estado más pequeño (Pill shape) */
+  .vehiculo-estado-container p {
+      font-size: 0.7em;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+  }
+
+  /* 6. Contenedor de Botones: Abajo a la derecha */
   .acciones-container {
     width: 100%;
-    border-left: none;
-    border-top: 1px solid #ccc;
-    padding-left: 0;
-    padding-top: 5px;
-    justify-content: center;
-    gap: 15px;
+    border-left: none;      
+    border-top: none; 
+    padding: 0;
+    margin: 0;
+    
+    /* Los botones flotan a la derecha, alineados con el estado que está a la izquierda */
+    justify-content: flex-end; 
+    gap: 8px;
+    
+    /* Lo subimos un poco para que comparta línea visual con el estado si hay espacio,
+       o simplemente quede abajo limpio */
+    margin-top: -32px; /* Truco visual para subirlo a la línea del estado */
   }
 
-  #main-car-info-line {
-    width: 100%;
-    height: 3px;
-    background-color: #99999970;
-    padding-bottom: 1px;
-    justify-content: center;
-    gap: 15px;
+  /* Botones más compactos */
+  .acciones-container button {
+      width: 35px;
+      height: 35px;
+      font-size: 1em;
+      border-radius: 6px;
+      background-color: white;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   }
-
-  .vehiculos-agencia {
-    flex-direction: column;
-    gap: 15px;
+  
+  /* Ajustes de KPIs superiores para móvil también */
+  .vehiculos-agencia-numero {
+      font-size: 2.2em; 
+      height: auto;
+      padding: 15px;
   }
-
-  .vehiculos-agencia > div {
-    width: 100%;
-  }
-
-  #car-owner{
-    font-size: 1em;
-  }
+  .vehiculos-agencia { gap: 10px; margin-top: 15px; }
+  .vehiculo-list-container h2 { font-size: 1.5em; margin-top: 20px; }
 }
 
 /* ------------------------------------------------ */
