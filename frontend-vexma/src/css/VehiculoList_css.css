@@ -443,4 +443,9 @@
         align-items: center;
         box-sizing: border-box;
     }
+
+    #main-car-info-line{
+        height: 1px;
+        width: 90%;
+    }
 }
