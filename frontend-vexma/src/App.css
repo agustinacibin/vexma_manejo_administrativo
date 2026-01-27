@@ -187,3 +187,28 @@ html, body {
     box-sizing: border-box;
   }
 }
+
+/* VISTA DE NOTEBOOK / LAPTOP (Pantallas medianas) */
+@media (min-width: 769px) and (max-width: 1440px) {
+    
+    .vehiculo-list-container,
+    .detalle-container,
+    .form-container,
+    .doc-container,
+    .titular-list-container,
+    .doc-list-container {
+        font-size: 85% !important; 
+        max-width: 95% !important; 
+    }
+
+    .modal-box, 
+    .modal-content {
+        font-size: 0.9em !important;
+    }
+    
+    .detalle-card, 
+    .list-card,
+    .doc-card {
+        padding: 15px !important;
+    }
+}
