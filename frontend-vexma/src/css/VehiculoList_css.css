@@ -254,6 +254,10 @@
   .vehiculos-agencia > div {
     width: 100%;
   }
+
+  #car-owner{
+    font-size: 0.9em;
+  }
 }
 
 /* ------------------------------------------------ */
