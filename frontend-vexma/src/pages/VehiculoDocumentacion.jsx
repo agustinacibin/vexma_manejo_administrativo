@@ -131,15 +131,17 @@ function VehiculoDocumentacion() {
               <div style={{ marginLeft: 'auto' }}>
                   <input 
                     type="date"
-                    name={item.dateKey} // Usamos la clave nueva (ej: fechaItv)
+                    name={item.dateKey} 
                     value={formulario[item.dateKey] || ""}
                     onChange={handleChange}
-                    disabled={!formulario[item.name]} // Se bloquea si no está tildado
+                    disabled={!formulario[item.name]} 
                     className="input-fecha-doc" 
                     style={{
                         padding: '5px',
                         borderRadius: '5px',
                         border: '1px solid #ccc',
+                        backgroundColor: 'white',
+                        color: '#070707',
                         opacity: formulario[item.name] ? 1 : 0.5
                     }}
                   />
