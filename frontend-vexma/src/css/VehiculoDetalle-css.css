@@ -407,79 +407,52 @@ input[type="date"]:valid::before {
 @media (max-width: 800px) {
     .detalle-container { padding: 10px; margin: 10px auto; }
 
+    /* Header y Títulos */
     .detalle-header {
-        flex-direction: row; /* En fila */
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        gap: 5px;
-        border-bottom: 1px solid #eee;
+        flex-direction: row; justify-content: space-between;
+        align-items: center; margin-bottom: 15px; gap: 5px; border-bottom: 1px solid #eee;
     }
-
-    .detalle-header div:first-child {
-        flex: 1; /* Ocupa espacio disponible */
-    }
-
-    .titulo-principal {
-        font-size: 1.1rem; /* Nombre del auto legible pero normal */
-        text-align: left;
-        line-height: 1.2;
-    }
-
-    /* Patente transformada en "Etiqueta" (Badge) */
+    .detalle-header div:first-child { flex: 1; }
+    .titulo-principal { font-size: 1.1rem; text-align: left; line-height: 1.2; }
     .subtitulo-patente {
-        font-size: 0.9rem;
-        background: #f1f5f9;
-        border: 1px solid #e2e8f0;
-        border-left: 1px solid #e2e8f0; /* Quitamos el borde azul grueso anterior */
-        padding: 4px 8px;
-        border-radius: 6px;
-        margin: 0;
-        white-space: nowrap;
-        color: #333;
-        font-weight: 700;
+        font-size: 0.9rem; background: #f1f5f9; border: 1px solid #e2e8f0;
+        padding: 4px 8px; border-radius: 6px; margin: 0; white-space: nowrap; color: #333;
     }
+    .btn-header-edit { padding: 5px; font-size: 0.8rem; }
 
-    /* Botón editar datos del header (Lapiz) */
-    .btn-header-edit {
-        padding: 5px;
-        font-size: 0.8rem;
-    }
-    .btn-header-edit svg { width: 12px; height: 12px; } /* Icono chico */
-
-    /* --- TARJETAS Y BOTONES --- */
+    /* Tarjetas */
     .detalle-grid { grid-template-columns: 1fr; gap: 10px; } 
-
-    .detalle-card {
-        padding: 12px;
-        font-size: 0.9em; /* Letra general más chica */
-    }
-
+    .detalle-card { padding: 12px; font-size: 0.9em; }
     .detalle-card h3 { font-size: 1rem; margin-bottom: 8px; }
     .info-row { padding: 5px 0; font-size: 0.85rem; }
 
-    /* Botones de acción (Venta / Docu) reducidos */
-    .btn-vender-principal, 
-    .btn-editar-docs {
-        margin-top: 10px;
-        padding: 8px; /* Menos relleno */
-        font-size: 0.9rem; /* Letra chica */
-        border-radius: 6px;
+    
+    .detalle-card h4 { 
+        font-size: 1rem !important; 
+        margin: 10px 0 5px 0 !important;
     }
-
-    /* --- ACTIVIDADES --- */
+    
     .form-actividad { padding: 10px; }
     .input-actividad { padding: 6px; font-size: 0.85em; }
     
-    .item-actividad {
-        padding: 8px 0;
-        font-size: 0.8rem; /* Lista de act. chica */
+    .item-actividad { padding: 8px 0; font-size: 0.8rem; }
+    .item-actividad strong { font-size: 0.9em; }
+
+    .status-badge {
+        padding: 8px;
+        font-size: 0.9rem; /* Letra más chica en la barra roja/verde */
+        margin-top: 15px;
+        margin-bottom: 10px;
     }
-    .item-actividad strong { font-size: 0.9em; } /* Precio */
-    
-    /* Botón agregar actividad */
-    .form-actividad button[type="submit"] {
-        padding: 5px 10px;
-        font-size: 0.85em;
+
+    .lista-faltantes {
+        padding: 10px 15px;
+        font-size: 0.85rem; /* Lista de papeles mucho más chica */
     }
+
+    /* Botones */
+    .btn-vender-principal, .btn-editar-docs {
+        margin-top: 10px; padding: 8px; font-size: 0.9rem; border-radius: 6px;
+    }
+    .precio-grande { font-size: 1.4rem; }
 }
