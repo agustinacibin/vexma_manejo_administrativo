@@ -151,10 +151,36 @@
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* RESPONSIVE */
+
+
+/* RESPONSIVE TITULARES */
 @media (max-width: 768px) {
     .titular-list-container {
-        overflow-x: auto;
-        padding: 10px;
+        width: 100%;
+        padding: 5px; /* Casi sin borde */
+        margin: 10px auto !important;
+    }
+
+    .titular-list-container h2 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+
+    /* Tabla Compacta */
+    .main-table {
+        min-width: 0 !important; /* Permite que se achique */
+        width: 100%;
+        font-size: 0.8em; /* Letra chiquita para que entre todo */
+    }
+
+    .main-table th, .main-table td {
+        padding: 8px 4px; /* Muy poco padding lateral */
+    }
+
+    /* Botones de acción más chicos en la tabla */
+    .action-btn {
+        width: 35px;
+        height: 35px;
+        padding: 5px;
     }
 }

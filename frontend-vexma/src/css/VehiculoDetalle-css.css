@@ -247,14 +247,6 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-/* RESPONSIVE */
-@media (max-width: 800px) {
-    .detalle-grid { grid-template-columns: 1fr; } 
-    .detalle-header { flex-direction: column; gap: 10px; text-align: center; }
-}
-
-
-
 /* CHECKBOX */
 .container {
   cursor: pointer;
@@ -407,4 +399,60 @@ input[type="date"]:not(.date-empty)::-webkit-datetime-edit {
 input[type="date"]:focus::before,
 input[type="date"]:valid::before { 
     display: none; 
+}
+
+
+
+/* RESPONSIVE MÓVIL COMPACTO */
+@media (max-width: 800px) {
+    /* 1. Contenedor general sin márgenes gigantes */
+    .detalle-container { 
+        padding: 10px; 
+        margin: 10px auto;
+    }
+
+    /* 2. Header más chico */
+    .detalle-header { 
+        flex-direction: column; 
+        gap: 10px; 
+        text-align: center; 
+        margin-bottom: 15px;
+    }
+    
+    .titulo-principal { font-size: 1.4rem; } /* Antes 2rem */
+    .subtitulo-patente { font-size: 1.4rem; padding-left: 10px; margin-left: 10px; }
+
+    /* 3. Grid en 1 columna */
+    .detalle-grid { 
+        grid-template-columns: 1fr; 
+        gap: 10px;
+    } 
+
+    /* 4. TARJETAS COMPACTAS (La clave) */
+    .detalle-card {
+        padding: 15px; /* Menos aire */
+        font-size: 0.95em; /* Letra un poco más chica */
+    }
+
+    .detalle-card h3 {
+        font-size: 1.1rem; /* Títulos de tarjeta más chicos */
+        margin-bottom: 10px;
+    }
+
+    /* 5. Filas de info más delgadas */
+    .info-row {
+        padding: 6px 0;
+        font-size: 0.9rem; /* Letra de datos más chica */
+    }
+
+    /* 6. Precios */
+    .precio-grande { font-size: 1.4rem; }
+    
+    /* 7. Modal de edición responsive */
+    .modal-content {
+        width: 90% !important; /* Porcentaje en vez de px fijos */
+        padding: 20px;
+        max-height: 80vh;
+        overflow-y: auto; /* Scroll interno si es necesario */
+    }
 }

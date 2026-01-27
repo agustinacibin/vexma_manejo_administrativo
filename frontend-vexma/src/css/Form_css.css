@@ -112,16 +112,6 @@
   background-color: rgb(59, 89, 176);
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .form-row {
-    flex-direction: column;
-    gap: 15px;
-  }
-  .form-container {
-      padding: 20px; /* Menos padding en celular */
-  }
-}
 
 /* Modal Styles */
 .modal-overlay {
@@ -190,3 +180,41 @@ input[type="date"]:valid::-webkit-datetime-edit { color: #333 !important; }
 
 input[type="date"]:focus::before,
 input[type="date"]:valid::before { display: none; }
+
+
+
+/* RESPONSIVE PARA FORMULARIOS Y MODALES */
+@media (max-width: 600px) {
+  
+  /* Contenedor del Formulario */
+  .form-container {
+      width: 92% !important; /* Casi todo el ancho */
+      max-width: none !important;
+      margin: 10px auto;
+      padding: 15px; /* Menos relleno */
+      font-size: 0.9em !important; /* Letra un pelín más chica */
+  }
+
+  .form-header h3 { font-size: 1.3em; }
+  .styled-input { font-size: 1em; padding: 10px; }
+
+  .form-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* MODALES (Como el de "Editar Vehículo") */
+  .modal-content {
+      width: 90% !important; /* ADIÓS PX FIJOS */
+      min-width: 0 !important; /* Elimina mínimos forzados */
+      padding: 20px;
+      margin: 0 auto; /* Centrado */
+      border-radius: 15px;
+  }
+  
+  /* Inputs dentro del modal */
+  .modal-content input {
+      width: 100%;
+      box-sizing: border-box; /* Para que el padding no rompa el ancho */
+  }
+}

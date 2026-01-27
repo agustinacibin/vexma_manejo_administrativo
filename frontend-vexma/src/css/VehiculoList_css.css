@@ -321,37 +321,45 @@
       margin: 0;
   }
 
-  /* --- 3. BOTONES (NEGROS Y VISIBLES) --- */
+  /* 3. BOTONES (NEGROS Y VISIBLES) */
   .acciones-container {
     width: 100%;
     border: none;
     padding: 0;
     margin: 0;
-    padding: 0;
     
-    /* Ubicados a la derecha, en la misma línea visual que el estado */
+    /* Ubicados a la derecha, subidos para ahorrar espacio */
     justify-content: flex-end; 
-    gap: 8px;
-    margin-top: -32px; /* Subimos los botones para que queden al lado del estado */
+    gap: 10px;
+    margin-top: -38px; /* Subimos los botones a la línea del estado */
+    position: relative;
+    z-index: 5; /* Asegura que estén "arriba" de todo para poder clickearlos */
   }
 
   .acciones-container button {
       width: 40px;
       height: 40px;
-      font-size: 1.1em;
+      font-size: 1.2em; /* Tamaño del icono */
       border-radius: 8px;
+      padding: 0; /* IMPORTANTE: Sin padding para que el icono se centre */
       
-      /* FONDO NEGRO PARA QUE SE VEAN */
-      background-color: #222 !important; 
-      border: 1px solid #000;
+      /* FONDO NEGRO */
+      background-color: #1a1a1a !important; 
+      border: 1px solid #333;
       
-      /* Sombra para profundidad */
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+      /* Sombra para que se despeguen del fondo */
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
       
-      /* Centrar iconos */
+      /* Centrado perfecto del icono */
       display: flex;
       align-items: center;
       justify-content: center;
+  }
+  
+  /* Aseguramos que el icono dentro no tenga margenes raros */
+  .acciones-container button svg {
+      margin: 0;
+      display: block;
   }
 }
 
