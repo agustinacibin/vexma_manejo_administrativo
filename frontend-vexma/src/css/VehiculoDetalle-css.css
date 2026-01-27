@@ -255,33 +255,6 @@
 
 
 
-/*  FECHAS */
-input[type="date"] {
-  position: relative; 
-  color: #333;
-  font-family: 'Montserrat', sans-serif;
-}
-
-input[type="date"]:invalid::-webkit-datetime-edit { color: transparent; }
-
-input[type="date"]:invalid::before {
-  content: attr(placeholder); 
-  position: absolute; left: 15px; color: #888; 
-  pointer-events: none;       
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1em;
-}
-
-input[type="date"]:focus::-webkit-datetime-edit,
-input[type="date"]:valid::-webkit-datetime-edit { color: #333 !important; }
-
-input[type="date"]:focus::before,
-input[type="date"]:valid::before { display: none; }
-
-
-
-
-
 /* CHECKBOX */
 .container {
   cursor: pointer;
@@ -327,4 +300,126 @@ input[type="date"]:valid::before { display: none; }
 }
 .container:hover input:checked ~ svg .path {
   stroke: #059669;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* --- MODAL DE EDICIÓN --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; 
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+}
+
+.modal-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    font-family: 'Montserrat', sans-serif;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-titulo {
+    font-size: 1.5rem;
+    color: royalblue;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.btn-cancelar {
+    background: #64748b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-guardar {
+    background: royalblue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- REGLAS FECHAS (Modificadas para funcionar sin 'required') --- */
+/* Usaremos una clase .date-empty controlada por React */
+
+input[type="date"] {
+  position: relative; 
+  color: #333;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Si tiene la clase .date-empty, ocultamos el texto por defecto (dd/mm/aaaa) */
+input[type="date"].date-empty::-webkit-datetime-edit { 
+    color: transparent; 
+}
+
+/* Si tiene la clase .date-empty, mostramos el placeholder */
+input[type="date"].date-empty::before {
+  content: attr(placeholder); 
+  position: absolute; 
+  left: 10px; 
+  color: #888; 
+  pointer-events: none;       
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9em; /* Ajuste visual */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Cuando hacemos focus, mostramos el selector nativo */
+input[type="date"]:focus::-webkit-datetime-edit { 
+    color: #333 !important; 
+}
+input[type="date"]:focus::before { 
+    display: none; 
 }

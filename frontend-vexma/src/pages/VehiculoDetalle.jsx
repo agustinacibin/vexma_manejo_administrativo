@@ -12,12 +12,17 @@ function VehiculoDetalle() {
     const navigate = useNavigate()
 
     const [vehiculo, setVehiculo] = useState(null)
+    
+    // Estado para nueva actividad
     const [nuevaActividad, setNuevaActividad] = useState({
         descripcion:"", 
         gasto:"", 
         fecha:"",
         isPendiente:false
     })
+
+    // Estado para el MODAL de edición (null = cerrado, objeto = abierto)
+    const [actividadAEditar, setActividadAEditar] = useState(null)
 
     const [descuento, setDescuento] = useState(2)
     const [rentabilidad, setRentabilidad] = useState(15)
@@ -26,7 +31,6 @@ function VehiculoDetalle() {
     const [showReingresoInput, setShowReingresoInput] = useState(false)
     const [fechaVenta, setFechaVenta] = useState("")
     const [fechaReingreso, setFechaReingreso] = useState("")
-
 
     const cargarDatosVehiculo = () => {
         VehiculoService.obtenerPorId(id)
@@ -38,16 +42,15 @@ function VehiculoDetalle() {
         cargarDatosVehiculo()
     }, [])
 
-
+    // --- LOGICA AGREGAR ---
     const handleGuardarActividad = async (e) => {
         e.preventDefault()
-
         if (!nuevaActividad.descripcion) return alert("Descripción requerida.")
 
         const actividadAEnviar = {
             ...nuevaActividad,
             gasto: parseFloat(nuevaActividad.gasto) || 0,
-            fecha: nuevaActividad.fecha || new Date(),
+            fecha: nuevaActividad.fecha || new Date(), // Si está vacío, usa hoy
             vehiculo: {id: vehiculo.id}
         }
 
@@ -56,12 +59,51 @@ function VehiculoDetalle() {
             setNuevaActividad({ descripcion:"", gasto:"", fecha:"", isPendiente:false})
             cargarDatosVehiculo()
         } catch (error) {
-            const mensaje = error.response?.data || "Error desconocido";
-            alert("Error al guardar actividad: " + mensaje);
+            alert("Error al guardar actividad", error);
         }
-
     }
 
+    // --- LOGICA EDITAR ---
+    const abrirModalEditar = (actividad) => {
+        // Formatear la fecha para que el input type="date" la lea bien (yyyy-MM-dd)
+        let fechaFormat = "";
+        if(actividad.fecha) {
+            // Asumiendo que viene como array [2024, 1, 20] o string ISO
+            if(Array.isArray(actividad.fecha)) {
+               // Ajuste rápido para array de fechas de Java LocalDate
+               const [y, m, d] = actividad.fecha;
+               fechaFormat = `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            } else {
+               fechaFormat = actividad.fecha.toString().split('T')[0];
+            }
+        }
+
+        setActividadAEditar({
+            ...actividad,
+            fecha: fechaFormat,
+            // Aseguramos que gasto sea string para el input o numero
+            gasto: actividad.gasto 
+        })
+    }
+
+    const handleActualizarActividad = async (e) => {
+        e.preventDefault();
+        try {
+            const actividadUpdate = {
+                ...actividadAEditar,
+                gasto: parseFloat(actividadAEditar.gasto) || 0,
+                fecha: actividadAEditar.fecha || new Date()
+            };
+            
+            // Asumimos que ActividadService.guardar hace update si tiene ID
+            await ActividadService.guardar(actividadUpdate);
+            setActividadAEditar(null); // Cerrar modal
+            cargarDatosVehiculo(); // Recargar lista
+        } catch (error) {
+            console.error(error);
+            alert("Error al actualizar la actividad");
+        }
+    }
 
     const borrarActividad = async (idActividad) => {
         if(window.confirm("¿Desea borrar la actividad?")) {
@@ -116,7 +158,7 @@ function VehiculoDetalle() {
     const actividadesCompletadas = vehiculo.actividades?.filter(a => !a.isPendiente) || [];
     const actividadesPendientes = vehiculo.actividades?.filter(a => a.isPendiente) || [];
 
-    // --- DOCUMENTACIÓN ---
+    // --- UTILS ---
     const verificarDocumentacion = (documentacion) => {
         if (!documentacion) return false
         return (
@@ -177,18 +219,13 @@ function VehiculoDetalle() {
                 </button>
             </header>
 
-            {/* GRID PRINCIPAL (2 COLUMNAS) */}
             <div className="detalle-grid">
                 
-                {/* ------------------------------------------------ */}
-                {/* COLUMNA 1 (IZQUIERDA): DATOS + ACTIVIDADES */}
-                {/* ------------------------------------------------ */}
+                {/* COLUMNA 1: DATOS + ACTIVIDADES */}
                 <div>
-                    
                     {/* 1. DATOS GENERALES */}
                     <div className="detalle-card">
                         <h3>Datos Generales</h3>
-                        
                         <div className="info-row"><span className="label">Versión:</span> <span className="valor">{vehiculo.version || "-"}</span></div>
                         <div className="info-row"><span className="label">Tipo:</span> <span className="valor">{tipos.find((t) => t.key === vehiculo.tipo)?.label || vehiculo.tipo || ""}</span></div>
                         <div className="info-row"><span className="label">Estado:</span> <span className="valor">{vehiculo.isNuevo ? "Nuevo 0km" : "Usado"}</span></div>
@@ -196,13 +233,11 @@ function VehiculoDetalle() {
                         <div className="info-row"><span className="label">Ingreso:</span> <span className="valor">{fechaFormater(vehiculo.fechaIngreso)}</span></div>
                         {vehiculo.fechaEgreso && <div className="info-row" style={{background:'#fee2e2'}}><span className="label" style={{color:'#ef4444'}}>Vendido el:</span> <span className="valor" style={{color:'#ef4444'}}>{fechaFormater(vehiculo.fechaEgreso)}</span></div>}
                         
-                        {/* Botones de Acción (Venta/Reingreso) */}
                         <div style={{marginTop: "20px"}}>
-                            {!vehiculo.fechaEgreso ? (
+                           {/* Logica botones venta/reingreso... (sin cambios) */}
+                           {!vehiculo.fechaEgreso ? (
                                 !showVentaInput ? (
-                                    <button onClick={() => setShowVentaInput(true)} className="btn-vender-principal">
-                                        REGISTRAR VENTA
-                                    </button>
+                                    <button onClick={() => setShowVentaInput(true)} className="btn-vender-principal">REGISTRAR VENTA</button>
                                 ) : (
                                     <div style={{padding:'10px', background:'#f0fdf4', borderRadius:'8px', border:'1px solid #bbf7d0'}}>
                                         <small style={{color: 'green'}}>Confirmar Fecha (Vacío = Fecha Actual):</small>
@@ -215,9 +250,7 @@ function VehiculoDetalle() {
                                 )
                             ) : (
                                 !showReingresoInput ? (
-                                    <button onClick={() => setShowReingresoInput(true)} className="btn-vender-principal" style={{background:'#f59e0b'}}>
-                                        REINGRESAR VEHÍCULO
-                                    </button>
+                                    <button onClick={() => setShowReingresoInput(true)} className="btn-vender-principal" style={{background:'#f59e0b'}}>REINGRESAR VEHÍCULO</button>
                                 ) : (
                                     <div style={{padding:'10px', background:'#fff7ed', borderRadius:'8px', border:'1px solid #fed7aa'}}>
                                         <small style={{color: 'orange'}}>Confirmar Reingreso (Vacío = Fecha Actual):</small>
@@ -232,24 +265,30 @@ function VehiculoDetalle() {
                         </div>
                     </div>
 
-
                     {/* 2. ACTIVIDADES */}
                     <div className="detalle-card" style={{marginTop:'25px'}}>
                         <h3>Actividades</h3>
                         
-                        {/* Formulario de carga */}
                         <form onSubmit={handleGuardarActividad} className="form-actividad">
                             <input placeholder="Descripción..." className="input-actividad" value={nuevaActividad.descripcion} onChange={e => setNuevaActividad({...nuevaActividad, descripcion: e.target.value})} style={{width:'100%', boxSizing:'border-box'}}/>
                             <div className="actividad-inputs-row">
                                 <input type="number" placeholder="Costo" className="input-actividad" style={{width:'80px'}} value={nuevaActividad.gasto} onChange={e => setNuevaActividad({...nuevaActividad, gasto: e.target.value})}/>
-                                <input type="date" required placeholder='Fecha de la Actividad' className="input-actividad" style={{flex:1}} value={nuevaActividad.fecha} onChange={e => setNuevaActividad({...nuevaActividad, fecha: e.target.value})} />
+                                {/* CAMBIO: Fecha sin required y con clase dinámica */}
+                                <input 
+                                    type="date" 
+                                    placeholder='Fecha (Opcional)' 
+                                    className={!nuevaActividad.fecha ? "input-actividad date-empty" : "input-actividad"}
+                                    style={{flex:1}} 
+                                    value={nuevaActividad.fecha} 
+                                    onChange={e => setNuevaActividad({...nuevaActividad, fecha: e.target.value})} 
+                                />
                             </div>
                             <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                                    <label class="container" style={{fontSize:'0.6em', display:'flex', alignItems:'center', gap:'5px'}}>
+                                    <label className="container" style={{fontSize:'0.6em', display:'flex', alignItems:'center', gap:'5px'}}>
                                         <input type="checkbox" checked={!nuevaActividad.isPendiente} onChange={e => setNuevaActividad({...nuevaActividad, isPendiente: !e.target.checked})}/> 
                                             <span style={{fontSize: "1.5em", marginLeft:"5px", color:"#4f4949"}}>{nuevaActividad.isPendiente ? "Pendiente" : "Completada"}</span>
                                         <svg viewBox="0 0 64 64" height="2em" width="2em">
-                                            <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" class="path"></path>
+                                            <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" className="path"></path>
                                         </svg>
                                 </label>
                                 <button type="submit" style={{background:'royalblue', color:'white', border:'none', padding:'5px 15px', borderRadius:'6px', cursor:'pointer'}}>+ Agregar</button>
@@ -258,7 +297,6 @@ function VehiculoDetalle() {
 
                         {/* Lista REALIZADAS */}
                         <h4 style={{fontSize:'1.3rem', color:'#10b981', margin:'15px 0 5px 0', borderBottom:'1px solid #10b981'}}>Realizadas ({actividadesCompletadas.length})</h4>
-                        
                         {actividadesCompletadas.length > 0 ? (
                             <ul className="lista-actividades">
                                 {actividadesCompletadas.map(act => (
@@ -266,6 +304,8 @@ function VehiculoDetalle() {
                                         <div><span style={{display:'block', fontWeight:500, fontSize:"1.07em"}}>{act.descripcion}</span><small style={{color:'#94a3b8'}}>{fechaFormater(act.fecha)}</small></div>
                                         <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
                                             <strong style={{color:'#334155'}}>${act.gasto}</strong>
+                                            {/* Botón Editar */}
+                                            <FaEdit color="#64748b" style={{cursor:'pointer'}} onClick={() => abrirModalEditar(act)}/>
                                             <FaTrash color="#ef4444" style={{cursor:'pointer'}} onClick={() => borrarActividad(act.id)}/>
                                         </div>
                                     </li>
@@ -273,10 +313,8 @@ function VehiculoDetalle() {
                             </ul>
                         ) : <p style={{fontStyle:"italic", color:"#9d9d9d", fontSize:'0.8em'}}>No hay actividades realizadas.</p>}
 
-
                         {/* Lista PENDIENTES */}
                         <h4 style={{fontSize:'1.3rem', color:'#f59e0b', margin:'20px 0 5px 0', borderBottom:'1px solid #f59e0b'}}>Pendientes ({actividadesPendientes.length})</h4>
-                        
                         {actividadesPendientes.length > 0 ? (
                             <ul className="lista-actividades">
                                 {actividadesPendientes.map(act => (
@@ -287,64 +325,50 @@ function VehiculoDetalle() {
                                         </div>
                                         <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
                                             <strong style={{color:'#334155'}}>${act.gasto}</strong>
+                                            {/* Botón Editar */}
+                                            <FaEdit color="#64748b" style={{cursor:'pointer'}} onClick={() => abrirModalEditar(act)}/>
                                             <FaTrash color="#ef4444" style={{cursor:'pointer'}} onClick={() => borrarActividad(act.id)}/>
                                         </div>
                                     </li>
                                 ))}
                             </ul>
                         ) : <p style={{fontStyle:"italic", color:"#9d9d9d", fontSize:'0.8em'}}>No hay actividades pendientes.</p>}
-
                     </div>
-
                 </div>
 
-                {/* ------------------------------------------------ */}
                 {/* COLUMNA 2 (DERECHA): PRECIOS + DOCUMENTACIÓN */}
-                {/* ------------------------------------------------ */}
                 <div>
-                    
-                    {/* 3. PRECIOS */}
+                    {/* ... (Se mantiene igual que antes la parte de precios y doc) ... */}
                     <div className="detalle-card">
                         <h3>Precios del Vehículo</h3>
-                        
                         <div className="info-row"><span className="label">Precio Compra:</span> <span className="valor">$ {vehiculo.precioCompra}</span></div>
                         <div className="info-row"><span className="label">+ Gastos:</span> <span className="valor">$ {gastoTotalCalculado}</span></div>
                         <hr style={{borderColor:'#f1f5f9'}}/>
                         <div className="info-row"><span className="label" style={{color:'#2c3e50'}}>Costo Total:</span> <span className="valor" style={{fontWeight:'bold'}}>$ {precioMinimoVenta}</span></div>
-                        
                         <br />
-                        
                         <div className="info-row"><span className="label">Precio Lista:</span> <span className="valor" style={{fontSize: "1.2em"}}>$ {vehiculo.precioLista}</span></div>
-
                         <div className="info-row" style={{background:"#f8fafc", padding:"5px", borderRadius:"5px", marginTop:"5px"}}>
                             <span className="label">Rentabilidad (%):</span>
                             <input type="number" value={rentabilidad} onChange={(e) => setRentabilidad(e.target.value)} className="input-pequeno"/>
                         </div>
-
                         <div className="precio-destacado">
                             <span style={{color:'#64748b', fontSize:'0.9rem'}}>Precio Sugerido:</span>
                             <span className="precio-grande">$ {precioContado.toFixed(2)}</span>
                         </div>
-
                         <div className="info-row" style={{background:"#f8fafc", padding:"5px", borderRadius:"5px"}}>
                             <span className="label">Descuento Contado (%):</span>
                             <input type="number" value={descuento} onChange={(e) => setDescuento(e.target.value)} className="input-pequeno"/>
                         </div>
-                        
                         <div className="info-row" style={{marginTop:'10px'}}>
                             <span className="label">Precio Final:</span>
                             <span className="valor" style={{color:'royalblue', fontSize:'1.2rem', fontWeight:'bold'}}>$ {precioDescuentoContado.toFixed(2)}</span>
                         </div>
                     </div>
 
-
-                    {/* 4. DOCUMENTACIÓN */}
                     <div className="detalle-card" style={{marginTop:'25px'}}>
                         <h3>Documentación</h3>
                         {verificarDocumentacion(vehiculo.documentacion) ? (
-                            <div className="status-badge status-ok">
-                                ✓ DOCUMENTACIÓN COMPLETA
-                            </div>
+                            <div className="status-badge status-ok">✓ DOCUMENTACIÓN COMPLETA</div>
                         ) : (
                             <div>
                                 <div className="status-badge status-error"> ⚠ INCOMPLETA </div> 
@@ -356,20 +380,76 @@ function VehiculoDetalle() {
                                 </ul>
                             </div>
                         )}
-
-                        <button 
-                            onClick={() => navigate(`/vehiculos/${id}/documentacion`)} 
-                            className="btn-editar-docs"
-                        >
-                            Gestionar Documentación
-                        </button>
+                        <button onClick={() => navigate(`/vehiculos/${id}/documentacion`)} className="btn-editar-docs">Gestionar Documentación</button>
                     </div>
-
-                    
-
                 </div>
-
             </div>
+
+            {/* --- MODAL EDITAR ACTIVIDAD --- */}
+            {actividadAEditar && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h2 className="modal-titulo">Editar Actividad</h2>
+                        
+                        <form onSubmit={handleActualizarActividad} className="form-actividad" style={{background:'transparent', padding:0}}>
+                            
+                            <label style={{fontWeight:'bold', fontSize:'0.9em', color:'#64748b'}}>Descripción:</label>
+                            <input 
+                                className="input-actividad" 
+                                value={actividadAEditar.descripcion} 
+                                onChange={e => setActividadAEditar({...actividadAEditar, descripcion: e.target.value})} 
+                                style={{width:'100%', boxSizing:'border-box', marginBottom:'15px'}}
+                            />
+
+                            <div style={{display:'flex', gap:'10px', marginBottom:'15px'}}>
+                                <div style={{flex:1}}>
+                                    <label style={{fontWeight:'bold', fontSize:'0.9em', color:'#64748b', display:'block'}}>Costo ($):</label>
+                                    <input 
+                                        type="number" 
+                                        className="input-actividad" 
+                                        style={{width:'100%', boxSizing:'border-box'}}
+                                        value={actividadAEditar.gasto} 
+                                        onChange={e => setActividadAEditar({...actividadAEditar, gasto: e.target.value})}
+                                    />
+                                </div>
+                                <div style={{flex:1}}>
+                                    <label style={{fontWeight:'bold', fontSize:'0.9em', color:'#64748b', display:'block'}}>Fecha:</label>
+                                    <input 
+                                        type="date" 
+                                        className="input-actividad" 
+                                        style={{width:'100%', boxSizing:'border-box'}}
+                                        value={actividadAEditar.fecha} 
+                                        onChange={e => setActividadAEditar({...actividadAEditar, fecha: e.target.value})} 
+                                    />
+                                </div>
+                            </div>
+
+                            <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', background:'#f8fafc', padding:'10px', borderRadius:'8px', border:'1px solid #e2e8f0'}}>
+                                <span style={{fontWeight:'bold', color:'#334155'}}>Estado:</span>
+                                <label className="container" style={{fontSize:'0.6em', display:'flex', alignItems:'center', gap:'5px', margin:0}}>
+                                    <input 
+                                        type="checkbox" 
+                                        checked={!actividadAEditar.isPendiente} 
+                                        onChange={e => setActividadAEditar({...actividadAEditar, isPendiente: !e.target.checked})}
+                                    /> 
+                                    <span style={{fontSize: "1.5em", marginLeft:"5px", color: actividadAEditar.isPendiente ? "#f59e0b" : "#10b981", fontWeight:'bold'}}>
+                                        {actividadAEditar.isPendiente ? "Pendiente" : "Completada"}
+                                    </span>
+                                    <svg viewBox="0 0 64 64" height="2em" width="2em">
+                                        <path d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16" pathLength="575.0541381835938" className="path"></path>
+                                    </svg>
+                                </label>
+                            </div>
+
+                            <div className="modal-actions">
+                                <button type="button" onClick={() => setActividadAEditar(null)} className="btn-cancelar">Cancelar</button>
+                                <button type="submit" className="btn-guardar">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
         </div>
     )
 }
