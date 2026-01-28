@@ -301,7 +301,7 @@ function VehiculoDetalle() {
                                     <li key={act.id} className="item-actividad">
                                         <div><span style={{display:'block', fontWeight:500, fontSize:"1.07em"}}>{act.descripcion}</span><small style={{color:'#94a3b8'}}>{fechaFormater(act.fecha)}</small></div>
                                         <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
-                                            <strong style={{color:'#334155'}}>${formatearMoneda(act.gasto)}</strong>
+                                            <strong style={{color:'#334155'}}>{formatearMoneda(act.gasto)}</strong>
                                             <FaEdit color="#35537c" style={{cursor:'pointer'}} onClick={() => abrirModalEditar(act)}/>
                                             <FaTrash color="#ef4444" style={{cursor:'pointer'}} onClick={() => borrarActividad(act.id)}/>
                                         </div>
@@ -321,7 +321,7 @@ function VehiculoDetalle() {
                                             <small style={{color:'#720000'}}>Pendiente - {fechaFormater(act.fecha)}</small>
                                         </div>
                                         <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
-                                            <strong style={{color:'#334155'}}>${formatearMoneda(act.gasto)}</strong>
+                                            <strong style={{color:'#334155'}}>{formatearMoneda(act.gasto)}</strong>
                                             {/* Botón Editar */}
                                             <FaEdit color="#64748b" style={{cursor:'pointer'}} onClick={() => abrirModalEditar(act)}/>
                                             <FaTrash color="#ef4444" style={{cursor:'pointer'}} onClick={() => borrarActividad(act.id)}/>
