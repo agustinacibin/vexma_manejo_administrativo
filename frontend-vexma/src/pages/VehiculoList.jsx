@@ -217,7 +217,7 @@ function VehiculoList() {
               <button onClick={cerrarPopup} className="close-icon-btn">
                 <SlArrowLeft />
               </button>
-              <h3>Antigüedad de Stock</h3>
+              <h3>Antigüedad de Vehículos</h3>
             </div>
 
             <ul className="modal-vehicle-list">
