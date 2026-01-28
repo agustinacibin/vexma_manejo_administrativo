@@ -112,13 +112,13 @@ function VehiculoList() {
           </div>
         </div>
 
-        {/* Card 3: Tiempos de Stock */}
+        {/* Card 3: Tiempo de Permanencia */}
         <div style={{cursor: 'pointer'}} onClick={() => setVehiculosPopUp(true)}>
           <div className="vehiculos-agencia-numero hover-effect">
              <FaClock size={40} color="#000000" />
           </div>
           <div className="vehiculos-agencia-texto">
-            Tiempos de Stock
+            Tiempo de Permanencia
           </div>
         </div>
       </div>
