@@ -77,7 +77,11 @@ function TitularModal({onClose, onTitularCreado}) {
 
                     <input
                         className="styled-input"
-                        type="date"
+                        type={nuevoTitular.fechaNacimiento ? "date" : "text"}
+                        onFocus={(e) => e.target.type = 'date'}
+                        onBlur={(e) => {
+                            if (!nuevoTitular.fechaNacimiento) e.target.type = 'text';
+                        }}
                         name="fechaNacimiento"
                         placeholder="Fecha de Nacimiento"
                         value={nuevoTitular.fechaNacimiento}
