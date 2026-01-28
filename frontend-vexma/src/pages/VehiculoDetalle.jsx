@@ -273,7 +273,11 @@ function VehiculoDetalle() {
                             <div className="actividad-inputs-row">
                                 <input type="number" placeholder="Costo" className="input-actividad" style={{width:'80px'}} value={nuevaActividad.gasto} onChange={e => setNuevaActividad({...nuevaActividad, gasto: e.target.value})}/>
                                 <input 
-                                    type="date" 
+                                    type={nuevaActividad.fecha ? "date" : "text"}
+                                    onFocus={(e) => e.target.type = 'date'}
+                                    onBlur={(e) => {
+                                        if (!nuevaActividad.fecha) e.target.type = 'text';
+                                    }}
                                     placeholder='Fecha (Opcional)' 
                                     className={!nuevaActividad.fecha ? "input-actividad date-empty" : "input-actividad"}
                                     style={{flex:1}} 

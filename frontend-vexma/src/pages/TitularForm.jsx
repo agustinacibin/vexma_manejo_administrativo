@@ -128,7 +128,11 @@ function TitularForm() {
                 {/* FILA 3: Fecha (Con el truco del CSS) */}
                 <input
                     className="styled-input"
-                    type="date"
+                    type={titular.fechaNacimiento ? "date" : "text"}
+                    onFocus={(e) => e.target.type = 'date'}
+                    onBlur={(e) => {
+                        if (!titular.fechaNacimiento) e.target.type = 'text';
+                    }}
                     name='fechaNacimiento'
                     placeholder="Fecha de Nacimiento"
                     value={titular.fechaNacimiento}

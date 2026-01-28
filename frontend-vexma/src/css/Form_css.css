@@ -160,46 +160,13 @@
 
 
 
-/* ---  FECHAS --- */
+/* --- CORRECCIÓN FECHAS (Form_css.css) --- */
 
-input[type="date"].date-empty {
-    color: transparent; 
-}
-
-input[type="date"].date-empty::-webkit-datetime-edit { 
-    color: transparent; 
-}
-
-
-input[type="date"].date-empty::before {
-  content: attr(placeholder); 
-  position: absolute; 
-  left: 12px; 
-  color: #9ca3af; 
-  pointer-events: none;       
+input[type="date"] {
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.9em; 
-  top: 50%;
-  transform: translateY(-50%);
-  white-space: nowrap;
+  color: #333;
+  padding: 12px 15px; /* Para que coincida con tus otros inputs */
 }
-
-
-input[type="date"]:focus,
-input[type="date"]:not(.date-empty) { 
-    color: #334155 !important; 
-}
-
-input[type="date"]:focus::-webkit-datetime-edit,
-input[type="date"]:not(.date-empty)::-webkit-datetime-edit { 
-    color: #334155 !important; 
-}
-
-input[type="date"]:focus::before,
-input[type="date"]:valid::before { 
-    display: none; 
-}
-
 
 
 

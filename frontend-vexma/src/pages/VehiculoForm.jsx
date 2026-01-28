@@ -249,7 +249,13 @@ function VehiculoForm() {
         {/* Fecha Ingreso */}
         <input
           className="styled-input"
-          type="date"
+
+          type={vehiculo.fechaIngreso ? "date" : "text"}
+          onFocus={(e) => e.target.type = 'date'}
+          onBlur={(e) => {
+            if (!vehiculo.fechaIngreso) e.target.type = 'text';
+          }}
+
           name="fechaIngreso"
           placeholder="Fecha de Ingreso"
           value={vehiculo.fechaIngreso}
