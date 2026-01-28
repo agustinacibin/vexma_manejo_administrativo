@@ -66,7 +66,7 @@ function TitularList(){
             <table className="main-table">
                 <thead>
                     <tr>
-                        <th>DNI</th>
+                        <th>DNI/CUIL/CUIT</th>
                         <th>Apellido</th>
                         <th>Nombre</th>
                         <th>Fecha de Nacimiento</th>

@@ -65,7 +65,7 @@ function TitularForm() {
 
 
     const handleVolver = () => {
-        navigate(-1); // Navega un paso atrás en el historial
+        navigate(-1);
     }
 
 
@@ -116,13 +116,12 @@ function TitularForm() {
                 {/* FILA 2: DNI */}
                 <input
                     className="styled-input"
-                    type="number" // numeric a veces da problemas, number es estandar
+                    type="number" 
                     name="dni"
-                    placeholder="DNI"
+                    placeholder="DNI/CUIL"
                     value={titular.dni}
                     onChange={handleChange}
                     required
-                    // maxLength no funciona bien con type="number", mejor controlarlo en change si es vital
                 />
 
                 {/* FILA 3: Fecha (Con el truco del CSS) */}

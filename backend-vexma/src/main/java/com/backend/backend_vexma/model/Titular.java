@@ -19,7 +19,7 @@ public class Titular {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "dni", nullable = false, precision = 8, unique = true)
+    @Column(name = "dni", nullable = false, precision = 15, unique = true)
     private Integer dni;
     @Column(name = "nombre", nullable = false)
     private String nombre;

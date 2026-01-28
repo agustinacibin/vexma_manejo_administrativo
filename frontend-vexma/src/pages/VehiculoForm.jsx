@@ -270,7 +270,7 @@ function VehiculoForm() {
               .sort((a, b) => a.apellido.localeCompare(b.apellido))
               .map((t) => (
                 <option key={t.id} value={t.id}>
-                  {t.apellido}, {t.nombre} - DNI: {t.dni}
+                  {t.apellido}, {t.nombre} - DNI | CUIL: {t.dni}
                 </option>
               ))}
           </select>
