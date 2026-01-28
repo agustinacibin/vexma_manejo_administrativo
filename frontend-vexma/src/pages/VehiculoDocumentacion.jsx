@@ -104,15 +104,19 @@ function VehiculoDocumentacion() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const datosAEnviar = { ...formulario };
 
-    Object.keys(datosAEnviar).forEach((key) => {
-      if (key.startsWith("fecha") && datosAEnviar[key] === "") {
-        datosAEnviar[key] = null;
+    const datosLimpios = { ...formulario };
+
+    Object.keys(datosLimpios).forEach((key) => {
+      if (key.startsWith("fecha") && datosLimpios[key] === "") {
+        datosLimpios[key] = null;
       }
     });
 
-    const payload = { ...datosAEnviar, vehiculo: { id: Number(id) } };
+    const payload = { 
+        ...datosLimpios, 
+        vehiculo: { id: Number(id) } 
+    };
 
     try {
       if (formulario.id) {
@@ -123,10 +127,11 @@ function VehiculoDocumentacion() {
       alert("Documentación guardada correctamente");
       cargarDatos();
     } catch (error) {
-      console.error(error); 
-      alert("Error al guardar.");
+      console.error("Detalle del error:", error);
+      // Muestra el mensaje real del servidor si existe
+      alert("Error al guardar: " + (error.response?.data || "Ver consola para detalles"));
     }
-  };
+  }
 
   if (loading) return <div className="doc-loading">Cargando...</div>;
   if (!vehiculo)
