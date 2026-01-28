@@ -158,28 +158,47 @@
 }
 .cancel-btn:hover { background-color: #5a6268; }
 
-/*  FECHAS */
+/* --- CORRECCIÓN FECHAS (Form_css.css) --- */
+
 input[type="date"] {
-  position: relative; 
+  position: relative;
+  font-family: 'Montserrat', sans-serif;
   color: #333;
-  font-family: 'Montserrat', sans-serif;
+  /* Asegura que el texto y el placeholder estén alineados verticalmente */
+  display: flex;
+  align-items: center;
 }
 
-input[type="date"]:invalid::-webkit-datetime-edit { color: transparent; }
-
-input[type="date"]:invalid::before {
-  content: attr(placeholder); 
-  position: absolute; left: 15px; color: #888; 
-  pointer-events: none;       
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1em;
+/* 1. ESTADO VACÍO (Inválido + Requerido) */
+/* Ocultamos la máscara nativa "dd/mm/aaaa" haciéndola transparente */
+input[type="date"]:required:invalid::-webkit-datetime-edit {
+  color: transparent;
 }
 
+/* Dibujamos el placeholder "falso" encima */
+input[type="date"]:required:invalid::before {
+  content: attr(placeholder);
+  position: absolute;
+  left: 15px; /* Debe coincidir con el padding-left de .styled-input */
+  color: #888;
+  pointer-events: none; /* Para que el click pase a través del texto */
+  font-family: 'Montserrat', sans-serif;
+  white-space: nowrap;
+}
+
+/* 2. ESTADO ACTIVO (Focus o Válido) */
+/* Cuando el usuario hace click (focus) o ya eligió fecha (valid), mostramos la fecha real */
 input[type="date"]:focus::-webkit-datetime-edit,
-input[type="date"]:valid::-webkit-datetime-edit { color: #333 !important; }
+input[type="date"]:valid::-webkit-datetime-edit {
+  color: #333 !important;
+  display: inline-block;
+}
 
+/* Y ocultamos nuestro placeholder falso */
 input[type="date"]:focus::before,
-input[type="date"]:valid::before { display: none; }
+input[type="date"]:valid::before {
+  display: none;
+}
 
 
 
