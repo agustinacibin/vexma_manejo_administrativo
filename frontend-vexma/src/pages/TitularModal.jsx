@@ -68,9 +68,10 @@ function TitularModal({onClose, onTitularCreado}) {
                         className="styled-input"
                         type="number"
                         name="dni"
-                        placeholder="DNI/CUIL"
+                        placeholder="DNI / CUIL"
                         value={nuevoTitular.dni}
                         onChange={handleChange}
+                        maxLength={15}
                         required
                     />
 

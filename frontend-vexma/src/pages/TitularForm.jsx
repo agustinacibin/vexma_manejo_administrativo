@@ -118,9 +118,10 @@ function TitularForm() {
                     className="styled-input"
                     type="number" 
                     name="dni"
-                    placeholder="DNI/CUIL"
+                    placeholder="DNI / CUIL"
                     value={titular.dni}
                     onChange={handleChange}
+                    maxLength={15}
                     required
                 />
 

@@ -20,7 +20,7 @@ public class Titular {
     private Long id;
 
     @Column(name = "dni", nullable = false, precision = 15, unique = true)
-    private Integer dni;
+    private Long dni;
     @Column(name = "nombre", nullable = false)
     private String nombre;
     @Column(name = "apellido", nullable = false)
@@ -36,7 +36,7 @@ public class Titular {
     // Constructor
     public Titular(){}
      
-    public Titular(Integer dni, String nombre, String apellido, LocalDate fechaNacimiento) {
+    public Titular(Long dni, String nombre, String apellido, LocalDate fechaNacimiento) {
         this.dni = dni;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -48,10 +48,10 @@ public class Titular {
         return this.id;
     }
 
-    public Integer getDni(){
+    public Long getDni(){
         return this.dni;
     }
-    public void setDni(Integer dni){
+    public void setDni(Long dni){
         this.dni = dni;
     }
 
