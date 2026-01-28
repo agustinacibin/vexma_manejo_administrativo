@@ -271,7 +271,7 @@ function VehiculoDetalle() {
                         <form onSubmit={handleGuardarActividad} className="form-actividad">
                             <input placeholder="Descripción..." className="input-actividad" value={nuevaActividad.descripcion} onChange={e => setNuevaActividad({...nuevaActividad, descripcion: e.target.value})} style={{width:'100%', boxSizing:'border-box'}}/>
                             <div className="actividad-inputs-row">
-                                <input type="number" placeholder="Costo" className="input-actividad" style={{width:'80px'}} value={formatearMoneda(nuevaActividad.gasto)} onChange={e => setNuevaActividad({...nuevaActividad, gasto: e.target.value})}/>
+                                <input type="number" placeholder="Costo" className="input-actividad" style={{width:'80px'}} value={nuevaActividad.gasto} onChange={e => setNuevaActividad({...nuevaActividad, gasto: e.target.value})}/>
                                 <input 
                                     type="date" 
                                     placeholder='Fecha (Opcional)' 
@@ -337,19 +337,19 @@ function VehiculoDetalle() {
                 <div>
                     <div className="detalle-card">
                         <h3>Precios del Vehículo</h3>
-                        <div className="info-row"><span className="label">Precio Compra:</span> <span className="valor">$ {formatearMoneda(vehiculo.precioCompra)}</span></div>
-                        <div className="info-row"><span className="label">+ Gastos:</span> <span className="valor">$ {formatearMoneda(gastoTotalCalculado)}</span></div>
+                        <div className="info-row"><span className="label">Precio Compra:</span> <span className="valor">{formatearMoneda(vehiculo.precioCompra)}</span></div>
+                        <div className="info-row"><span className="label">+ Gastos:</span> <span className="valor">{formatearMoneda(gastoTotalCalculado)}</span></div>
                         <hr style={{borderColor:'#f1f5f9'}}/>
-                        <div className="info-row"><span className="label" style={{color:'#2c3e50'}}>Costo Total:</span> <span className="valor" style={{fontWeight:'bold'}}>$ {formatearMoneda(precioMinimoVenta)}</span></div>
+                        <div className="info-row"><span className="label" style={{color:'#2c3e50'}}>Costo Total:</span> <span className="valor" style={{fontWeight:'bold'}}>{formatearMoneda(precioMinimoVenta)}</span></div>
                         <br />
-                        <div className="info-row"><span className="label">Precio Lista:</span> <span className="valor" style={{fontSize: "1.2em"}}>$ {formatearMoneda(vehiculo.precioLista)}</span></div>
+                        <div className="info-row"><span className="label">Precio Lista:</span> <span className="valor" style={{fontSize: "1.2em"}}>{formatearMoneda(vehiculo.precioLista)}</span></div>
                         <div className="info-row" style={{background:"#f8fafc", padding:"5px", borderRadius:"5px", marginTop:"5px"}}>
                             <span className="label">Rentabilidad (%):</span>
                             <input type="number" value={rentabilidad} onChange={(e) => setRentabilidad(e.target.value)} className="input-pequeno"/>
                         </div>
                         <div className="precio-destacado">
                             <span style={{color:'#64748b', fontSize:'0.9rem'}}>Precio Sugerido:</span>
-                            <span className="precio-grande">$ {formatearMoneda(precioContado.toFixed(2))}</span>
+                            <span className="precio-grande">{formatearMoneda(precioContado.toFixed(2))}</span>
                         </div>
                         <div className="info-row" style={{background:"#f8fafc", padding:"5px", borderRadius:"5px"}}>
                             <span className="label">Descuento Contado (%):</span>
@@ -357,7 +357,7 @@ function VehiculoDetalle() {
                         </div>
                         <div className="info-row" style={{marginTop:'10px'}}>
                             <span className="label">Precio Final:</span>
-                            <span className="valor" style={{color:'royalblue', fontSize:'1.2rem', fontWeight:'bold'}}>$ {formatearMoneda(precioDescuentoContado.toFixed(2))}</span>
+                            <span className="valor" style={{color:'royalblue', fontSize:'1.2rem', fontWeight:'bold'}}>{formatearMoneda(precioDescuentoContado.toFixed(2))}</span>
                         </div>
                     </div>
 
